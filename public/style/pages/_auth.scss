@@ -1,0 +1,84 @@
+.auth{
+	background-color: #f4f4f44d;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 13px rgb(81 113 255 / 53%);
+	width: fit-content;
+	margin: 0 auto;
+	margin-top: 100px;
+	h2 {
+		margin-bottom: 20px;
+		position: relative;
+		text-align: center;
+		font-size: 39px;
+		color: #333;
+		z-index: 3;
+		position: relative;
+		svg{
+			position: absolute;
+			width: 95px;
+			z-index: 1;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+	form{
+		display: flex;
+		width: 460px;
+		flex-wrap: wrap;
+		label{
+			font-weight: 500;
+			font-size: 14px;
+		}
+		p{
+			width: 100%;
+			font-size: 13px;
+			user-select: none;
+			font-weight: 500;
+			margin: 0;
+			a{
+				color: #5171ff;
+				cursor: pointer;
+				text-decoration: none;
+			}
+		}
+		input {
+			width: 100%;
+			padding: 10px;
+			margin: 10px 0;
+			font-size: 14px;
+			height: 40px;
+			border: 1px solid #ccc;
+			outline: none;
+			border-radius: 5px;
+		}
+		button {
+			width: 155px;
+			padding: 10px;
+			background-color: #5171ff;
+			border: none;
+			color: #fff;
+			border-radius: 5px;
+			cursor: pointer;
+			margin: 0 auto;
+			height: 40px;
+			font-weight: 700;
+			margin-top: 20px;
+			font-size: 13px;
+			&:hover {
+				background-color: #5171ff;
+			}
+		}
+	}
+	.error_msg{
+		color: red;
+    text-align: left;
+    font-size: 14px;
+	}
+	.done_msg{
+		color: #28a745;
+    text-align: left;
+    font-size: 14px;
+	}
+}

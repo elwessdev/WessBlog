@@ -1,0 +1,26 @@
+footer{
+  border-top: 1px solid #ececec;
+  padding: 30px 20px;
+  overflow: hidden;
+  margin-top: 40px;
+  h3{
+    color: #203656;
+    font-weight: 500;
+    // float: left;
+    text-align: center;
+  }
+  .backTop{
+    float: right;
+    padding: 6px 15px;
+    border-radius: 30px;
+    font-size: 13px;
+    display: inline-block;
+    border: 1px solid #5171ff;
+    color: #5171ff;
+    font-weight: 600;
+    text-transform: lowercase;
+    &:hover{
+      color: #FFF;
+    }
+  }
+}

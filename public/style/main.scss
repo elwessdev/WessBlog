@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #ffffff;
+}
+button,a,input,textarea,h1,h2{
+  transition: all .2s;
+}
+button:hover{
+  background: #2c49c9 !important;
+}
+input:focus,textarea:focus{
+  border-color: #5171ff !important;
+}
+.title{
+  color: #5171ff;
+  font-weight: 700;
+  line-height: 1.4;
+  font-size: 23px;
+  margin-bottom: 15px;
+  svg{
+    margin-left: 5px;
+    margin-top: 3px;
+  }
+}
+.error{
+  color: #F00;
+  font-size: 13px;
+  margin: 6px 0;
+}
+// Header
+@import "pages/_header";
+// Footer
+@import "pages/_footer";
+// Home
+@import "pages/_home";
+// Auth
+@import "pages/_auth";
+// Profile
+@import "pages/_profile";
+// New Post
+@import "pages/_new-post";
+// Settings
+@import "pages/_settings";
+// Settings
+@import "pages/_post";
