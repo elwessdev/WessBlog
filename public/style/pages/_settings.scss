@@ -12,6 +12,24 @@
       display: flex;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      .error{
+        text-align: center;
+        width: 100%;
+      }
+  }
+  .errors{
+    width: 100%;
+    padding: 0 17px;
+    margin-bottom: 10px;
+    li{
+      list-style: disc;
+      font-size: 14px;
+      color: #F00;
+      &:not(:last-of-type){
+        margin-bottom: 3px;
+      }
+    }
   }
   .profile-avatar {
     color: #fff;

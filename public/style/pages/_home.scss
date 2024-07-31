@@ -9,7 +9,7 @@
       margin-right: 20px;
       position: relative;
       height: 530px;
-      cursor: pointer;
+      cursor: context-menu;
       width: calc(100% - 340px);
       &:hover {
         .img{
@@ -42,21 +42,29 @@
         right: 50px;
         position: absolute;
         z-index: 1;
-        .category {
-          color: white;
-          padding: 5px 10px;
-          border-radius: 5px;
-          font-size: 12px;
-          text-transform: uppercase;
-          display: inline-block;
-          background: #5171ff;
+        .tags {
+          display: flex;
+          grid-gap: 7px;
+          width: 100%;
+          margin-bottom: 10px;
+          span{
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            text-transform: uppercase;
+            display: inline-block;
+            background: #5171ff;
+          }
         }
-        h1 {
+        .title-ps {
           font-size: 30px;
           margin: 10px 0;
           color: #FFF;
+          cursor: pointer;
           font-weight: 700;
           line-height: 1.2;
+          display: flex;
         }
         .author-date {
           display: flex;
@@ -65,6 +73,19 @@
           width: fit-content;
           font-size: 14px;
           grid-gap: 10px;
+          a{
+            display: flex;
+            img{
+              width: 21px;
+              border-radius: 50%;
+              margin-right: 6px;
+              position: relative;
+              top: -1px;
+            }
+            &:hover{
+              color: #5171ff;
+            }
+          }
         }
       }
     }
@@ -93,11 +114,20 @@
                 object-fit: cover;
             }
             .article-info {
+                &:hover p{
+                  color: #5171ff;
+                }
                 p {
                   font-size: 15px;
                   margin: 0;
                   font-weight: 600;
                   color: #091651;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  -webkit-line-clamp: 2;
+                  transition: all .2s;
                 }
                 span {
                   display: block;
@@ -151,24 +181,43 @@
             }
           }
           .post-content {
-            .user{
+            width: calc(100% - 300px);
+            .pyt{
               display: flex;
-              &:not(:last-of-type){
-                margin-bottom: 3px;
+              margin-bottom: 5px;
+              p{
+                margin: 0;
               }
-              img{
-                width: 23px;
-                border-radius: 50%;
-                margin-right: 6px;
-              }
-              a{
-                color: #8F9BAD;
-                font-size: 13px;
-                font-weight: 500;
-                margin-top: 2px;
-                &:hover{
-                  color: #5171ff;
+              .user{
+                display: flex;
+                &:not(:last-of-type){
+                  margin-bottom: 3px;
                 }
+                img{
+                  width: 23px;
+                  height: 23px;
+                  border-radius: 50%;
+                  margin-right: 6px;
+                  position: relative;
+                }
+                a{
+                  color: #8F9BAD;
+                  font-size: 13px;
+                  font-weight: 500;
+                  margin-top: 2px;
+                  margin-bottom: 0;
+                  &:hover{
+                    color: #5171ff;
+                  }
+                }
+              }
+              p {
+                display: flex;
+                font-size: 12px;
+                margin: 0;
+                color: #8F9BAD;
+                padding: 2px 0;
+                margin-left: 12px;
               }
             }
             .tags{
@@ -185,13 +234,14 @@
                 background: #5171ff;
               }
             }
-            h2 {
+            a {
               margin: 0 0 7px;
               font-size: 18px;
               font-weight: bold;
               color: #203656;
               cursor: pointer;
               transition: all 0.2s;
+              display: flex;
               &:hover{
                 color: #5171ff;
               }
@@ -200,6 +250,11 @@
               margin: 0 0 9px;
               color: #8F9BAD;
               font-size: 14px;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              -webkit-line-clamp: 2;
             }
             .post-meta {
                 display: flex;

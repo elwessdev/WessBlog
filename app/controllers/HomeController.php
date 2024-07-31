@@ -4,8 +4,12 @@ class HomeController{
   public function __construct($postModel){
     $this->postModel = $postModel;
   }
+  // Index
   public function index(){
-    $posts = $this->postModel->getAllPosts();
+    $posts = $this->postModel->getLatestPosts();
+    $topPost = $this->postModel->getTopPost()->fetch_object();
+    $tradingPosts = $this->postModel->getTradingPosts();
+    $topics = $this->postModel->getTopicsWithNums();
     include '../app/views/index.php';
   }
 }

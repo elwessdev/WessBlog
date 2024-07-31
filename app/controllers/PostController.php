@@ -36,4 +36,23 @@ class PostController{
       include '../app/views/add-post.php';
     }
   }
+  // Post Page
+  public function PostPage(){
+    if (isset($_GET['action']) && $_GET['action'] === 'post' && isset($_GET['id'])) {
+      $result = $this->postModel->getPostDetails($_GET['id']);
+      $post = $result->fetch_assoc();
+      if ($post) {
+        // $data = ['post' => $post];
+        // extract($data);
+        include '../app/views/post.php';
+      } else {
+        // http_response_code(404);
+        // echo "User not found";
+        header("location: ../public/");
+      }
+    } else {
+      http_response_code(400);
+      echo "Invalid request";
+    }
+  }
 }

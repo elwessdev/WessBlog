@@ -1,8 +1,10 @@
 <?php
 session_start();
 require '../config/db.php';
+require '../vendor/autoload.php';
+require '../app/helpers/UploadImageHelper.php';
+require '../app/helpers/SessionHelper.php';
 // Models
-require '../app/helpers/session_helper.php';
 require '../app/models/UserModel.php';
 require '../app/models/PostModel.php';
 // Controllers
@@ -23,6 +25,8 @@ $PostController = new PostController($postModel);
 $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? null;
 
+echo $id."<br>";
+
 
 // echo "action".$action."<br>";
 // echo "id".$id."<br>";
@@ -32,6 +36,7 @@ switch ($action) {
     case '':
         $homeController->index();
         break;
+    // Auth
     case 'login':
         $authController->login();
         break;
@@ -41,21 +46,26 @@ switch ($action) {
     case 'logout':
         $authController->logout();
         break;
+    // Post
+    case 'post':
+        $PostController->PostPage();
+        break;
     case 'add-post':
         $PostController->handleNewPost();
-        // include '../app/views/add-post.php';
         break;
-    case 'profile':
-        $userController->profile();
+    // User
+    case 'user':
+        $userController->user();
         break;
     case 'settings':
-        include '../app/views/settings.php';
+        $userController->settings();
         break;
-    case 'post':
-        include '../app/views/post.php';
+    case 'my-profile':
+        $userController->myProfile();
         break;
     default:
-        http_response_code(404);
-        echo "Page not found";
+        // http_response_code(404);
+        // echo "Page not found";
+        header("location: ../public/");
 }
 ?>

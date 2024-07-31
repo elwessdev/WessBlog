@@ -4,36 +4,75 @@
   margin: 0 auto;
   width: 100%;
   background-color: #fff;
-
   .posts {
     width: calc(100% - 320px);
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     grid-gap: 20px;
-    padding-right: 20px;
-    .title{
+    height: fit-content;
+    padding-right: 35px;
+
+    .title {
       margin-bottom: 0;
       font-size: 21px;
+      width: 100%;
+      text-transform: capitalize;
     }
+
+    .nothing{
+      padding: 35px 0;
+      margin: 0 auto;
+      background-color: #eef5ff;
+      border: 1px solid rgba(204, 204, 204, 0.67);
+      border-radius: 5px;
+      width: 60%;
+      text-align: center;
+      h3{
+        color: #091651;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      a{
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        background-color: #5171ff;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 20px;
+        margin: 0 auto;
+        margin-top: 16px;
+        display: flex;
+        width: fit-content;
+      }
+    }
+
     .post {
       display: flex;
       padding: 15px;
       border: 1px solid #cccccc8a;
       border-radius: 5px;
-      background-color: #ffffff;
+      // background-color: #ffffff;
+      background-color: #eef5ff;
       width: 100%;
       height: fit-content;
       transition: all 0.2s;
+      position: relative;
+
       &:hover .img img {
         transform: scale(1.07);
       }
+
       .img {
-        width: 300px;
+        width: 240px;
         margin-right: 20px;
         cursor: pointer;
         border-radius: 10px;
-        transition: all .2s;
+        transition: all 0.2s;
         overflow: hidden;
 
         img {
@@ -42,7 +81,10 @@
           height: 100%;
         }
       }
+
       .post-content {
+        width: calc(100% - 240px);
+
         .user {
           display: flex;
 
@@ -57,7 +99,7 @@
           }
 
           a {
-            color: #8F9BAD;
+            color: #8f9bad;
             font-size: 13px;
             font-weight: 500;
             margin-top: 2px;
@@ -84,13 +126,15 @@
           }
         }
 
-        h2 {
+        a {
           margin: 0 0 7px;
+          width: fit-content;
           font-size: 18px;
           font-weight: bold;
           color: #203656;
           cursor: pointer;
           transition: all 0.2s;
+          display: flex;
 
           &:hover {
             color: #5171ff;
@@ -99,14 +143,19 @@
 
         p {
           margin: 0 0 9px;
-          color: #8F9BAD;
+          color: #8f9bad;
           font-size: 14px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          -webkit-line-clamp: 2;
         }
 
         .post-meta {
           display: flex;
           font-size: 12px;
-          color: #8F9BAD;
+          color: #8f9bad;
 
           span {
             margin-right: 10px;
@@ -116,15 +165,44 @@
               margin-right: 3px;
 
               path {
-                fill: #8F9BAD;
+                fill: #8f9bad;
               }
             }
           }
         }
       }
+
+      .options {
+        position: absolute;
+        right: -15px;
+        top: -10px;
+
+        a {
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          svg {
+            fill: #fff;
+            width: 14px;
+          }
+        }
+
+        .edit {
+          background: #5171ff;
+          margin-bottom: 3px;
+        }
+
+        .delete {
+          background: #ff2626;
+        }
+      }
     }
   }
-
   .infos {
     width: 320px;
     height: fit-content;
@@ -132,8 +210,7 @@
     padding: 15px;
     border-radius: 8px;
     background-color: #eef5ff;
-
-    // margin-top: 55px;
+    margin-top: 57px;
     .profile_sec {
       margin-bottom: 40px;
       text-align: center;
@@ -155,24 +232,25 @@
         color: #091651;
 
         &:nth-of-type(2) {
-          color: #8F9BAD;
+          color: #8f9bad;
           font-size: 14px;
           margin-top: 0px;
         }
 
         &:nth-of-type(3) {
-          color: #8F9BAD;
+          color: #8f9bad;
           font-size: 13px;
         }
       }
 
-      button {
+      button,
+      .set {
         border: none;
         cursor: pointer;
         text-decoration: none;
         transition: all 0.2s;
         background-color: #5171ff;
-        color: #FFF;
+        color: #fff;
         border-radius: 5px;
         font-size: 14px;
         font-weight: 600;
@@ -183,11 +261,11 @@
         width: fit-content;
 
         svg {
-          fill: #FFF;
+          fill: #fff;
           width: 16px;
           margin-right: 4px;
-          position: relative;
-          top: 2px;
+          // position: relative;
+          // top: 2px;
         }
       }
     }

@@ -78,6 +78,43 @@ header nav ul li.active {
 header nav ul li.active a {
   color: #FFF;
 }
+header nav ul li.ds {
+  padding: 0;
+}
+header nav ul li.ds .search_bar {
+  width: 280px;
+  border: 2px solid #5171ff;
+  font-size: 14px;
+  margin-left: 10px;
+  overflow: hidden;
+  border-radius: 30px;
+  position: relative;
+}
+header nav ul li.ds .search_bar input {
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+  text-indent: 11px;
+  border-radius: 30px;
+  height: 34px;
+}
+header nav ul li.ds .search_bar button {
+  position: absolute;
+  right: 3px;
+  top: 2px;
+  background-color: #5171ff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+header nav ul li.ds .search_bar button svg {
+  width: 16px;
+  fill: #FFF;
+}
 header nav .btns {
   display: flex;
   grid-gap: 10px;
@@ -185,7 +222,7 @@ footer .backTop:hover {
   margin-right: 20px;
   position: relative;
   height: 530px;
-  cursor: pointer;
+  cursor: context-menu;
   width: calc(100% - 340px);
 }
 .home main .main-article:hover .img {
@@ -218,7 +255,13 @@ footer .backTop:hover {
   position: absolute;
   z-index: 1;
 }
-.home main .main-article .article-content .category {
+.home main .main-article .article-content .tags {
+  display: flex;
+  grid-gap: 7px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.home main .main-article .article-content .tags span {
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
@@ -227,12 +270,14 @@ footer .backTop:hover {
   display: inline-block;
   background: #5171ff;
 }
-.home main .main-article .article-content h1 {
+.home main .main-article .article-content .title-ps {
   font-size: 30px;
   margin: 10px 0;
   color: #FFF;
+  cursor: pointer;
   font-weight: 700;
   line-height: 1.2;
+  display: flex;
 }
 .home main .main-article .article-content .author-date {
   display: flex;
@@ -242,6 +287,19 @@ footer .backTop:hover {
   width: fit-content;
   font-size: 14px;
   grid-gap: 10px;
+}
+.home main .main-article .article-content .author-date a {
+  display: flex;
+}
+.home main .main-article .article-content .author-date a img {
+  width: 21px;
+  border-radius: 50%;
+  margin-right: 6px;
+  position: relative;
+  top: -1px;
+}
+.home main .main-article .article-content .author-date a:hover {
+  color: #5171ff;
 }
 .home main .trading {
   border: 1px solid rgba(204, 204, 204, 0.38);
@@ -267,11 +325,20 @@ footer .backTop:hover {
   -o-object-fit: cover;
      object-fit: cover;
 }
+.home main .trading .articles .sidebar-article .article-info:hover p {
+  color: #5171ff;
+}
 .home main .trading .articles .sidebar-article .article-info p {
   font-size: 15px;
   margin: 0;
   font-weight: 600;
   color: #091651;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  transition: all 0.2s;
 }
 .home main .trading .articles .sidebar-article .article-info span {
   display: block;
@@ -323,25 +390,46 @@ footer .backTop:hover {
   width: 100%;
   height: 100%;
 }
-.home .s_sc .latest-posts .posts .post .post-content .user {
+.home .s_sc .latest-posts .posts .post .post-content {
+  width: calc(100% - 300px);
+}
+.home .s_sc .latest-posts .posts .post .post-content .pyt {
+  display: flex;
+  margin-bottom: 5px;
+}
+.home .s_sc .latest-posts .posts .post .post-content .pyt p {
+  margin: 0;
+}
+.home .s_sc .latest-posts .posts .post .post-content .pyt .user {
   display: flex;
 }
-.home .s_sc .latest-posts .posts .post .post-content .user:not(:last-of-type) {
+.home .s_sc .latest-posts .posts .post .post-content .pyt .user:not(:last-of-type) {
   margin-bottom: 3px;
 }
-.home .s_sc .latest-posts .posts .post .post-content .user img {
+.home .s_sc .latest-posts .posts .post .post-content .pyt .user img {
   width: 23px;
+  height: 23px;
   border-radius: 50%;
   margin-right: 6px;
+  position: relative;
 }
-.home .s_sc .latest-posts .posts .post .post-content .user a {
+.home .s_sc .latest-posts .posts .post .post-content .pyt .user a {
   color: #8F9BAD;
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
+  margin-bottom: 0;
 }
-.home .s_sc .latest-posts .posts .post .post-content .user a:hover {
+.home .s_sc .latest-posts .posts .post .post-content .pyt .user a:hover {
   color: #5171ff;
+}
+.home .s_sc .latest-posts .posts .post .post-content .pyt p {
+  display: flex;
+  font-size: 12px;
+  margin: 0;
+  color: #8F9BAD;
+  padding: 2px 0;
+  margin-left: 12px;
 }
 .home .s_sc .latest-posts .posts .post .post-content .tags {
   display: flex;
@@ -357,21 +445,27 @@ footer .backTop:hover {
   display: inline-block;
   background: #5171ff;
 }
-.home .s_sc .latest-posts .posts .post .post-content h2 {
+.home .s_sc .latest-posts .posts .post .post-content a {
   margin: 0 0 7px;
   font-size: 18px;
   font-weight: bold;
   color: #203656;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
 }
-.home .s_sc .latest-posts .posts .post .post-content h2:hover {
+.home .s_sc .latest-posts .posts .post .post-content a:hover {
   color: #5171ff;
 }
 .home .s_sc .latest-posts .posts .post .post-content p {
   margin: 0 0 9px;
   color: #8F9BAD;
   font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
 }
 .home .s_sc .latest-posts .posts .post .post-content .post-meta {
   display: flex;
@@ -524,28 +618,64 @@ footer .backTop:hover {
   display: flex;
   flex-wrap: wrap;
   grid-gap: 20px;
-  padding-right: 20px;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-right: 35px;
 }
 .profile .posts .title {
   margin-bottom: 0;
   font-size: 21px;
+  width: 100%;
+  text-transform: capitalize;
+}
+.profile .posts .nothing {
+  padding: 35px 0;
+  margin: 0 auto;
+  background-color: #eef5ff;
+  border: 1px solid rgba(204, 204, 204, 0.67);
+  border-radius: 5px;
+  width: 60%;
+  text-align: center;
+}
+.profile .posts .nothing h3 {
+  color: #091651;
+  font-size: 16px;
+  font-weight: 500;
+}
+.profile .posts .nothing a {
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  background-color: #5171ff;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  margin: 0 auto;
+  margin-top: 16px;
+  display: flex;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .profile .posts .post {
   display: flex;
   padding: 15px;
   border: 1px solid rgba(204, 204, 204, 0.5411764706);
   border-radius: 5px;
-  background-color: #ffffff;
+  background-color: #eef5ff;
   width: 100%;
   height: -moz-fit-content;
   height: fit-content;
   transition: all 0.2s;
+  position: relative;
 }
 .profile .posts .post:hover .img img {
   transform: scale(1.07);
 }
 .profile .posts .post .img {
-  width: 300px;
+  width: 240px;
   margin-right: 20px;
   cursor: pointer;
   border-radius: 10px;
@@ -556,6 +686,9 @@ footer .backTop:hover {
   transition: all 0.3s ease-in-out;
   width: 100%;
   height: 100%;
+}
+.profile .posts .post .post-content {
+  width: calc(100% - 240px);
 }
 .profile .posts .post .post-content .user {
   display: flex;
@@ -569,7 +702,7 @@ footer .backTop:hover {
   margin-right: 6px;
 }
 .profile .posts .post .post-content .user a {
-  color: #8F9BAD;
+  color: #8f9bad;
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
@@ -591,26 +724,34 @@ footer .backTop:hover {
   display: inline-block;
   background: #5171ff;
 }
-.profile .posts .post .post-content h2 {
+.profile .posts .post .post-content a {
   margin: 0 0 7px;
+  width: -moz-fit-content;
+  width: fit-content;
   font-size: 18px;
   font-weight: bold;
   color: #203656;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
 }
-.profile .posts .post .post-content h2:hover {
+.profile .posts .post .post-content a:hover {
   color: #5171ff;
 }
 .profile .posts .post .post-content p {
   margin: 0 0 9px;
-  color: #8F9BAD;
+  color: #8f9bad;
   font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
 }
 .profile .posts .post .post-content .post-meta {
   display: flex;
   font-size: 12px;
-  color: #8F9BAD;
+  color: #8f9bad;
 }
 .profile .posts .post .post-content .post-meta span {
   margin-right: 10px;
@@ -620,7 +761,32 @@ footer .backTop:hover {
   margin-right: 3px;
 }
 .profile .posts .post .post-content .post-meta span svg path {
-  fill: #8F9BAD;
+  fill: #8f9bad;
+}
+.profile .posts .post .options {
+  position: absolute;
+  right: -15px;
+  top: -10px;
+}
+.profile .posts .post .options a {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.profile .posts .post .options a svg {
+  fill: #fff;
+  width: 14px;
+}
+.profile .posts .post .options .edit {
+  background: #5171ff;
+  margin-bottom: 3px;
+}
+.profile .posts .post .options .delete {
+  background: #ff2626;
 }
 .profile .infos {
   width: 320px;
@@ -630,6 +796,7 @@ footer .backTop:hover {
   padding: 15px;
   border-radius: 8px;
   background-color: #eef5ff;
+  margin-top: 57px;
 }
 .profile .infos .profile_sec {
   margin-bottom: 40px;
@@ -651,21 +818,22 @@ footer .backTop:hover {
   color: #091651;
 }
 .profile .infos .profile_sec p:nth-of-type(2) {
-  color: #8F9BAD;
+  color: #8f9bad;
   font-size: 14px;
   margin-top: 0px;
 }
 .profile .infos .profile_sec p:nth-of-type(3) {
-  color: #8F9BAD;
+  color: #8f9bad;
   font-size: 13px;
 }
-.profile .infos .profile_sec button {
+.profile .infos .profile_sec button,
+.profile .infos .profile_sec .set {
   border: none;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.2s;
   background-color: #5171ff;
-  color: #FFF;
+  color: #fff;
   border-radius: 5px;
   font-size: 14px;
   font-weight: 600;
@@ -676,12 +844,11 @@ footer .backTop:hover {
   width: -moz-fit-content;
   width: fit-content;
 }
-.profile .infos .profile_sec button svg {
-  fill: #FFF;
+.profile .infos .profile_sec button svg,
+.profile .infos .profile_sec .set svg {
+  fill: #fff;
   width: 16px;
   margin-right: 4px;
-  position: relative;
-  top: 2px;
 }
 .profile .infos .following h3 {
   margin: 0 0 15px;
@@ -727,11 +894,11 @@ footer .backTop:hover {
 }
 .new-post h2 {
   text-align: center;
-  font-size: 29px;
+  font-size: 30px;
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 .new-post h2 svg {
   margin: 0 auto;
@@ -914,6 +1081,24 @@ footer .backTop:hover {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.settings .profile-header .error {
+  text-align: center;
+  width: 100%;
+}
+.settings .errors {
+  width: 100%;
+  padding: 0 17px;
+  margin-bottom: 10px;
+}
+.settings .errors li {
+  list-style: disc;
+  font-size: 14px;
+  color: #F00;
+}
+.settings .errors li:not(:last-of-type) {
+  margin-bottom: 3px;
 }
 .settings .profile-avatar {
   color: #fff;
@@ -1007,10 +1192,25 @@ footer .backTop:hover {
   margin: 0 auto;
 }
 .post .post_content h2 {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
   color: #091651;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+}
+.post .post_content .tags {
+  display: flex;
+  grid-gap: 7px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.post .post_content .tags a {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  text-transform: uppercase;
+  display: inline-block;
+  background: #5171ff;
 }
 .post .post_content .img img {
   border-radius: 10px;
@@ -1019,25 +1219,31 @@ footer .backTop:hover {
 }
 .post .post_content .txt {
   margin-top: 20px;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.8;
 }
 .post .post_content .ld {
   display: flex;
-  font-size: 15px;
-  color: #8F9BAD;
   margin-top: 35px;
+  grid-gap: 10px;
+}
+.post .post_content .ld .date {
+  font-size: 13px;
+  font-weight: 500;
+  color: #8F9BAD;
 }
 .post .post_content .ld span {
-  margin-right: 10px;
   display: flex;
   font-weight: 500;
+  -moz-user-select: none;
   -webkit-user-select: none;
-     -moz-user-select: none;
           user-select: none;
+  color: #8F9BAD;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
+  font-size: 13px;
+  color: #8F9BAD;
 }
 .post .post_content .ld span:hover {
   color: #5171ff;
@@ -1046,8 +1252,8 @@ footer .backTop:hover {
   fill: #5171ff;
 }
 .post .post_content .ld span svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   margin-right: 3px;
   position: relative;
   top: -2px;
@@ -1100,12 +1306,12 @@ footer .backTop:hover {
   width: calc(100% - 60px);
 }
 .post .post_content .profile-card .infos .profile-name {
-  font-size: 18px;
+  font-size: 17px;
   margin: 0;
   margin-bottom: 3px;
-  width: -moz-fit-content;
-  width: fit-content;
   cursor: pointer;
+  font-weight: 500;
+  color: #091651;
 }
 .post .post_content .profile-card .infos .profile-name:hover {
   color: #5171ff;
@@ -1123,4 +1329,51 @@ footer .backTop:hover {
 .post .post_content .profile-card .infos .social-icon img {
   width: 24px;
   height: 24px;
+}
+.post .post_content .user {
+  display: flex;
+  margin-bottom: 15px !important;
+  position: relative;
+}
+.post .post_content .user:not(:last-of-type) {
+  margin-bottom: 3px;
+}
+.post .post_content .user:hover p {
+  color: #5171ff;
+}
+.post .post_content .user img {
+  width: 45px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.post .post_content .user p {
+  color: #091651;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  padding: 10px 0;
+  transition: all 0.2s;
+}
+.post .post_content .user .edit {
+  position: absolute;
+  right: 0;
+  text-decoration: none;
+  transition: all 0.2s;
+  background-color: #5171ff;
+  color: #FFF;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 7px 15px;
+  display: flex;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 2px 0;
+}
+.post .post_content .user .edit svg {
+  width: 14px;
+  fill: #FFF;
+  margin-right: 3px;
+  position: relative;
+  top: 2px;
 }/*# sourceMappingURL=main.css.map */
