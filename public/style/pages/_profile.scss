@@ -68,7 +68,7 @@
       }
 
       .img {
-        width: 240px;
+        width: 200px;
         margin-right: 20px;
         cursor: pointer;
         border-radius: 10px;
@@ -103,7 +103,7 @@
             font-size: 13px;
             font-weight: 500;
             margin-top: 2px;
-
+            text-transform: capitalize;
             &:hover {
               color: #5171ff;
             }
@@ -114,15 +114,19 @@
           display: flex;
           grid-gap: 8px;
           margin-top: 10px;
-
-          span {
+          a {
             color: white;
             padding: 3px 8px;
             border-radius: 5px;
             font-size: 11px;
-            text-transform: uppercase;
+            text-transform: capitalize;
             display: inline-block;
             background: #5171ff;
+            font-weight: 500;
+            &:hover{
+              box-shadow: 0px 0px 3px 2px #5171ff;
+              color: #FFF;
+            }
           }
         }
 
@@ -135,7 +139,7 @@
           cursor: pointer;
           transition: all 0.2s;
           display: flex;
-
+          text-transform: capitalize;
           &:hover {
             color: #5171ff;
           }
@@ -212,9 +216,7 @@
     background-color: #eef5ff;
     margin-top: 57px;
     .profile_sec {
-      margin-bottom: 40px;
       text-align: center;
-
       img {
         width: 90px;
         height: auto;
@@ -222,7 +224,6 @@
         margin: 0 auto;
         margin-bottom: 10px;
       }
-
       p {
         margin: 3px 0;
         width: 100%;
@@ -230,7 +231,10 @@
         font-size: 16px;
         font-weight: 500;
         color: #091651;
-
+        
+        &:first-of-type {
+          text-transform: capitalize;
+        }
         &:nth-of-type(2) {
           color: #8f9bad;
           font-size: 14px;
@@ -242,7 +246,6 @@
           font-size: 13px;
         }
       }
-
       button,
       .set {
         border: none;
@@ -259,7 +262,6 @@
         margin-top: 13px;
         display: flex;
         width: fit-content;
-
         svg {
           fill: #fff;
           width: 16px;
@@ -269,8 +271,8 @@
         }
       }
     }
-
     .following {
+      margin-top: 40px;
       h3 {
         margin: 0 0 15px;
         font-weight: 600;

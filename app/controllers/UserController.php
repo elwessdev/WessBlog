@@ -2,7 +2,6 @@
 class UserController {
     private $userModel;
     private $isAdmin=false;
-
     public function __construct($userModel) {
         $this->userModel = $userModel;
     }
@@ -15,12 +14,8 @@ class UserController {
             $user = $result->fetch_assoc();
             $posts = $this->userModel->getUserPostsByID($_GET['id']);
             if ($user) {
-                // $data = ['user' => $user];
-                // extract($data);
                 include '../app/views/user.php';
             } else {
-                // http_response_code(404);
-                // echo "User not found";
                 header("location: ../public/");
             }
         } else {
@@ -57,18 +52,20 @@ class UserController {
 
             $userDetails = $this->userModel->getUserByEmail($prevEmail);
             
-            $changePhoto=false;
-            $changeUsername=false;
-            $changeBio=false;
-            $changeEmail=false;
-            $changePassword=false;
-            $newImageLink="";
+            $changes = [
+                'photo' => false,
+                'username' => false,
+                'bio' => false,
+                'email' => false,
+                'password' => false,
+                'photoLink' => ""
+            ];
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0){
                 $file = $_FILES['photo']['tmp_name'];
                 $up = uploadImage($file);
                 if(!empty($up)){
-                    $newImageLink=$up;
-                    $changePassword=true;
+                    $changes["photoLink"]=$up;
+                    $changes["photo"]=true;
                 } else {
                     array_push($errors,"There is problem in upload new Photo");
                     echo "user photo changed"."<br>";
@@ -81,24 +78,24 @@ class UserController {
                 if($this->userModel->checkUsernameExist($username,$userDetails["id"])){
                     array_push($errors,"Username is exist");
                 } else {
-                    $changeUsername=true;
+                    $changes["username"]=true;
                 }
             }
             if(!empty($bio)&&$bio!=$prevBio){
-                $changeBio=true;
+                $changes["bio"]=true;
             }
             if(!empty($email)&&$email!=$prevEmail){
                 if($this->userModel->checkEmailExist($email,$userDetails["id"])){
                     array_push($errors,"Email is exist");
                 } else {
-                    $changeEmail=true;
+                    $changes["email"]=true;
                 }
             }
             if(!empty($currentPassword)){
                 if(password_verify($currentPassword, $userDetails['password'])){
                     if(!empty($newPassword)&&!empty($confirmPassword)){
                         if($newPassword==$confirmPassword){
-                            $changePassword=true;
+                            $changes["password"]=true;
                         } else {
                             array_push($errors, "You'r password confirm is wrong");
                         }
@@ -111,30 +108,23 @@ class UserController {
                 include '../app/views/settings.php';
                 exit();
             } else {
-                array_push($errors,"Data is valid i will changed");
-                if(!empty($newImageLink)){
-                    // array_push($errors, "new photo $newImageLink");
-                    $this->userModel->changePhoto($newImageLink,$userDetails["id"]);
+                // array_push($errors,"Data is valid i will changed");
+                if(!empty($changes["photoLink"])){
+                    $this->userModel->changePhoto($changes["photoLink"],$userDetails["id"]);
                 }
-                if($changeUsername){
-                    // array_push($errors, "new username $username");
+                if($changes["username"]){
                     $this->userModel->changeUsername($username,$userDetails["id"]);
                 }
-                if($changeBio){
-                    // array_push($errors, "new bio $bio");
+                if($changes["bio"]){
                     $this->userModel->changeBio($bio,$userDetails["id"]);
                 }
-                if($changeEmail){
-                    // array_push($errors, "new email $email");
+                if($changes["email"]){
                     $this->userModel->changeEmail($email,$userDetails["id"]);
                 }
-                if($changePassword){
-                    // array_push($errors, "new password $newPassword");
+                if($changes["password"]){
                     $pwd = password_hash($newPassword, PASSWORD_BCRYPT);
                     $this->userModel->changePassword($pwd,$userDetails["id"]);
                 }
-                // include '../app/views/settings.php';
-                // exit();
                 header("Location: ?action=settings");
             }
         } else {
@@ -142,37 +132,4 @@ class UserController {
         }
     }
 }
-
-
-// // Check if the form is submitted
-// if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_photo'])) {
-//     $file = $_FILES['profile_photo']['tmp_name'];
-
-//     // Upload to Cloudinary
-//     try {
-//         $result = (new UploadApi())->upload($file, [
-//             'folder' => 'profile_photos'
-//         ]);
-
-//         // Get the URL of the uploaded image
-//         $imageUrl = $result['secure_url'];
-
-//         // Store the image URL in the database
-//         $userId = $_SESSION['user_id']; // Assume you have the user ID stored in the session
-//         $query = "UPDATE users SET profile_photo = ? WHERE id = ?";
-//         $stmt = $conn->prepare($query);
-//         $stmt->bind_param("si", $imageUrl, $userId);
-
-//         if ($stmt->execute()) {
-//             echo "Profile photo uploaded successfully.";
-//         } else {
-//             echo "Sorry, there was an error updating your profile photo in the database.";
-//         }
-
-//         $stmt->close();
-//     } catch (Exception $e) {
-//         echo 'Upload error: ' . $e->getMessage();
-//     }
-// }
-
 ?>

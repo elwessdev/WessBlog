@@ -61,9 +61,8 @@ class PostController{
     if (isset($_GET['action']) && $_GET['action'] === 'post' && isset($_GET['id'])) {
       $result = $this->postModel->getPostDetails($_GET['id']);
       $post = $result->fetch_assoc();
+      $name=$post["postTitle"];
       if ($post) {
-        // $data = ['post' => $post];
-        // extract($data);
         include '../app/views/post.php';
       } else {
         // http_response_code(404);
@@ -71,8 +70,9 @@ class PostController{
         header("location: ../public/");
       }
     } else {
-      http_response_code(400);
-      echo "Invalid request";
+      // http_response_code(400);
+      // echo "Invalid request";
+      header("location: ../public/");
     }
   }
   // Topic Page
@@ -80,8 +80,43 @@ class PostController{
     if(isset($_GET["action"])&&$_GET["action"]=="topic"&&isset($_GET["name"])){
       $topicName = $_GET["name"];
       $topics = $this->postModel->getTopicsWithNums();
-      $topicPosts = $this->postModel->getTopicPosts($_GET["name"]);
+      $tradingPosts = $this->postModel->getTradingPosts();
+      $posts = $this->postModel->getTopicPosts($_GET["name"]);
       include '../app/views/topic.php';
+    }
+  }
+  // Search Page
+  public function searchPage(){
+    if(isset($_POST["keywords"])&&!empty($_POST["keywords"])){
+      $keyword=$_POST["keywords"];
+      $tradingPosts = $this->postModel->getTradingPosts();
+      $topics = $this->postModel->getTopicsWithNums();
+      $posts = $this->postModel->getSearchPosts($keyword);
+      include '../app/views/search.php';
+    } else {
+      header("location: ../public/");
+    }
+  }
+  // Edit Poste
+  public function editPost(){
+    if(isset($_GET['action']) && $_GET['action'] === 'edit-post' && isset($_GET['id'])){
+      $postID=$_GET["id"];
+      $AllTopics = $this->postModel->getAllTopics();
+      $result = $this->postModel->getPostDetails($postID);
+      $curPost = $result->fetch_assoc();
+      include "../app/views/Edit-post.php";
+    }
+    if($_SERVER["REQUEST_METHOD"]=="POST"){
+      $title = $_POST['title'];
+      $content = $_POST['content'];
+      $topics = $_POST['topics'];
+
+      $errors=[];
+
+      echo $title."<br>";
+      echo $content."<br>";
+      echo $topics[0]."<br>";
+
     }
   }
 }

@@ -32,14 +32,14 @@
                             <path d="M33 1c-3.3 0-3.3 4-6.598 4C23.1 5 23.1 1 19.8 1c-3.3 0-3.3 4-6.599 4-3.3 0-3.3-4-6.6-4S3.303 5 0 5" stroke="url(#gradient)" stroke-width="2" fill="none"></path>
                         </svg>
                     </h2>
-                    <?php if (isset($posts) && is_array($posts->fetch_array()) && count($posts->fetch_array())>0): ?>
+                    <?php if (isset($posts) && is_array($posts->fetch_array()) && count($posts->fetch_all(MYSQLI_ASSOC))>0): ?>
                         <?php foreach ($posts as $post): ?>
                             <article class="post">
-                                <a href="?action=post&id=<?php echo $post['id'] ?>" class="img">
+                                <a href="?action=post&id=<?php echo $post['post_id'] ?>" class="img">
                                     <img src="<?php echo $post['img']; ?>">
                                 </a>
                                 <div class="post-content">
-                                    <a href="?action=post&id=<?php echo $post['id'] ?>"><?php echo $post['title']; ?></a>
+                                    <a href="?action=post&id=<?php echo $post['post_id'] ?>"><?php echo $post['title']; ?></a>
                                     <p><?php echo $post["content"] ?></p>
                                     <div class="post-meta">
                                         <span><?php $date=new DateTime($post["published_at"]); echo $date->format('F j, Y') ?></span>
@@ -49,21 +49,22 @@
                                         </span>
                                         <span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#6B6B6B" viewBox="0 0 16 16"><path fill="#6B6B6B" d="M12.344 11.458A5.28 5.28 0 0 0 14 7.526C14 4.483 11.391 2 8.051 2S2 4.483 2 7.527c0 3.051 2.712 5.526 6.059 5.526a6.6 6.6 0 0 0 1.758-.236q.255.223.554.414c.784.51 1.626.768 2.512.768a.37.37 0 0 0 .355-.214.37.37 0 0 0-.03-.384 4.7 4.7 0 0 1-.857-1.958v.014z"></path></svg>
-                                            3
+                                            0
                                         </span>
                                     </div>
                                     <div class="tags">
-                                        <span>Inspiration</span>
-                                        <span>Inspiration</span>
-                                        <span>Lifestyle</span>
+                                        <?php $topics = explode(',', $post['topics']);?>
+                                        <?php foreach ($topics as $topic): ?>
+                                            <a href="?action=topic&name=<?php echo strtolower(trim(htmlspecialchars($topic))); ?>"><?php echo $topic; ?></a>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
                                 <?php if($admin): ?>
                                     <div class="options">
-                                        <a class="edit" href="?action=edit-post">
+                                        <a class="edit" href="?action=edit-post&id=<?php echo $post["post_id"]; ?>">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-96c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7-14.3 32-32 32L96 448c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 64z"/></svg>
                                         </a>
-                                        <a class="delete" href="?action=edit-post">
+                                        <a class="delete" href="?action=delete-post">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
                                         </a>
                                     </div>
@@ -87,7 +88,7 @@
                     <div class="profile_sec">
                         <img src="<?php echo $user['photo']; ?>" alt="<?php echo $user['username']; ?>">
                         <p><?php echo $user['username']; ?></p>
-                        <p>2.1K Followers</p>
+                        <!-- <p>2.1K Followers</p> -->
                         <p><?php
                             if($user['bio']){
                                 echo $user['bio'];
@@ -104,14 +105,9 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152L0 424c0 48.6 39.4 88 88 88l272 0c48.6 0 88-39.4 88-88l0-112c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 112c0 22.1-17.9 40-40 40L88 464c-22.1 0-40-17.9-40-40l0-272c0-22.1 17.9-40 40-40l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L88 64z"/></svg>
                                 Edit Profile
                             </a>
-                        <?php else: ?>
-                            <button>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z"/></svg>
-                                Follow
-                            </button>
                         <?php endif; ?>
                     </div>
-                    <div class="following">
+                    <!-- <div class="following">
                         <h3>
                         Following
                         <svg width="33" height="6" xmlns="http://www.w3.org/2000/svg">
@@ -126,27 +122,23 @@
                         </h3>
                         <ul>
                             <li>
-                            <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
-                            <a href="#">Code Like A Girl</a>
+                                <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
+                                <a href="#">Alex Johnson</a>
                             </li>
                             <li>
-                            <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
-                            <a href="#">Code Like A Girl</a>
+                                <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
+                                <a href="#">Casey Smith</a>
                             </li>
                             <li>
-                            <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
-                            <a href="#">Code Like A Girl</a>
+                                <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
+                                <a href="#">Jordan Taylor</a>
                             </li>
                             <li>
-                            <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
-                            <a href="#">Code Like A Girl</a>
-                            </li>
-                            <li>
-                            <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
-                            <a href="#">Code Like A Girl</a>
+                                <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=rami" />
+                                <a href="#">Morgan Brown</a>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
             <?php else: ?>
                 <p>User not found.</p>

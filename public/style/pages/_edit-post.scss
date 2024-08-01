@@ -1,0 +1,25 @@
+.edit-post{
+  .add-area{
+    &:after {
+      content: "";
+      position: absolute;
+      background: rgba(81, 113, 255, 0.58);
+      z-index: 5;
+      width: 100%;
+      height: 100%;
+      top: 0;
+    }
+    svg{
+      position: absolute;
+      width: 23px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      fill: #FFF;
+      z-index: 50;
+    }
+    input{
+      z-index: 30 !important;
+    }
+  }
+}

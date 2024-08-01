@@ -58,6 +58,9 @@ switch ($action) {
         $PostController->topicPage();
         // include "../app/views/topics.php";
         break;
+    case 'search':
+        $PostController->searchPage();
+        break;
     // User
     case 'user':
         $userController->user();
@@ -67,6 +70,9 @@ switch ($action) {
         break;
     case 'my-profile':
         $userController->myProfile();
+        break;
+    case 'edit-post':
+        $PostController->editPost();
         break;
     default:
         // http_response_code(404);

@@ -43,7 +43,25 @@ class User {
     }
     // Get User Posts by user ID
     public function getUserPostsByID($id) {
-        $q="SELECT * FROM posts WHERE author_id = ?";
+        $q="SELECT 
+                posts.id AS post_id,
+                posts.title,
+                posts.content,
+                posts.published_at,
+                posts.likes,
+                posts.img,
+                users.id AS author_id,
+                users.username AS author_name,
+                users.photo AS author_img,
+                GROUP_CONCAT(tags.name ORDER BY tags.name SEPARATOR ', ') AS topics
+            FROM posts
+            INNER JOIN users ON posts.author_id = users.id
+            LEFT JOIN post_tags ON posts.id = post_tags.post_id
+            LEFT JOIN tags ON post_tags.topic_id = tags.id
+            WHERE author_id = ?
+            GROUP BY posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img, users.username, users.id, users.photo
+            ORDER BY posts.published_at DESC
+        ";
         $stmt=$this->db->prepare($q);
         $stmt->bind_param("i",$id);
         $stmt->execute();

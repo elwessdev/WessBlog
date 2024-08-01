@@ -7,6 +7,7 @@
       font-weight: 700;
       color: #091651;
       margin-bottom: 15px;
+      text-transform: capitalize;
     }
     .tags {
       display: flex;
@@ -15,12 +16,16 @@
       margin-bottom: 10px;
       a{
         color: white;
-        padding: 5px 10px;
+        padding: 4px 9px;
         border-radius: 5px;
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
         display: inline-block;
         background: #5171ff;
+        &:hover{
+          box-shadow: 0px 0px 3px 2px #5171ff;
+          color: #FFF;
+        }
       }
     }
     .img img{
@@ -150,7 +155,8 @@
         color: #5171ff;
       }
       img{
-        width: 45px;
+        width: 37px;
+        height: 37px;
         border-radius: 50%;
         margin-right: 6px;
       }
@@ -159,7 +165,8 @@
         font-size: 16px;
         font-weight: 500;
         margin: 0;
-        padding: 10px 0;
+        text-transform: capitalize;
+        padding: 6px 0;
         transition: all .2s;
         width: fit-content;
       }

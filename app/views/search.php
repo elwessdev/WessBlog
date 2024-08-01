@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo ucfirst($topicName)." Posts"; ?> - WessBlog</title>
+    <title><?php echo $keyword; ?> - WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style/main.css">
 </head>
-<body class="home topicPage">
+<body class="home searchPage">
 <!-- Header -->
 <div class="container mx-auto px-6 py-4">
     <?php include("header.php") ?>
@@ -16,7 +16,7 @@
     <div class="s_sc">
         <div class="latest-posts">
             <h2 class="title">
-                <?php echo ucfirst($topicName); ?> Posts
+                Search For <?php echo ucfirst($keyword); ?>
                 <svg width="33" height="6" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">

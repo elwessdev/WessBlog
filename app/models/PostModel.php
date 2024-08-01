@@ -46,23 +46,17 @@ class Post {
     }
     // All Posts
     public function getLatestPosts() {
-        // $q = "SELECT posts.id,posts.title,posts.content,posts.published_at,posts.likes,posts.img,
-        // users.username as author_name, users.id as author_id, users.photo as author_img
-        // FROM posts
-        // INNER JOIN users
-        // ON posts.author_id = users.id
-        // ORDER BY posts.published_at DESC";
         $q="SELECT 
-                posts.id AS post_id,
-                posts.title,
-                posts.content,
-                posts.published_at,
-                posts.likes,
-                posts.img,
-                users.username AS author_name,
-                users.id AS author_id,
-                users.photo AS author_img,
-                GROUP_CONCAT(tags.name ORDER BY tags.name SEPARATOR ', ') AS topics
+            posts.id AS postId,
+            posts.title AS postTitle,
+            posts.content AS postContent,
+            posts.published_at AS postDate,
+            posts.likes AS postLikes,
+            posts.img AS postCover,
+            users.username AS authorName,
+            users.id AS authorId,
+            users.photo AS authorPhoto,
+            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
             FROM
                 posts
             INNER JOIN
@@ -74,19 +68,31 @@ class Post {
             GROUP BY
                 posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img, users.username, users.id, users.photo
             ORDER BY
-                posts.published_at DESC;
+                postDate DESC;
         ";
         return $this->DBGetter($q);
     }
     // Top Post
     public function getTopPost(){
-        $q = "SELECT posts.id,posts.title,posts.img,posts.content,posts.likes,posts.published_at,
-        users.username as author_name, users.id as author_id, users.photo as author_img
-        FROM posts
-        INNER JOIN users
-        ON posts.author_id = users.id
-        ORDER BY posts.likes DESC
-        LIMIT 1";
+        $q = "SELECT 
+            posts.id AS postId,
+            posts.title AS postTitle,
+            posts.published_at AS postDate,
+            posts.img AS postCover,
+            users.username AS authorName,
+            users.id AS authorId,
+            users.photo AS authorPhoto,
+            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+            FROM posts
+            INNER JOIN users ON posts.author_id = users.id
+            LEFT JOIN post_tags ON posts.id = post_tags.post_id
+            LEFT JOIN tags ON post_tags.topic_id = tags.id
+            GROUP BY 
+                    posts.id, posts.title, posts.img, posts.published_at, 
+                    users.id, users.username, users.photo
+            ORDER BY posts.likes DESC
+            LIMIT 1;
+        ";
         return $this->DBGetter($q);
     }
     // Trading Posts (6 posts only)
@@ -94,7 +100,7 @@ class Post {
         $q = "SELECT * FROM posts ORDER BY likes DESC LIMIT 6";
         return $this->DBGetter($q);
     }
-    // Posts Topics with nums
+    // Posts Topics numbers
     public function getTopicsWithNums(){
         $q = "SELECT tags.name AS tagName, COUNT(post_tags.post_id) AS countTag
             FROM tags
@@ -106,16 +112,24 @@ class Post {
     }
     // Post Details
     public function getPostDetails($id){
-        $q="SELECT posts.title AS title, posts.img as img, posts.content AS content, posts.likes AS likes, posts.published_at AS date,
-            users.id AS author_id, users.username AS username, users.bio as bio, users.photo AS photo,
-            GROUP_CONCAT(tags.name ORDER BY tags.name SEPARATOR ', ') AS topics
+        $q="SELECT
+            posts.id AS postId,
+            posts.title AS postTitle,
+            posts.content AS postContent,
+            posts.published_at AS postDate,
+            posts.likes AS postLikes,
+            posts.img AS postCover,
+            users.username AS authorName,
+            users.id AS authorId,
+            users.photo AS authorPhoto,
+            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
             FROM posts
             INNER JOIN users
-            ON posts.author_id = users.id
-            LEFT JOIN
-                post_tags ON posts.id = post_tags.post_id
-            LEFT JOIN
-                tags ON post_tags.topic_id = tags.id
+                ON posts.author_id = users.id
+            LEFT JOIN post_tags
+                ON posts.id = post_tags.post_id
+            LEFT JOIN tags
+                ON post_tags.topic_id = tags.id
             WHERE posts.id = ?";
         $stmt=$this->db->prepare($q);
         $stmt->bind_param("i",$id);
@@ -132,16 +146,16 @@ class Post {
     // Get Topic posts
     public function getTopicPosts($name){
         $stmt=$this->db->prepare("SELECT 
-            posts.id AS post_id,
-            posts.title,
-            posts.content,
-            posts.published_at,
-            posts.likes,
-            posts.img,
-            users.username AS author_name,
-            users.id AS author_id,
-            users.photo AS author_img,
-            GROUP_CONCAT(tags.name ORDER BY tags.name SEPARATOR ', ') AS topics
+            posts.id AS postId,
+            posts.title AS postTitle,
+            posts.content AS postContent,
+            posts.published_at AS postDate,
+            posts.likes AS postLikes,
+            posts.img AS postCover,
+            users.username AS authorName,
+            users.id AS authorId,
+            users.photo AS authorPhoto,
+            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
         FROM
             posts
         INNER JOIN
@@ -158,6 +172,32 @@ class Post {
             posts.published_at DESC;
         ");
         $stmt->bind_param("s",$name);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+    // Get Search Posts
+    public function getSearchPosts($keyword){
+        $stmt=$this->db->prepare("SELECT 
+                posts.id AS postId,
+                posts.title AS postTitle,
+                posts.content AS postContent,
+                posts.published_at AS postDate,
+                posts.likes AS postLikes,
+                posts.img AS postCover,
+                users.username AS authorName,
+                users.id AS authorId,
+                users.photo AS authorPhoto,
+                GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+            FROM posts
+            INNER JOIN users ON posts.author_id = users.id
+            LEFT JOIN post_tags ON posts.id = post_tags.post_id
+            LEFT JOIN tags ON post_tags.topic_id = tags.id
+            WHERE posts.title LIKE ?
+            GROUP BY posts.id, users.username, users.id, users.photo
+            ORDER BY postLikes DESC
+            ");
+        $keyword="%{$keyword}%";
+        $stmt->bind_param("s",$keyword);
         $stmt->execute();
         return $stmt->get_result();
     }

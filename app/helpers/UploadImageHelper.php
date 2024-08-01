@@ -8,8 +8,8 @@ $dotenv->load();
 function uploadImage($file) {
     $imageKit = new ImageKit(
         $_ENV['IMAGEKIT_API_KEY'],
-        $_ENV['IMAGEKIT_AUTH'],
-        $_ENV['IMAGEKIT_API_SECRET']
+        $_ENV['IMAGEKIT_API_SECRET'],
+        $_ENV['IMAGEKIT_END_POINT']
     );
     $result="";
     try {
