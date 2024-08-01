@@ -44,14 +44,22 @@
             <label for="content">Poste Content</label>
             <textarea name="content" required></textarea>
             <br>
-            <label for="topics">Poste Topics</label>
-            <!-- <input type="text" name="topics" required> -->
-            <select multiple placeholder="Choose skills" data-allow-clear="1" name="tags">
-              <?php foreach ($tags as $tag): ?>
-              <option value="<?php echo $tag['id'] ?>"><?php echo $tag['name']; ?></option>
+            <label for="topics">Choose Topics</label>
+            <div class="topics">
+              <?php foreach ($AllTopics as $topic): ?>
+                <div class="topic">
+                  <input type="checkbox" value="<?php echo $topic['id'] ?>" name="topics[]" />
+                  <label><?php echo $topic['name']; ?></label>
+                </div>
               <?php endforeach; ?>
-            </select>
-            <p><?php echo $error ?></p>
+            </div>
+            <?php if (!empty($errors)): ?>
+                <ul class="errorsList">
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
             <button type="submit" class="btn">Publish</button>
           </div>
       </form>

@@ -31,7 +31,7 @@
                     <p class="error"></p>
                 </div>
                 <?php if (!empty($errors)): ?>
-                    <ul class="errors">
+                    <ul class="errorsList">
                         <?php foreach ($errors as $error): ?>
                             <li><?php echo htmlspecialchars($error); ?></li>
                         <?php endforeach; ?>

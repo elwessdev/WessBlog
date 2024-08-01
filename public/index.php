@@ -1,5 +1,6 @@
 <?php
 session_start();
+require '../vendor/autoload.php';
 require '../config/db.php';
 require '../vendor/autoload.php';
 require '../app/helpers/UploadImageHelper.php';
@@ -25,7 +26,7 @@ $PostController = new PostController($postModel);
 $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? null;
 
-echo $id."<br>";
+// echo $id."<br>";
 
 
 // echo "action".$action."<br>";
@@ -52,6 +53,10 @@ switch ($action) {
         break;
     case 'add-post':
         $PostController->handleNewPost();
+        break;
+    case 'topic':
+        $PostController->topicPage();
+        // include "../app/views/topics.php";
         break;
     // User
     case 'user':

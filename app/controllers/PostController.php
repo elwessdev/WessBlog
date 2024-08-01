@@ -8,29 +8,49 @@ class PostController{
   public function handleNewPost(){
     // Get all tags
     $error="";
-    $tags = $this->postModel->getTags();
+    $AllTopics = $this->postModel->getAllTopics();
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       $title = $_POST['title'];
       $content = $_POST['content'];
-      $tags = $_POST['tags'];
-      if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $id=$_SESSION['user_id'];
-        if (!is_dir("uploads/$id/")) {
-          mkdir("uploads/$id/", 0777, true);
-        }
-        $targetFile = "uploads/$id/".basename($_FILES["image"]["name"]);
-        if (!move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-          $error="Sorry, there was an error uploading your file.";
-        } else {
-          if(isset($title)&&isset($content)){
-            $tags = $this->postModel->addPost($id,$title,$targetFile,$content);
-            include '../app/views/add-post.php';
-          } else {
-            $error="Sorry, There is a problem, Please try again.";
-          }
-        }
+      $errors=[];
+      if(!isset($_FILES['image'])||$_FILES['image']['error']!=0){array_push($errors,"Pelase upload Post Cover");}
+      if(empty($title)){array_push($errors,"Pelase fill Post Title");}
+      if(empty($content)){array_push($errors,"Pelase fill Post Content");}
+      if (!isset($_POST['topics'])){array_push($errors,"Pelase Choose topics");}
+
+      if(!empty($errors)){
+        include '../app/views/add-post.php';
+        exit();
       } else {
-        $error="No image uploaded or an error occurred.";
+        $id=$_SESSION['user_id'];
+        $file = $_FILES['image']['tmp_name'];
+        $cover = uploadImage($file);
+        if(empty($cover)){
+          array_push($errors,"There is problem in upload Post Photo");
+          include '../app/views/add-post.php';
+          exit();
+        }
+        try {
+          // Start transaction
+          $this->postModel->beginTransaction();
+          // Add post
+          $postId = $this->postModel->addPost($id, $title, $cover, $content);
+          // Add topics
+          $topics = $_POST['topics'];
+          foreach ($topics as $topic) {
+              $this->postModel->addPostTopic($postId, $topic);
+          }
+          // Commit transaction
+          $this->postModel->commit();
+          header('location: ?action=my-profile');
+        } catch (Exception $e) {
+            // Rollback transaction in case of error
+            $this->postModel->rollback();
+            // array_push($errors, "There was a problem adding your post: " . $e->getMessage());
+            array_push($errors, "There was a problem adding your post, Please try again");
+            include '../app/views/add-post.php';
+            exit();
+        }
       }
     } else {
       include '../app/views/add-post.php';
@@ -53,6 +73,15 @@ class PostController{
     } else {
       http_response_code(400);
       echo "Invalid request";
+    }
+  }
+  // Topic Page
+  public function topicPage(){
+    if(isset($_GET["action"])&&$_GET["action"]=="topic"&&isset($_GET["name"])){
+      $topicName = $_GET["name"];
+      $topics = $this->postModel->getTopicsWithNums();
+      $topicPosts = $this->postModel->getTopicPosts($_GET["name"]);
+      include '../app/views/topic.php';
     }
   }
 }

@@ -30,11 +30,11 @@
                 <p><?php echo $post['username']; ?></p>
             </a>
         <?php endif; ?>
-        
         <div class="tags">
-            <a href="?action=topic&name=inspiration">Inspiration</a>
-            <a>Inspiration</a>
-            <a>Lifestyle</a>
+            <?php $topicsPost = explode(',', $post["topics"]);?>
+            <?php foreach ($topicsPost as $topic): ?>
+                <a href="?action=topic&name=<?php echo strtolower(trim($topic)); ?>"><?php echo $topic; ?></a>
+            <?php endforeach; ?>
         </div>
         <div class="img">
             <img src="<?php echo $post["img"]; ?>" />

@@ -1,17 +1,21 @@
 <?php
 use ImageKit\ImageKit;
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable( __DIR__ . '/../../');
+$dotenv->load();
 
 function uploadImage($file) {
     $imageKit = new ImageKit(
-        "public_oT6DViR8+Ipw9hhbWYdnlb3gz7Y=",
-        "private_C6cJPhmSi8+q/+SxSUBY+gDXhxA=",
-        "https://ik.imagekit.io/nhx8dixrzg"
+        $_ENV['IMAGEKIT_API_KEY'],
+        $_ENV['IMAGEKIT_AUTH'],
+        $_ENV['IMAGEKIT_API_SECRET']
     );
     $result="";
     try {
         $uploadFile = $imageKit->uploadFile([
             'file' => fopen($file, 'r'), // Open file in read mode
-            'fileName' => 'profiles/' . basename($file) // File name with folder
+            'fileName' => basename($file) // File name with folder
         ]);
         // print_r($uploadFile);
         $result = $uploadFile->result->url;

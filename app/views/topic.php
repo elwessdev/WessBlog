@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Wess-Blog</title>
+    <title><?php echo $topicName." Posts"; ?> - Wess-Blog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style/main.css">
@@ -13,65 +13,10 @@
 <div class="container mx-auto px-6 py-4">
     <?php include("header.php") ?>
     <!-- Page content -->
-    <main>
-        <div class="main-article">
-            <div class="img" style="background-image: url('<?php echo $topPost->img; ?>')"></div>
-            <div class="article-content">
-                <div class="tags">
-                    <span>Inspiration</span>
-                    <span>Lifestyle</span>
-                </div>
-                <a class="title-ps" href="?action=post&id=<?php echo $topPost->id ?>"><?php echo $topPost->title; ?></a>
-                <div class="author-date">
-                    <a href="?action=user&id=<?php echo $topPost->author_name; ?>">
-                        <img src="<?php echo $topPost->author_img ?>" />
-                        <?php echo $topPost->author_name; ?>
-                    </a>
-                    .
-                    <span>
-                        <?php
-                            $date = new DateTime($topPost->published_at);
-                            echo $date->format("F j, Y");
-                        ?>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="trading">
-            <h2 class="title">
-                Trading
-                <svg width="33" height="6" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#5171ff"></stop>
-                            <stop offset="100%" stop-color="#5171ff"></stop>
-                        </linearGradient>
-                        </defs>
-                    <path d="M33 1c-3.3 0-3.3 4-6.598 4C23.1 5 23.1 1 19.8 1c-3.3 0-3.3 4-6.599 4-3.3 0-3.3-4-6.6-4S3.303 5 0 5" stroke="url(#gradient)" stroke-width="2" fill="none"></path>
-                </svg>
-            </h2>
-            <div class="articles">
-                <?php foreach($tradingPosts as $post): ?>
-                    <div class="sidebar-article">
-                        <img src="<?php echo $post["img"]; ?>" alt="iPhone">
-                        <a href="?action=post&id=<?php echo $post['id'] ?>" class="article-info">
-                            <p><?php echo $post["title"]; ?></p>
-                            <span>
-                            <?php
-                                $date = new DateTime($post["published_at"]);
-                                echo $date->format('F j, Y');
-                            ?>
-                            </span>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </main>
     <div class="s_sc">
         <div class="latest-posts">
             <h2 class="title">
-                Latest Posts
+                <?php echo ucfirst($topicName); ?> Posts
                 <svg width="33" height="6" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -83,8 +28,8 @@
                 </svg>
             </h2>
             <div class="posts">
-                <?php if (count($posts->fetch_array()) > 0): ?>
-                    <?php foreach ($posts as $post): ?>
+                <?php if (count($topicPosts->fetch_array()) > 0): ?>
+                    <?php foreach ($topicPosts as $post): ?>
                         <article class="post">
                             <a href="?action=post&id=<?php echo $post['post_id'] ?>" class="img">
                                 <img src="<?php echo $post['img']; ?>">

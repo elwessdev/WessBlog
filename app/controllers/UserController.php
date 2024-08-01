@@ -54,7 +54,6 @@ class UserController {
             $newPassword = $_POST['new-password'];
             $confirmPassword = $_POST['confirm-password'];
             $errors = [];
-            
 
             $userDetails = $this->userModel->getUserByEmail($prevEmail);
             
@@ -108,7 +107,6 @@ class UserController {
                     array_push($errors,"You're password is wrong");
                 }
             }
-
             if(!empty($errors)){
                 include '../app/views/settings.php';
                 exit();
@@ -132,7 +130,8 @@ class UserController {
                 }
                 if($changePassword){
                     // array_push($errors, "new password $newPassword");
-                    $this->userModel->changePassword($newPassword,$userDetails["id"]);
+                    $pwd = password_hash($newPassword, PASSWORD_BCRYPT);
+                    $this->userModel->changePassword($pwd,$userDetails["id"]);
                 }
                 // include '../app/views/settings.php';
                 // exit();

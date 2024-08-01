@@ -224,14 +224,17 @@
               display: flex;
               grid-gap: 8px;
               margin-top: 10px;
-              span{
+              a{
                 color: white;
                 padding: 3px 8px;
                 border-radius: 5px;
                 font-size: 11px;
-                text-transform: uppercase;
+                // text-transform: uppercase;
                 display: inline-block;
                 background: #5171ff;
+                &:hover{
+                  color: #FFF;
+                }
               }
             }
             a {
