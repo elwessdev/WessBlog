@@ -6,7 +6,6 @@ class AuthController {
     }
     // Handle user login
     public function login() {
-        checkLogin();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             function validate($data){
                 $data = trim($data);
@@ -16,21 +15,28 @@ class AuthController {
             }
             $email = validate($_POST['email']);
             $password = validate($_POST['password']);
+            $errors=[];
             if (empty($email)) {
-                echo "<p class='error_msg'>Email is required</p>";
+                array_push($errors,"Username/Email is required");
             } else if (empty($password)) {
-                echo "<p class='error_msg'>Password is required</p>";
+                array_push($errors,"Password is required");
             } 
-            // Get user Data with Email
-            $user = $this->userModel->getUserByEmail($email);
-            if ($user && password_verify($password, $user['password'])) {
-                // Set session variables
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                header('Location: /blog/public/?action=profile');
-            } else {
-                echo "Invalid username or password";
+            if(!empty($errors)){
                 include '../app/views/auth/login.php';
+                exit();
+            } else {
+                $user = $this->userModel->getUserByEmail($email);
+                if ($user && password_verify($password, $user['password'])) {
+                    // Set session variables
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['user_photo'] = $user['photo'];
+                    header('Location: /blog/public/?action=profile');
+                } else {
+                    array_push($errors,"Invalid username or password");
+                    include '../app/views/auth/login.php';
+                    exit();
+                }
             }
         } else {
             include '../app/views/auth/login.php';
@@ -38,26 +44,42 @@ class AuthController {
     }
     // Handle user registration
     public function register() {
-        checkLogin();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['username'];
             $email = $_POST['email'];
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirm_password'];
-            if ($password !== $confirmPassword) {
-                echo "Passwords do not match!";
-                return;
-            }
-            if($this->userModel->userExist($email,$username)){
-                echo "The user already exist";
+            $errors = [];
+            if (preg_match('/^\d+$/', $username)) {
+                array_push($errors,"Username cannot be all numbers.");
             } else {
+                if($this->userModel->userExist($email,$username)){
+                    array_push($errors,"The user already exist UserName or Email");
+                }
+            }
+            if ($password !== $confirmPassword) {
+                array_push($errors,"Passwords do not match!");
+                
+            } else {
+                if(!preg_match('/(?=.*[A-Za-z])(?=.*\d)/', $password)){
+                    array_push($errors,$password);
+                    array_push($errors,"Password must contain both letters and numbers.");
+                }
+            }
+            if(!empty($errors)){
+                include '../app/views/auth/register.php';
+                exit();
+            }else{
+                $uid = rand(1000, 999999);
                 $profile_photo = "https://api.dicebear.com/9.x/thumbs/svg?seed=$username";
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-                $result = $this->userModel->createUser($username,$email,$hashedPassword,$profile_photo);
+                $result = $this->userModel->createUser($uid,$username,$email,$hashedPassword,$profile_photo);
                 if ($result) {
                     header('Location: /blog/public/?action=login');
                 } else {
-                    echo "Registration failed, Please Try again :)";
+                    array_push($errors,"Registration failed, Please Try again");
+                    include '../app/views/auth/register.php';
+                    exit();
                 }
             }
         } else {

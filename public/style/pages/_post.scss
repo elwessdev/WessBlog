@@ -2,6 +2,7 @@
   .post_content{
     width: 780px;
     margin: 0 auto;
+    position: relative;
     h2{
       font-size: 30px;
       font-weight: 700;
@@ -19,7 +20,6 @@
         padding: 4px 9px;
         border-radius: 5px;
         font-size: 11px;
-        text-transform: uppercase;
         display: inline-block;
         background: #5171ff;
         &:hover{
@@ -148,6 +148,7 @@
       display: flex;
       margin-bottom: 15px !important;
       position: relative;
+      width: fit-content;
       &:not(:last-of-type){
         margin-bottom: 3px;
       }
@@ -170,27 +171,29 @@
         transition: all .2s;
         width: fit-content;
       }
-      .edit{
-        position: absolute;
-        right: 0;
-        text-decoration: none;
-        transition: all 0.2s;
-        background-color: #5171ff;
-        color: #FFF;
-        border-radius: 5px;
-        font-size: 14px;
-        font-weight: 400;
-        padding: 7px 15px;
-        display: flex;
-        height: fit-content;
-        margin: 2px 0;
-        svg{
-          width: 14px;
-          fill: #FFF;
-          margin-right: 3px;
-          position: relative;
-          top: 2px;
-        }
+    }
+    .edit{
+      position: absolute;
+      right: 0;
+      top: 60px;
+      text-decoration: none;
+      transition: all 0.2s;
+      background-color: #5171ff;
+      color: #FFF;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 7px 15px;
+      display: flex;
+      height: fit-content;
+      margin: 2px 0;
+      &:hover{
+        background-color: #1831a1;
+      }
+      svg{
+        width: 14px;
+        fill: #FFF;
+        margin-right: 3px;
       }
     }
   }

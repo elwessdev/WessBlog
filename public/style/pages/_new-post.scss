@@ -78,6 +78,20 @@
 			flex-wrap: wrap;
 			padding-left: 15px;
 			height: fit-content;
+			.sec{
+				width: 100%;
+				position: relative;
+				p{
+					position: absolute;
+					right: 4px;
+					top: 4px;
+					width: fit-content;
+					font-weight: 600;
+					font-size: 12px;
+					color: #091651;
+					margin-bottom: 5px;
+				}
+			}
 			label{
 				font-weight: 500;
 				font-size: 14px;
@@ -131,40 +145,15 @@
 				margin: 0 auto;
 				margin-top: 35px;
 			}
-			.select2-container{
-				width: 100%;
-				height: 40px;
-				.select2-search{
-					height: 40px;
-					position: relative;
-					top: -21px;
-					background: none;
-					font-size: 13px;
-					margin-left: 8px;
-					textarea{
-						width: 100%;
-						height: 40px;
-						background: none;
-						resize: none;
-					}
-				}
-				.select2-selection--multiple .select2-selection__rendered {
-					margin-top: 3px !important;
-				}
-				.select2-selection--multiple .select2-selection__choice__remove {
-					color: #bdc6d0;
-					&:hover{
-						color: #5171ff !important;
-						background:none !important;
-					}
-				}
-			}
 			.topics{
 				display: flex;
 				grid-gap: 5px;
+				flex-wrap: wrap;
 				margin-top: 5px;
+				width: 100%;
 				.topic{
 					width: fit-content;
+					display: flex;
 					position: relative;
 					label{
 						font-size: 13px;
@@ -189,10 +178,10 @@
 						position: absolute;
 						width: 100%;
 						cursor: pointer;
+						top: 0;
 						height: 100%;
 						opacity: 0;
 						left: 0;
-						right: 0;
 						z-index: 5;
 						margin: 0;
 					}
@@ -203,24 +192,4 @@
 			margin-top: 20px;
 		}
 	}
-}
-.select2-container--bootstrap4.select2-container--focus .select2-selection {
-  border-color: #ccc !important;
-  box-shadow: none !important;
-}
-.select2-container--bootstrap4 .select2-selection__clear {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 17px;
-  height: 16px;
-  padding: 0;
-}
-.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
-  font-size: 14px;
-}
-.select2-container--bootstrap4 .select2-results__option--highlighted, 
-.select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
-	color: #fff;
-	background-color: #5171ff;
 }

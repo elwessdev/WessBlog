@@ -5,10 +5,10 @@ class User {
         $this->db = $db;
     }
     // Create new user
-    public function createUser($username,$email,$password,$profile_photo) {
-        $q = "INSERT INTO users (username, email, password, photo, created_at) VALUES (?, ?, ?, ?, NOW())";
+    public function createUser($id,$username,$email,$password,$profile_photo) {
+        $q = "INSERT INTO users (id, username, email, password, photo, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
         $stmt = $this->db->prepare($q);
-        $stmt->bind_param("ssss", $username,$email,$password,$profile_photo);
+        $stmt->bind_param("issss", $id,$username,$email,$password,$profile_photo);
         return $stmt->execute();
     }
     // Check user exist with mail or username
@@ -22,9 +22,9 @@ class User {
     }
     // Get user data with email when login
     public function getUserByEmail($email) {
-        $q = "SELECT * FROM users WHERE email = ?";
+        $q = "SELECT * FROM users WHERE email = ? OR username = ?";
         $stmt = $this->db->prepare($q);
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("ss",$email,$email);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
@@ -35,7 +35,36 @@ class User {
     }
     // Get user details by Name
     public function getUserByID($id) {
-        $q = "SELECT * FROM users WHERE id = ?";
+        $q = "SELECT 
+            users.id,
+            users.username,
+            users.email,
+            users.photo,
+            users.bio,
+            COUNT(following.user_id) AS followers
+            FROM users
+            LEFT JOIN following
+            ON users.id = following.followed_id
+            WHERE users.id = ?
+            GROUP BY users.id, users.username, users.photo, users.bio
+        ";
+        $stmt = $this->db->prepare($q);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+    // User Following
+    public function followingUsers($id) {
+        $q = "SELECT 
+            users.id AS user_id,
+            users.username AS user_name,
+            users.photo AS user_photo
+            FROM users
+            LEFT JOIN following
+            ON users.id = following.followed_id
+            WHERE following.user_id = ?
+        ";
         $stmt = $this->db->prepare($q);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -115,6 +144,29 @@ class User {
         $stmt=$this->db->prepare($q);
         $stmt->bind_param("si",$password,$id);
         $stmt->execute();
+    }
+    // Get user photo
+    public function getUserPhoto($id){
+        $q = "SELECT users.photo AS photo FROM users WHERE id = ?";
+        $stmt = $this->db->prepare($q);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['photo'];
+        } else {
+            return null;
+        }
+    }
+    // Check Follow
+    public function checkFollow($userID,$followID){
+        $q = "SELECT id FROM following WHERE user_id = ? AND followed_id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("ii",$userID,$followID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
     }
 }
 ?>

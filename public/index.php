@@ -27,21 +27,23 @@ $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? null;
 
 // echo $id."<br>";
-
-
 // echo "action".$action."<br>";
 // echo "id".$id."<br>";
 // echo $_SESSION["user_id"];
 // Route based on the path
+
+
 switch ($action) {
     case '':
         $homeController->index();
         break;
     // Auth
     case 'login':
+        checkLoginInside();
         $authController->login();
         break;
     case 'register':
+        checkLoginInside();
         $authController->register();
         break;
     case 'logout':
@@ -52,6 +54,7 @@ switch ($action) {
         $PostController->PostPage();
         break;
     case 'add-post':
+        checkLoginOutSide();
         $PostController->handleNewPost();
         break;
     case 'topic':
@@ -61,17 +64,24 @@ switch ($action) {
     case 'search':
         $PostController->searchPage();
         break;
+    case 'for-you':
+        checkLoginOutSide();
+        $PostController->ForYouPage();
+        break;
     // User
     case 'user':
         $userController->user();
         break;
     case 'settings':
+        checkLoginOutSide();
         $userController->settings();
         break;
     case 'my-profile':
+        checkLoginOutSide();
         $userController->myProfile();
         break;
     case 'edit-post':
+        checkLoginOutSide();
         $PostController->editPost();
         break;
     default:

@@ -16,13 +16,20 @@
     <div class="auth">
         <h2>Sign in</h2>
         <form action="/blog/public/?action=login" method="POST">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email">Username/Email:</label>
+                <input type="text" id="email" name="email" required>
             <br>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" minlength="5" id="password" name="password" required>
             <br>
             <p>Did you not have account ? <a href="?action=register">Sign up</a></p>
+            <?php if (!empty($errors)): ?>
+                <ul class="errorsList" style="margin-top: 10px !important;">
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
             <button type="submit">Sign in</button>
             <?php if (!empty($message)): ?>
                 <p style="color:green;"><?php echo htmlspecialchars($message); ?></p>

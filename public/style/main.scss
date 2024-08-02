@@ -28,6 +28,20 @@ input:focus,textarea:focus{
   font-size: 13px;
   margin: 6px 0;
 }
+.no-post{
+  padding: 40px;
+  border: 1px solid rgba(204, 204, 204, 0.5411764706);
+  border-radius: 5px;
+  background-color: #eef5ff;
+  height: fit-content;
+  transition: all 0.2s;
+  position: relative;
+  color: #091651;
+  text-align: center;
+  font-weight: 500;
+  width: 50%;
+  margin: 0 auto;
+}
 // Header
 @import "pages/_header";
 // Footer
@@ -48,3 +62,5 @@ input:focus,textarea:focus{
 @import "pages/_search";
 // Search
 @import "pages/_edit-post";
+// For you
+@import "pages/_for-you";

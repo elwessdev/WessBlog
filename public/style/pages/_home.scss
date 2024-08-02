@@ -117,7 +117,6 @@
           border-radius: 5px;
           background-color: #ffffff;
           width: 100%;
-          height: fit-content;
           transition: all 0.2s;
           &:hover .img img{
             transform: scale(1.07);
@@ -128,6 +127,7 @@
             margin-right: 20px;
             cursor: pointer;
             border-radius: 10px;
+            height: 198px;
             transition: all 0.2s;
             overflow: hidden;
             img{

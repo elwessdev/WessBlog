@@ -5,6 +5,7 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable( __DIR__ . '/../../');
 $dotenv->load();
 
+
 function uploadImage($file) {
     $imageKit = new ImageKit(
         $_ENV['IMAGEKIT_API_KEY'],
@@ -24,4 +25,14 @@ function uploadImage($file) {
         $result="";
     }
     return $result;
+}
+function deleteImage($id){
+    $imageKit = new ImageKit(
+        $_ENV['IMAGEKIT_API_KEY'],
+        $_ENV['IMAGEKIT_API_SECRET'],
+        $_ENV['IMAGEKIT_END_POINT']
+    );
+    return $imageKit->deleteFile($id);
+    // echo $id."<br>";
+    // echo("Delete file : " . json_encode($deleteFile));
 }

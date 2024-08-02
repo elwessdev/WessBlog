@@ -34,6 +34,22 @@ input:focus, textarea:focus {
   margin: 6px 0;
 }
 
+.no-post {
+  padding: 40px;
+  border: 1px solid rgba(204, 204, 204, 0.5411764706);
+  border-radius: 5px;
+  background-color: #eef5ff;
+  height: -moz-fit-content;
+  height: fit-content;
+  transition: all 0.2s;
+  position: relative;
+  color: #091651;
+  text-align: center;
+  font-weight: 500;
+  width: 50%;
+  margin: 0 auto;
+}
+
 header {
   margin-bottom: 30px;
 }
@@ -44,38 +60,44 @@ header nav {
   padding: 10px 0;
 }
 header nav .logo {
-  font-size: 26px;
   display: flex;
   align-items: center;
-  font-weight: 600;
-  color: #5171ff;
 }
 header nav .logo img {
   width: 58px;
+  z-index: 10;
+  position: relative;
+}
+header nav .logo p {
+  font-size: 30px;
+  font-weight: 600;
+  z-index: 30;
+  color: #5171ff;
+  position: relative;
+  left: -32px;
+  top: 4px;
 }
 header nav ul {
   list-style: none;
   display: flex;
+  grid-gap: 8px;
 }
 header nav ul li {
   border-radius: 30px;
-  padding: 6px 20px;
 }
 header nav ul li a {
+  padding: 7px 20px;
   text-decoration: none;
-  color: #333;
   font-size: 14px;
   font-weight: 600;
   transition: all 0.2s;
+  display: flex;
+  border-radius: 30px;
+  color: #5171ff;
+  border: 2px solid #5171ff;
 }
 header nav ul li a:hover {
-  color: #5171ff;
-}
-header nav ul li.active {
   background-color: #5171ff;
-  color: #FFF;
-}
-header nav ul li.active a {
   color: #FFF;
 }
 header nav ul li.ds {
@@ -85,7 +107,6 @@ header nav ul li.ds .search_bar {
   width: 280px;
   border: 2px solid #5171ff;
   font-size: 14px;
-  margin-left: 10px;
   overflow: hidden;
   border-radius: 30px;
   margin-bottom: 0;
@@ -94,7 +115,7 @@ header nav ul li.ds .search_bar {
 header nav ul li.ds .search_bar input {
   width: 100%;
   outline: none;
-  font-size: 14px;
+  font-size: 13px;
   text-indent: 11px;
   border-radius: 30px;
   height: 34px;
@@ -331,8 +352,6 @@ footer .backTop:hover {
   border-radius: 5px;
   background-color: #ffffff;
   width: 100%;
-  height: -moz-fit-content;
-  height: fit-content;
   transition: all 0.2s;
 }
 .home .s_sc .latest-posts .posts .post:hover .img img {
@@ -344,6 +363,7 @@ footer .backTop:hover {
   margin-right: 20px;
   cursor: pointer;
   border-radius: 10px;
+  height: 198px;
   transition: all 0.2s;
   overflow: hidden;
 }
@@ -688,12 +708,13 @@ footer .backTop:hover {
   transform: scale(1.07);
 }
 .profile .posts .post .img {
-  width: 200px;
+  width: 270px;
   margin-right: 20px;
   cursor: pointer;
   border-radius: 10px;
   transition: all 0.2s;
   overflow: hidden;
+  height: 170px;
 }
 .profile .posts .post .img img {
   transition: all 0.3s ease-in-out;
@@ -701,7 +722,7 @@ footer .backTop:hover {
   height: 100%;
 }
 .profile .posts .post .post-content {
-  width: calc(100% - 240px);
+  width: calc(100% - 270px);
 }
 .profile .posts .post .post-content .user {
   display: flex;
@@ -788,7 +809,7 @@ footer .backTop:hover {
   right: -15px;
   top: -10px;
 }
-.profile .posts .post .options a {
+.profile .posts .post .options a, .profile .posts .post .options button {
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -797,7 +818,7 @@ footer .backTop:hover {
   align-items: center;
   cursor: pointer;
 }
-.profile .posts .post .options a svg {
+.profile .posts .post .options a svg, .profile .posts .post .options button svg {
   fill: #fff;
   width: 14px;
 }
@@ -805,8 +826,14 @@ footer .backTop:hover {
   background: #5171ff;
   margin-bottom: 3px;
 }
+.profile .posts .post .options .edit:hover {
+  background-color: #405ddb !important;
+}
 .profile .posts .post .options .delete {
   background: #ff2626;
+}
+.profile .posts .post .options .delete:hover {
+  background-color: #cf1a1a !important;
 }
 .profile .infos {
   width: 320px;
@@ -888,6 +915,7 @@ footer .backTop:hover {
 }
 .profile .infos .following ul li {
   display: flex;
+  padding: 3px 0;
 }
 .profile .infos .following ul li:not(:last-of-type) {
   margin-bottom: 3px;
@@ -896,6 +924,8 @@ footer .backTop:hover {
   width: 25px;
   border-radius: 50%;
   margin-right: 6px;
+  position: relative;
+  top: -1px;
 }
 .profile .infos .following ul li a {
   color: #091651;
@@ -904,6 +934,11 @@ footer .backTop:hover {
 }
 .profile .infos .following ul li a:hover {
   color: #5171ff;
+}
+.profile .infos .following p {
+  font-weight: 500;
+  font-size: 14px;
+  color: #091651;
 }
 
 .new-post {
@@ -987,6 +1022,21 @@ footer .backTop:hover {
   height: -moz-fit-content;
   height: fit-content;
 }
+.new-post form .details .sec {
+  width: 100%;
+  position: relative;
+}
+.new-post form .details .sec p {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-weight: 600;
+  font-size: 12px;
+  color: #091651;
+  margin-bottom: 5px;
+}
 .new-post form .details label {
   font-weight: 500;
   font-size: 14px;
@@ -1041,42 +1091,17 @@ footer .backTop:hover {
   margin: 0 auto;
   margin-top: 35px;
 }
-.new-post form .details .select2-container {
-  width: 100%;
-  height: 40px;
-}
-.new-post form .details .select2-container .select2-search {
-  height: 40px;
-  position: relative;
-  top: -21px;
-  background: none;
-  font-size: 13px;
-  margin-left: 8px;
-}
-.new-post form .details .select2-container .select2-search textarea {
-  width: 100%;
-  height: 40px;
-  background: none;
-  resize: none;
-}
-.new-post form .details .select2-container .select2-selection--multiple .select2-selection__rendered {
-  margin-top: 3px !important;
-}
-.new-post form .details .select2-container .select2-selection--multiple .select2-selection__choice__remove {
-  color: #bdc6d0;
-}
-.new-post form .details .select2-container .select2-selection--multiple .select2-selection__choice__remove:hover {
-  color: #5171ff !important;
-  background: none !important;
-}
 .new-post form .details .topics {
   display: flex;
   grid-gap: 5px;
+  flex-wrap: wrap;
   margin-top: 5px;
+  width: 100%;
 }
 .new-post form .details .topics .topic {
   width: -moz-fit-content;
   width: fit-content;
+  display: flex;
   position: relative;
 }
 .new-post form .details .topics .topic label {
@@ -1102,39 +1127,15 @@ footer .backTop:hover {
   position: absolute;
   width: 100%;
   cursor: pointer;
+  top: 0;
   height: 100%;
   opacity: 0;
   left: 0;
-  right: 0;
   z-index: 5;
   margin: 0;
 }
 .new-post form .errorsList {
   margin-top: 20px;
-}
-
-.select2-container--bootstrap4.select2-container--focus .select2-selection {
-  border-color: #ccc !important;
-  box-shadow: none !important;
-}
-
-.select2-container--bootstrap4 .select2-selection__clear {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 17px;
-  height: 16px;
-  padding: 0;
-}
-
-.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
-  font-size: 14px;
-}
-
-.select2-container--bootstrap4 .select2-results__option--highlighted,
-.select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected=true] {
-  color: #fff;
-  background-color: #5171ff;
 }
 
 .settings .profile-form {
@@ -1260,6 +1261,7 @@ footer .backTop:hover {
 .post .post_content {
   width: 780px;
   margin: 0 auto;
+  position: relative;
 }
 .post .post_content h2 {
   font-size: 30px;
@@ -1279,7 +1281,6 @@ footer .backTop:hover {
   padding: 4px 9px;
   border-radius: 5px;
   font-size: 11px;
-  text-transform: uppercase;
   display: inline-block;
   background: #5171ff;
 }
@@ -1409,6 +1410,8 @@ footer .backTop:hover {
   display: flex;
   margin-bottom: 15px !important;
   position: relative;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .post .post_content .user:not(:last-of-type) {
   margin-bottom: 3px;
@@ -1433,9 +1436,10 @@ footer .backTop:hover {
   width: -moz-fit-content;
   width: fit-content;
 }
-.post .post_content .user .edit {
+.post .post_content .edit {
   position: absolute;
   right: 0;
+  top: 60px;
   text-decoration: none;
   transition: all 0.2s;
   background-color: #5171ff;
@@ -1449,12 +1453,13 @@ footer .backTop:hover {
   height: fit-content;
   margin: 2px 0;
 }
-.post .post_content .user .edit svg {
+.post .post_content .edit:hover {
+  background-color: #1831a1;
+}
+.post .post_content .edit svg {
   width: 14px;
   fill: #FFF;
   margin-right: 3px;
-  position: relative;
-  top: 2px;
 }
 
 .searchPage .explore_topics, .topicPage .explore_topics {

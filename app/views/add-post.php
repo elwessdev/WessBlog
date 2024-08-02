@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - WessBlog</title>
     <!-- CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-    <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"> 
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
+    <!-- <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">  -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style/main.css">
 </head>
@@ -38,23 +38,29 @@
             <p class="error"></p>
           </div>
           <div class="details">
-            <label for="title">Poste Title</label>
-            <input type="text" name="title" required>
-            <br>
-            <label for="content">Poste Content</label>
-            <textarea name="content" required></textarea>
-            <br>
-            <label for="topics">Choose Topics</label>
-            <div class="topics">
-              <?php foreach ($AllTopics as $topic): ?>
-                <div class="topic">
-                  <input type="checkbox" value="<?php echo $topic['id'] ?>" name="topics[]" />
-                  <label><?php echo $topic['name']; ?></label>
-                </div>
-              <?php endforeach; ?>
+            <div class="sec">
+              <label for="title">Poste Title</label>
+              <p class="titleNum"><span>0</span> character - (Minimum 20)</p>
+              <input id="inptTitle" minlength="20" type="text" name="title" required>
+            </div>
+            <div class="sec">
+              <p class="titleContent"><span>0</span> character - (Minimum 200)</p>
+              <label for="content">Poste Content</label>
+              <textarea id="inptContent" minlength="200" name="content" required></textarea>
+            </div>
+            <div class="sec">
+              <label for="topics">Choose Topics</label>
+              <div class="topics">
+                <?php foreach ($AllTopics as $topic): ?>
+                  <div class="topic">
+                    <input type="checkbox" value="<?php echo $topic['id'] ?>" name="topics[]" />
+                    <label><?php echo $topic['name']; ?></label>
+                  </div>
+                <?php endforeach; ?>
+              </div>
             </div>
             <?php if (!empty($errors)): ?>
-                <ul class="errorsList">
+                <ul class="errorsList" style="margin-top: 10px !important;">
                     <?php foreach ($errors as $error): ?>
                         <li><?php echo htmlspecialchars($error); ?></li>
                     <?php endforeach; ?>
@@ -70,7 +76,7 @@
 <!-- Js -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 <script src="js/post.js"></script>
 </body>
 </html>

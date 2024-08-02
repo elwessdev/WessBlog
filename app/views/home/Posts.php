@@ -1,5 +1,5 @@
 <div class="posts">
-  <?php if (count($posts->fetch_array()) > 0) : ?>
+  <?php $v = $posts->fetch_array(); if (is_array($v)&&count($v) > 0): ?>
     <?php foreach ($posts as $post) : ?>
       <article class="post">
         <a href="?action=post&id=<?php echo $post["postId"] ?>" class="img">
@@ -48,6 +48,6 @@
       </article>
     <?php endforeach; ?>
   <?php else : ?>
-    <p>No posts available.</p>
+    <div class="no-post">No posts available.</div>
   <?php endif; ?>
 </div>

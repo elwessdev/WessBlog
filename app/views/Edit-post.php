@@ -29,9 +29,14 @@
           </svg>
       </h2>
       <form action="?action=edit-post" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="postID" value="<?php echo $curPost["postId"]; ?>" />
+          <input type="hidden" name="prevCover" value="<?php echo $curPost["postCover"]; ?>" />
+          <input type="hidden" name="prevTitle" value="<?php echo $curPost["postTitle"]; ?>" />
+          <input type="hidden" name="prevContent" value="<?php echo $curPost["postContent"]; ?>" />
+          <!-- <input type="hidden" name="prevTopics" value="<?php echo $curPost["topics"]; ?>" /> -->
           <div class="img">
             <div class="add-area">
-              <input type="file" name="image" id="image" accept="image/*" class="img_up_fi" required />
+              <input type="file" name="image" id="image" accept="image/*" class="img_up_fi" />
               <p>Upload Main Post Image</p>
               <img id="previewImg" src="<?php echo $curPost["postCover"]; ?>" alt="" />
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -41,15 +46,21 @@
             <p class="error"></p>
           </div>
           <div class="details">
-            <label for="title">Poste Title</label>
-            <input type="text" name="title" value="<?php echo $curPost["postTitle"]; ?>" required>
-            <br>
-            <label for="content">Poste Content</label>
-            <textarea name="content" required><?php echo $curPost["postContent"]; ?></textarea>
-            <br>
+            <div class="sec">
+              <label for="title">Poste Title</label>
+              <p class="titleNum"><span>0</span> character - (Minimum 20)</p>
+              <input id="inptTitle" minlength="20" type="text" name="title" value="<?php echo $curPost["postTitle"]; ?>" required>
+            </div>
+            <div class="sec">
+              <p class="titleContent"><span>0</span> character - (Minimum 200)</p>
+              <label for="content">Poste Content</label>
+              <textarea id="inptContent" minlength="200" name="content" required><?php echo $curPost["postContent"]; ?></textarea>
+            </div>        
             <label for="topics">Choose Topics</label>
             <div class="topics">
-              <?php $postTopics = explode(',', $curPost["topics"]);?>
+              <?php 
+                $postTopics = explode(',', $curPost["topics"]);
+              ?>
               <?php foreach ($AllTopics as $topic): ?>
                 <div class="topic">
                   <input type="checkbox" <?php echo in_array($topic['name'],$postTopics) ?"checked" :""; ?> value="<?php echo $topic['id'] ?>" name="topics[]" />

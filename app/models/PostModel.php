@@ -201,5 +201,87 @@ class Post {
         $stmt->execute();
         return $stmt->get_result();
     }
+    // Get Post Topics ID
+    public function getPostTopicsID($postID){
+        $q = "SELECT GROUP_CONCAT(tags.id) AS topics
+            FROM posts
+            LEFT JOIN post_tags ON posts.id = post_tags.post_id
+            LEFT JOIN tags ON post_tags.topic_id = tags.id
+            WHERE posts.id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("i",$postID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+    // UPDATE Post
+    public function changePostCover($postID, $url){
+        $q = "UPDATE posts SET img = ? WHERE id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("si",$url,$postID);
+        $stmt->execute();
+    }
+    public function changePostTitle($postID, $title){
+        $q = "UPDATE posts SET title = ? WHERE id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("si",$title,$postID);
+        $stmt->execute();
+    }
+    public function changePostContent($postID, $content){
+        $q = "UPDATE posts SET content = ? WHERE id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("si",$content,$postID);
+        $stmt->execute();
+    }
+    public function deletePostTopic($postID, $topic){
+        $q="DELETE FROM post_tags WHERE post_id = ? AND topic_id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("ii",$postID,$topic);
+        if (!$stmt->execute()) {
+            throw new Exception("Error inserting post topic: " . $stmt->error);
+        }
+    }
+    // Following Posts
+    public function followingPosts($id){
+        $q="SELECT 
+                posts.id AS postId,
+                posts.title AS postTitle,
+                posts.content AS postContent,
+                posts.published_at AS postDate,
+                posts.likes AS postLikes,
+                posts.img AS postCover,
+                users.username AS authorName,
+                users.id AS authorId,
+                users.photo AS authorPhoto,
+                GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+            FROM
+                posts
+            INNER JOIN
+                users ON posts.author_id = users.id
+            LEFT JOIN
+                post_tags ON posts.id = post_tags.post_id
+            LEFT JOIN
+                tags ON post_tags.topic_id = tags.id
+            INNER JOIN
+                following ON users.id = following.followed_id
+            WHERE
+                following.user_id = ?
+            GROUP BY
+                posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img, users.username, users.id, users.photo
+            ORDER BY posts.published_at DESC
+        ";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+    // Check post owner
+    public function checkPostOwner($user,$post){
+        $stmt=$this->db->prepare("SELECT id FROM posts WHERE author_id = ? AND id = ?");
+        $stmt->bind_param("ii",$user,$post);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        return $res->num_rows > 0;
+    }
 }
 ?>

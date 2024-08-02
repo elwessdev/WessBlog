@@ -10,9 +10,12 @@ class UserController {
         $this->isAdmin=false;
         $admin=$this->isAdmin;
         if (isset($_GET['action']) && $_GET['action'] === 'user' && isset($_GET['id'])) {
-            $result = $this->userModel->getUserByID($_GET['id']);
-            $user = $result->fetch_assoc();
+            $user = $this->userModel->getUserByID($_GET['id']);
             $posts = $this->userModel->getUserPostsByID($_GET['id']);
+            $followingUsers = $this->userModel->followingUsers($_GET['id']);
+            if(isset($_SESSION['user_id'])){
+                $isFollow = $this->userModel->checkFollow($_SESSION["user_id"],$_GET['id']);
+            }
             if ($user) {
                 include '../app/views/user.php';
             } else {
@@ -27,16 +30,16 @@ class UserController {
     public function myProfile() {
         $this->isAdmin=true;
         $admin=$this->isAdmin;
-        $result = $this->userModel->getUserByID($_SESSION['user_id']);
-        $user = $result->fetch_assoc();
+        $user = $this->userModel->getUserByID($_SESSION['user_id']);
         $posts = $this->userModel->getUserPostsByID($_SESSION['user_id']);
+        $followingUsers = $this->userModel->followingUsers($_SESSION['user_id']);
+        // echo $_SESSION['user_id'];
         include '../app/views/user.php';
     }
     // Settings Page
     public function settings() {
         // Get Previous Data
-        $result = $this->userModel->getUserByID($_SESSION['user_id']);
-        $user = $result->fetch_assoc();
+        $user = $this->userModel->getUserByID($_SESSION['user_id']);
         // Handle new data
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             $username = $_POST['username'];
@@ -108,22 +111,25 @@ class UserController {
                 include '../app/views/settings.php';
                 exit();
             } else {
-                // array_push($errors,"Data is valid i will changed");
-                if(!empty($changes["photoLink"])){
-                    $this->userModel->changePhoto($changes["photoLink"],$userDetails["id"]);
-                }
-                if($changes["username"]){
-                    $this->userModel->changeUsername($username,$userDetails["id"]);
-                }
-                if($changes["bio"]){
-                    $this->userModel->changeBio($bio,$userDetails["id"]);
-                }
-                if($changes["email"]){
-                    $this->userModel->changeEmail($email,$userDetails["id"]);
-                }
-                if($changes["password"]){
-                    $pwd = password_hash($newPassword, PASSWORD_BCRYPT);
-                    $this->userModel->changePassword($pwd,$userDetails["id"]);
+                if($changes["photo"]||$changes["username"]||$changes["bio"]||$changes["email"]||$changes["password"]){
+                    // array_push($errors,"Data is valid i will changed");
+                    if(!empty($changes["photoLink"])){
+                        $this->userModel->changePhoto($changes["photoLink"],$userDetails["id"]);
+                        $_SESSION['user_photo'] = $this->userModel->getUserPhoto($userDetails["id"]);
+                    }
+                    if($changes["username"]){
+                        $this->userModel->changeUsername($username,$userDetails["id"]);
+                    }
+                    if($changes["bio"]){
+                        $this->userModel->changeBio($bio,$userDetails["id"]);
+                    }
+                    if($changes["email"]){
+                        $this->userModel->changeEmail($email,$userDetails["id"]);
+                    }
+                    if($changes["password"]){
+                        $pwd = password_hash($newPassword, PASSWORD_BCRYPT);
+                        $this->userModel->changePassword($pwd,$userDetails["id"]);
+                    }
                 }
                 header("Location: ?action=settings");
             }
