@@ -46,6 +46,14 @@ switch ($action) {
         checkLoginInside();
         $authController->register();
         break;
+    case 'forgot-password':
+        checkLoginInside();
+        $authController->forgotPassword();
+        break;
+    case 'reset-password':
+        checkLoginInside();
+        $authController->resetPassword();
+        break;
     case 'logout':
         $authController->logout();
         break;

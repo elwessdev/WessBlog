@@ -106,10 +106,10 @@ class User {
         return $result->num_rows > 0;
     } 
     // check user password
-    public function checkEmailExist($email,$id){
-        $q = "SELECT email FROM users WHERE email = ? AND id != ?";
+    public function checkEmailExist($email){
+        $q = "SELECT email FROM users WHERE email = ?";
         $stmt=$this->db->prepare($q);
-        $stmt->bind_param("si",$email,$id);
+        $stmt->bind_param("s",$email);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->num_rows > 0;
@@ -167,6 +167,31 @@ class User {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->num_rows > 0;
+    }
+    // Set Token reset password
+    public function ResetTokenPassword($token,$expire,$email){
+        $stmt=$this->db->prepare("UPDATE users SET 	reset_token = ?, token_expires_at = ? WHERE email = ?");
+        $stmt->bind_param("sss",$token,$expire,$email);
+        $stmt->execute();
+        if($this->db->affected_rows){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    // Get Token
+    public function getTokenResetPassword($token){
+        $stmt=$this->db->prepare("SELECT * from users WHERE reset_token = ?");
+        $stmt->bind_param("s",$token);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+    // Get Token
+    public function resetSaveNewPassword($pwd,$id){
+        $stmt=$this->db->prepare("UPDATE users SET password ?, reset_token = NULL, token_expires_at = NULL WHERE id = ?");
+        $stmt->bind_param("si",$pwd,$id);
+        return $stmt->execute();
     }
 }
 ?>

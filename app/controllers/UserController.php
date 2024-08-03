@@ -88,7 +88,7 @@ class UserController {
                 $changes["bio"]=true;
             }
             if(!empty($email)&&$email!=$prevEmail){
-                if($this->userModel->checkEmailExist($email,$userDetails["id"])){
+                if($this->userModel->checkEmailExist($email)){
                     array_push($errors,"Email is exist");
                 } else {
                     $changes["email"]=true;

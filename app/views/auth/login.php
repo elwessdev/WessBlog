@@ -22,7 +22,8 @@
             <label for="password">Password:</label>
             <input type="password" minlength="5" id="password" name="password" required>
             <br>
-            <p>Did you not have account ? <a href="?action=register">Sign up</a></p>
+            <a class="for" href="?action=forgot-password">Forgot Password</a>
+            <p>Did you not have account ?<a href="?action=register">Sign up</a></p>
             <?php if (!empty($errors)): ?>
                 <ul class="errorsList" style="margin-top: 10px !important;">
                     <?php foreach ($errors as $error): ?>

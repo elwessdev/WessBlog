@@ -2,18 +2,18 @@
 	background-color: #f4f4f44d;
 	padding: 20px;
 	border-radius: 10px;
-	box-shadow: 0 0 13px rgb(81 113 255 / 53%);
+	box-shadow: 0 0 13px rgb(81 113 255 / 26%);
 	width: fit-content;
 	margin: 0 auto;
 	margin-top: 100px;
 	h2 {
 		margin-bottom: 20px;
-		position: relative;
-		text-align: center;
-		font-size: 39px;
-		color: #333;
-		z-index: 3;
-		position: relative;
+    text-align: center;
+    font-size: 35px;
+    color: #333;
+    z-index: 3;
+    position: relative;
+    font-weight: 600;
 		svg{
 			position: absolute;
 			width: 95px;
@@ -69,6 +69,15 @@
 			&:hover {
 				background-color: #5171ff;
 			}
+		}
+		.for{
+			color: #5171ff;
+			cursor: pointer;
+			text-decoration: none;
+			font-weight: 500;
+			font-size: 14px;
+			margin: 3px 0;
+			text-decoration: underline;
 		}
 	}
 	.error_msg{

@@ -39,7 +39,7 @@ class AuthController {
                 }
             }
         } else {
-            include '../app/views/auth/login.php';
+            include '../app/views/auth/Login.php';
         }
     }
     // Handle user registration
@@ -83,7 +83,91 @@ class AuthController {
                 }
             }
         } else {
-            include '../app/views/auth/register.php';
+            include '../app/views/auth/Register.php';
+        }
+    }
+    // Handle Reset password
+    public function forgotPassword(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'&&$_GET["action"]=="forgot-password"){
+            $email=$_POST["email"];
+            $emailExist = $this->userModel->checkEmailExist($email);
+            $errors = [];
+            if(!$emailExist){
+                array_push($errors, "Email is not exist");
+            }
+            if(!empty($errors)){
+                include '../app/views/Forgot-password.php';
+                exit();
+            } else {
+                // Prepare Token and expire date
+                $token = bin2hex(random_bytes(16));
+                $token_hash=hash("sha256",$token);
+                $expiry=date("y-m-d h:i:s",time()+60*30);
+                $setToken = $this->userModel->ResetTokenPassword($token_hash,$expiry,$email);
+                if($setToken){
+                    include "../app/helpers/PHPMailer.php";
+                    $mail->setFrom("noreply@WessBlog.com");
+                    $mail->addAddress($email);
+                    $mail->Subject="Password Reset";
+                    $mail->Body = <<<END
+                        Click <a href="http://localhost/blog/public/?action=reset-password&token=$token">HERE</a> to reset you password
+                    END;
+                    try{
+                        $mail->send();
+                    } catch(Exception $error){
+                        echo "error ".$mail->ErrorInfo;
+                    }
+                }
+                echo "Message sent, please check your inbox";
+            }
+        } else {
+            include '../app/views/Forgot-password.php';
+        }
+    }
+    // Handle Reset password
+    public function resetPassword(){
+        if($_GET["action"]=="reset-password"&&isset($_GET["token"])){
+            $token=hash("sha256",$_GET["token"]);
+            $user = $this->userModel->getTokenResetPassword($token);
+            if(!$user){
+                die("Token not found, please try again");
+                // header("refresh:2;url=?action=reset-password");
+            } else{
+                if(strtotime($user["token_expires_at"])<=time()){
+                    echo "Token has expired, Please Try again";
+                    // header("refresh:2;url=?action=reset-password");
+                    exit();
+                } else {
+                    // header("location: ?action=reset-password&token={$token}");
+                    include "../app/views/reset-password.php";
+                }
+            }
+        }
+        if($_GET["action"]=="reset-password"&&isset($_GET["token"])&&$_SERVER["REQUEST_METHOD"]=="POST"){
+            $token=hash("sha256",$_POST["token"]);
+            $id=$_POST["user_id"];
+            $pwd1=$_POST["pwd1"];
+            $pwd2=$_POST["pwd2"];
+            $error=[];
+            if ($password !== $confirmPassword) {
+                array_push($errors,"Passwords do not match!");
+            } else {
+                if(!preg_match('/(?=.*[A-Za-z])(?=.*\d)/', $password)){
+                    array_push($errors,$password);
+                    array_push($errors,"Password must contain both letters and numbers.");
+                }
+            }
+            if(!empty($errors)){
+                // foreach($errors as $err){
+                //     echo $err."<br>";
+                // }
+                // include "../app/views/reset-password.php";
+                die("dsqfsdf");
+                header("location: ?action=reset-password&token={$token}");
+            } else {
+                $this->userModel->resetSaveNewPassword($pwd1,$id);
+                header("location:?action=reset-password&token={$token}");
+            }
         }
     }
     // Handle user logout

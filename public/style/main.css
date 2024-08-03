@@ -554,7 +554,7 @@ footer .backTop:hover {
   background-color: rgba(244, 244, 244, 0.3019607843);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 13px rgba(81, 113, 255, 0.53);
+  box-shadow: 0 0 13px rgba(81, 113, 255, 0.26);
   width: -moz-fit-content;
   width: fit-content;
   margin: 0 auto;
@@ -562,12 +562,12 @@ footer .backTop:hover {
 }
 .auth h2 {
   margin-bottom: 20px;
-  position: relative;
   text-align: center;
-  font-size: 39px;
+  font-size: 35px;
   color: #333;
   z-index: 3;
   position: relative;
+  font-weight: 600;
 }
 .auth h2 svg {
   position: absolute;
@@ -626,6 +626,15 @@ footer .backTop:hover {
 }
 .auth form button:hover {
   background-color: #5171ff;
+}
+.auth form .for {
+  color: #5171ff;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  margin: 3px 0;
+  text-decoration: underline;
 }
 .auth .error_msg {
   color: red;
