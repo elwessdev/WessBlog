@@ -2,7 +2,7 @@
     <nav>
       <!-- <div class="logo">Katen<span>.</span></div> -->
       <a href="?action=" class="logo">
-        <img src="./assets/min.png" />
+        <img src="./public/assets/min.png" />
         <p>WessBlog</p>
       </a>
       <ul>

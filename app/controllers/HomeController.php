@@ -10,6 +10,6 @@ class HomeController{
     $topPost = $this->postModel->getTopPost()->fetch_object();
     $tradingPosts = $this->postModel->getTradingPosts();
     $topics = $this->postModel->getTopicsWithNums();
-    include '../app/views/index.php';
+    include 'app/views/index.php';
   }
 }

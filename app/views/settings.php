@@ -7,7 +7,7 @@
     <title>Settings - WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 
 <body>
@@ -16,7 +16,7 @@
         <?php include __DIR__ . "/header.php" ?>
         <!-- Page content -->
         <div class="settings">
-            <form class="profile-form" action="/blog/public/?action=settings" method="POST" enctype="multipart/form-data">
+            <form class="profile-form" action="?action=settings" method="POST" enctype="multipart/form-data">
                 <input type="text" name="prev-photo" value="<?php echo $user["photo_id"] ?>" hidden />
                 <input type="text" name="prev-username" value="<?php echo $user["username"] ?>" hidden />
                 <input type="text" name="prev-bio" value="<?php echo $user["bio"] ?>" hidden />

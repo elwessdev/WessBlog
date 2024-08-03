@@ -8,7 +8,7 @@
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
     <!-- <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">  -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body>
 <div class="container mx-auto px-6 py-4">
@@ -28,7 +28,7 @@
               <path d="M33 1c-3.3 0-3.3 4-6.598 4C23.1 5 23.1 1 19.8 1c-3.3 0-3.3 4-6.599 4-3.3 0-3.3-4-6.6-4S3.303 5 0 5" stroke="url(#gradient)" stroke-width="2" fill="none"></path>
           </svg>
       </h2>
-      <form action="/blog/public/?action=add-post" method="POST" enctype="multipart/form-data">
+      <form action="?action=add-post" method="POST" enctype="multipart/form-data">
           <div class="img">
             <div class="add-area">
               <input type="file" name="image" id="image" accept="image/*" class="img_up_fi" required />

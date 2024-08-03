@@ -6,7 +6,7 @@
     <title>Home - WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body class="home">
 <!-- Header -->

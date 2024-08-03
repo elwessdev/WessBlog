@@ -6,7 +6,7 @@
     <title>Reset Password | WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body>
 <div class="container mx-auto px-6 py-4">
@@ -18,7 +18,7 @@
             Reset Password
         </h2>
         <?php if(!isset($done)): ?>
-            <form action="/blog/public/?action=reset-password" method="POST">
+            <form action="?action=reset-password" method="POST">
                 <input type="hidden" name="token" value="<?php # echo $user["reset_token"]; ?>">
                 <input type="hidden" name="user_id" value="<?php echo $user["id"]; ?>">
                 <label for="pwd1">Enter new password:</label>

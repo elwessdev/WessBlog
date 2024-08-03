@@ -6,7 +6,7 @@
     <title>Sign up | WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body>
 <div class="container mx-auto px-6 py-4">
@@ -17,7 +17,7 @@
         <h2>
             Sign up
         </h2>
-        <form action="/blog/public/?action=register" method="POST">
+        <form action="?action=register" method="POST">
             <label for="username">Username:</label>
             <input type="text" minlength="5" id="username" name="username" required>
             <br>

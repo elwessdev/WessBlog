@@ -20,6 +20,15 @@ class User {
         $result = $stmt->get_result();
         return $result->num_rows > 0;
     }
+    // Check user exist with mail or username
+    public function userNameExist($username){
+        $q = "SELECT id FROM users WHERE username = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
     // Get user data with email when login
     public function getUserByEmail($email) {
         $q = "SELECT * FROM users WHERE email = ? OR username = ?";

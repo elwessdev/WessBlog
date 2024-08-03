@@ -22,7 +22,7 @@ class AuthController {
                 array_push($errors,"Password is required");
             }
             if(!empty($errors)){
-                include '../app/views/auth/login.php';
+                include 'app/views/auth/login.php';
                 exit();
             } else {
                 $user = $this->userModel->getUserByEmail($email);
@@ -31,15 +31,15 @@ class AuthController {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['user_photo'] = $user['photo'];
-                    header('Location: /blog/public/?action=profile');
+                    header('Location: ?action=profile');
                 } else {
                     array_push($errors,"Invalid username or password");
-                    include '../app/views/auth/login.php';
+                    include 'app/views/auth/login.php';
                     exit();
                 }
             }
         } else {
-            include '../app/views/auth/Login.php';
+            include 'app/views/auth/Login.php';
         }
     }
     // Handle user registration
@@ -50,24 +50,32 @@ class AuthController {
             $password = $_POST['password'];
             $confirmPassword = $_POST['confirm_password'];
             $errors = [];
-            if (preg_match('/^\d+$/', $username)) {
-                array_push($errors,"Username cannot be all numbers.");
+
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $username)){
+                array_push($errors,"Should username contains characters and numbers");
             } else {
-                if($this->userModel->userExist($email,$username)){
-                    array_push($errors,"The user already exist UserName or Email");
+                if($this->userModel->userNameExist($username)){
+                    array_push($errors,"The username already exist");
                 }
             }
+
+            if(!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',$email)){
+                array_push($errors,"Email is not valid");
+            } else if($this->userModel->checkEmailExist($email)){
+                array_push($errors,"Email is exist");
+            }
+
             if ($password !== $confirmPassword) {
                 array_push($errors,"Passwords do not match!");
                 
             } else {
-                if(!preg_match('/(?=.*[A-Za-z])(?=.*\d)/', $password)){
-                    array_push($errors,$password);
-                    array_push($errors,"Password must contain both letters and numbers.");
+                if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/',$password)){
+                    array_push($errors, "Password is weak (Minimum 6 characters, At least one uppercase letter/lowercase letter/one digit/one special character)");
                 }
             }
+
             if(!empty($errors)){
-                include '../app/views/auth/register.php';
+                include 'app/views/auth/register.php';
                 exit();
             }else{
                 $uid = rand(1000, 999999);
@@ -75,15 +83,16 @@ class AuthController {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $result = $this->userModel->createUser($uid,$username,$email,$hashedPassword,$profile_photo);
                 if ($result) {
-                    header('Location: /blog/public/?action=login');
+                    header('Location: ?action=login');
                 } else {
                     array_push($errors,"Registration failed, Please Try again");
-                    include '../app/views/auth/register.php';
+                    include 'app/views/auth/register.php';
                     exit();
                 }
             }
+
         } else {
-            include '../app/views/auth/Register.php';
+            include 'app/views/auth/Register.php';
         }
     }
     // Handle Reset password
@@ -97,7 +106,7 @@ class AuthController {
                 array_push($errors, "Email is not exist");
             }
             if(!empty($errors)){
-                include '../app/views/Forgot-password.php';
+                include 'app/views/Forgot-password.php';
                 exit();
             } else {
                 // Prepare Token and expire date
@@ -107,7 +116,7 @@ class AuthController {
                 $expiry=date("Y-m-d H:i:s",time()+60*30);
                 $setToken = $this->userModel->TokenResetPassword($token_hash,$expiry,$email);
                 if($setToken){
-                    include "../app/helpers/PHPMailer.php";
+                    include "app/helpers/PHPMailer.php";
                     $mail->setFrom('noreply@wessblog.com',"WessBlog");
                     $mail->addAddress($email);
                     $mail->Subject="Reset Password";
@@ -126,7 +135,7 @@ class AuthController {
                             </tr>
                             <tr>
                                 <td align="center" style="padding: 20px;">
-                                    <a href="http://localhost/blog/public/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
+                                    <a href="http://localhost/wessblog/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
                                 </td>
                             </tr>
                             <tr>
@@ -143,11 +152,11 @@ class AuthController {
                         $done=false;
                         // echo "error ".$mail->ErrorInfo;
                     }
-                    include '../app/views/Forgot-password.php';
+                    include 'app/views/Forgot-password.php';
                 }
             }
         } else {
-            include '../app/views/Forgot-password.php';
+            include 'app/views/Forgot-password.php';
         }
     }
     // Handle Reset password
@@ -168,7 +177,7 @@ class AuthController {
                     exit();
                 } else {
                     // header("location: ?action=reset-password&token={$token}");
-                    include "../app/views/reset-password.php";
+                    include "app/views/reset-password.php";
                 }
             }
         }
@@ -187,13 +196,13 @@ class AuthController {
                 }
             }
             if(!empty($errors)){
-                include "../app/views/reset-password.php";
+                include "app/views/reset-password.php";
             } else {
                 $hash_password = password_hash($pwd1, PASSWORD_DEFAULT);
                 $changed = $this->userModel->resetSaveNewPassword($hash_password,$id);
                 if($changed){
                     $done=true;
-                    include "../app/views/reset-password.php";
+                    include "app/views/reset-password.php";
                 }
             }
         }
@@ -201,7 +210,7 @@ class AuthController {
     // Handle user logout
     public function logout() {
         session_destroy();
-        header('Location: /blog/public/?action=login');
+        header('Location: ?action=login');
     }
 }
 ?>

@@ -6,7 +6,7 @@
     <title>Sign in | WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body>
 <div class="container mx-auto px-6 py-4">
@@ -15,7 +15,7 @@
     <!-- Page Content -->
     <div class="auth">
         <h2>Sign in</h2>
-        <form action="/blog/public/?action=login" method="POST">
+        <form action="?action=login" method="POST">
             <label for="email">Username/Email:</label>
                 <input type="text" id="email" name="email" required>
             <br>
@@ -23,7 +23,7 @@
             <input type="password" minlength="5" id="password" name="password" required>
             <br>
             <a class="for" href="?action=forgot-password">Forgot Password</a>
-            <p>Did you not have account ?<a href="?action=register">Sign up</a></p>
+            <p>Did you not have account ?<a href="?action=register"> Sign up</a></p>
             <?php if (!empty($errors)): ?>
                 <ul class="errorsList" style="margin-top: 10px !important;">
                     <?php foreach ($errors as $error): ?>

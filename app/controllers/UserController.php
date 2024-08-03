@@ -17,7 +17,7 @@ class UserController {
                 $isFollow = $this->userModel->checkFollow($_SESSION["user_id"],$_GET['id']);
             }
             if ($user) {
-                include '../app/views/user.php';
+                include 'app/views/user.php';
             } else {
                 header("location: ../public/");
             }
@@ -34,7 +34,7 @@ class UserController {
         $posts = $this->userModel->getUserPostsByID($_SESSION['user_id']);
         $followingUsers = $this->userModel->followingUsers($_SESSION['user_id']);
         // echo $_SESSION['user_id'];
-        include '../app/views/user.php';
+        include 'app/views/user.php';
     }
     // Settings Page
     public function settings() {
@@ -96,17 +96,25 @@ class UserController {
                 // echo $file."<br>";
             }
             if($username!=$prevUsername){
-                if($this->userModel->checkUsernameExist($username,$userDetails["id"])){
+                if(!preg_match('/^[a-zA-Z0-9]+$/', $username)){
+                    array_push($errors,"Should username contains characters and numbers only");
+                } else if($this->userModel->checkUsernameExist($username,$userDetails["id"])){
                     array_push($errors,"Username is exist");
                 } else {
                     $changes["username"]=true;
                 }
             }
             if(!empty($bio)&&$bio!=$prevBio){
-                $changes["bio"]=true;
+                if(!preg_match('/^[a-zA-Z0-9\s.,!?@]+$/', $bio)){
+                    array_push($errors,"Invalid Bio");
+                } else {
+                    $changes["bio"]=true;
+                }
             }
             if(!empty($email)&&$email!=$prevEmail){
-                if($this->userModel->checkEmailExist($email)){
+                if(!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',$email)){
+                    array_push($errors,"Email is not valid");
+                } else if($this->userModel->checkEmailExist($email)){
                     array_push($errors,"Email is exist");
                 } else {
                     $changes["email"]=true;
@@ -116,7 +124,11 @@ class UserController {
                 if(password_verify($currentPassword, $userDetails['password'])){
                     if(!empty($newPassword)&&!empty($confirmPassword)){
                         if($newPassword==$confirmPassword){
-                            $changes["password"]=true;
+                            if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/',$newPassword)){
+                                array_push($errors, "Password is weak (Minimum 6 characters, At least one uppercase letter/lowercase letter/one digit/one special character)");
+                            } else {
+                                $changes["password"]=true;
+                            }
                         } else {
                             array_push($errors, "You'r password confirm is wrong");
                         }
@@ -126,7 +138,7 @@ class UserController {
                 }
             }
             if(!empty($errors)){
-                include '../app/views/settings.php';
+                include 'app/views/settings.php';
                 exit();
             } else {
                 if($changes["photo"]||$changes["username"]||$changes["bio"]||$changes["email"]||$changes["password"]){
@@ -152,7 +164,7 @@ class UserController {
                 header("Location: ?action=settings");
             }
         } else {
-            include '../app/views/settings.php';
+            include 'app/views/settings.php';
         }
     }
 }

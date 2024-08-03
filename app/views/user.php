@@ -6,7 +6,7 @@
     <title>Profile - WessBlog</title>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body>
     <div class="container mx-auto px-6 py-4">
@@ -156,7 +156,7 @@
 <script lang="javascript">
     function followBtn(){
         let followedID = document.getElementById("follow-btn").dataset.user;
-        fetch("../app/helpers/FollowHelper.php",{
+        fetch("app/helpers/FollowHelper.php",{
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -172,7 +172,7 @@
     }
     function unfollowBtn(){
         let followedID = document.getElementById("follow-btn").dataset.user;
-        fetch("../app/helpers/FollowHelper.php",{
+        fetch("app/helpers/FollowHelper.php",{
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -188,7 +188,7 @@
     }
     function deletePost(id,auth){
         console.log(id,auth);
-        fetch("../app/helpers/DeletePost.php",{
+        fetch("app/helpers/DeletePost.php",{
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
