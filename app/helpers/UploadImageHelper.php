@@ -5,7 +5,7 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable( __DIR__ . '/../../');
 $dotenv->load();
 
-
+// Upload Image
 function uploadImage($file) {
     $imageKit = new ImageKit(
         $_ENV['IMAGEKIT_API_KEY'],
@@ -19,13 +19,14 @@ function uploadImage($file) {
             'fileName' => basename($file) // File name with folder
         ]);
         // print_r($uploadFile);
-        $result = $uploadFile->result->url;
+        $result = $uploadFile;
     } catch (Exception $e) {
         // $result = 'Upload error: ' . $e->getMessage();
         $result="";
     }
     return $result;
 }
+// Delete image after changed
 function deleteImage($id){
     $imageKit = new ImageKit(
         $_ENV['IMAGEKIT_API_KEY'],

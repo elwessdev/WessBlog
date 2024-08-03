@@ -10,7 +10,7 @@
 		margin-bottom: 20px;
     text-align: center;
     font-size: 35px;
-    color: #333;
+    color: #091651;
     z-index: 3;
     position: relative;
     font-weight: 600;
@@ -89,5 +89,22 @@
 		color: #28a745;
     text-align: left;
     font-size: 14px;
+	}
+	.done_msg{
+    width: 400px;
+    text-align: center;
+    padding: 20px 0;
+    font-weight: 500;
+    color: #5171ff;
+    display: flex;
+		font-size: 16px;
+    justify-content: center;
+		svg{
+			width: 28px;
+			fill: #5171ff;
+			margin-right: 7px;
+			position: relative;
+			top: -2px;
+		}
 	}
 }

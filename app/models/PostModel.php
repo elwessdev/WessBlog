@@ -119,6 +119,7 @@ class Post {
             posts.published_at AS postDate,
             posts.likes AS postLikes,
             posts.img AS postCover,
+            posts.img_id AS postCoverID,
             users.username AS authorName,
             users.id AS authorId,
             users.photo AS authorPhoto,
@@ -215,10 +216,10 @@ class Post {
         return $result->fetch_assoc();
     }
     // UPDATE Post
-    public function changePostCover($postID, $url){
-        $q = "UPDATE posts SET img = ? WHERE id = ?";
+    public function changePostCover($postID,$url,$img_id){
+        $q = "UPDATE posts SET img = ?, img_id = ? WHERE id = ?";
         $stmt=$this->db->prepare($q);
-        $stmt->bind_param("si",$url,$postID);
+        $stmt->bind_param("ssi",$url,$img_id,$postID);
         $stmt->execute();
     }
     public function changePostTitle($postID, $title){

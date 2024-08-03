@@ -38,3 +38,4 @@ document.querySelector(".profile-avatar input").addEventListener("change", () =>
     // document.querySelector(".img .error").textContent="No file selected.";
   }
 })
+// Topics

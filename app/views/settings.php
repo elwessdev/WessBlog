@@ -17,6 +17,7 @@
         <!-- Page content -->
         <div class="settings">
             <form class="profile-form" action="/blog/public/?action=settings" method="POST" enctype="multipart/form-data">
+                <input type="text" name="prev-photo" value="<?php echo $user["photo_id"] ?>" hidden />
                 <input type="text" name="prev-username" value="<?php echo $user["username"] ?>" hidden />
                 <input type="text" name="prev-bio" value="<?php echo $user["bio"] ?>" hidden />
                 <input type="text" name="prev-email" value="<?php echo $user["email"] ?>" hidden />
@@ -33,7 +34,7 @@
                 <?php if (!empty($errors)): ?>
                     <ul class="errorsList">
                         <?php foreach ($errors as $error): ?>
-                            <li><?php echo htmlspecialchars($error); ?></li>
+                            <li><?php echo $error; ?></li>
                         <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>

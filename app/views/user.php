@@ -197,11 +197,11 @@
         })
         .then(res=>res.text())
         .then(data=>{
-            console.log("data", "post deleted", data);
+            // console.log("data", "post deleted", data);
             Swal.fire({
                 position: "top-center",
                 icon: "success",
-                title: "The post id deleted",
+                title: "The post is deleted",
                 showConfirmButton: false,
                 timer: 1500
             });

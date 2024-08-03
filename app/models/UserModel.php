@@ -40,6 +40,7 @@ class User {
             users.username,
             users.email,
             users.photo,
+            users.photo_id,
             users.bio,
             COUNT(following.user_id) AS followers
             FROM users
@@ -107,18 +108,17 @@ class User {
     } 
     // check user password
     public function checkEmailExist($email){
-        $q = "SELECT email FROM users WHERE email = ?";
-        $stmt=$this->db->prepare($q);
+        $stmt=$this->db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->bind_param("s",$email);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->num_rows > 0;
+        return $result->num_rows;
     }
     // Settings
-    public function changePhoto($photo,$id){
-        $q = "UPDATE users SET photo = ? WHERE id = ?";
+    public function changePhoto($photo,$photo_id,$id){
+        $q = "UPDATE users SET photo = ?, photo_id = ? WHERE id = ?";
         $stmt=$this->db->prepare($q);
-        $stmt->bind_param("si",$photo,$id);
+        $stmt->bind_param("ssi",$photo,$photo_id,$id);
         $stmt->execute();
     }
     public function changeUsername($username,$id){
@@ -169,7 +169,7 @@ class User {
         return $result->num_rows > 0;
     }
     // Set Token reset password
-    public function ResetTokenPassword($token,$expire,$email){
+    public function TokenResetPassword($token,$expire,$email){
         $stmt=$this->db->prepare("UPDATE users SET 	reset_token = ?, token_expires_at = ? WHERE email = ?");
         $stmt->bind_param("sss",$token,$expire,$email);
         $stmt->execute();
@@ -189,9 +189,14 @@ class User {
     }
     // Get Token
     public function resetSaveNewPassword($pwd,$id){
-        $stmt=$this->db->prepare("UPDATE users SET password ?, reset_token = NULL, token_expires_at = NULL WHERE id = ?");
+        $stmt=$this->db->prepare("UPDATE users SET password = ?, reset_token = NULL, token_expires_at = NULL WHERE id = ?");
         $stmt->bind_param("si",$pwd,$id);
-        return $stmt->execute();
+        $stmt->execute();
+        if($this->db->affected_rows){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 ?>

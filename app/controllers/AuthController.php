@@ -20,7 +20,7 @@ class AuthController {
                 array_push($errors,"Username/Email is required");
             } else if (empty($password)) {
                 array_push($errors,"Password is required");
-            } 
+            }
             if(!empty($errors)){
                 include '../app/views/auth/login.php';
                 exit();
@@ -72,7 +72,7 @@ class AuthController {
             }else{
                 $uid = rand(1000, 999999);
                 $profile_photo = "https://api.dicebear.com/9.x/thumbs/svg?seed=$username";
-                $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 $result = $this->userModel->createUser($uid,$username,$email,$hashedPassword,$profile_photo);
                 if ($result) {
                     header('Location: /blog/public/?action=login');
@@ -92,6 +92,7 @@ class AuthController {
             $email=$_POST["email"];
             $emailExist = $this->userModel->checkEmailExist($email);
             $errors = [];
+            $done=false;
             if(!$emailExist){
                 array_push($errors, "Email is not exist");
             }
@@ -102,23 +103,48 @@ class AuthController {
                 // Prepare Token and expire date
                 $token = bin2hex(random_bytes(16));
                 $token_hash=hash("sha256",$token);
-                $expiry=date("y-m-d h:i:s",time()+60*30);
-                $setToken = $this->userModel->ResetTokenPassword($token_hash,$expiry,$email);
+                date_default_timezone_set('UTC');
+                $expiry=date("Y-m-d H:i:s",time()+60*30);
+                $setToken = $this->userModel->TokenResetPassword($token_hash,$expiry,$email);
                 if($setToken){
                     include "../app/helpers/PHPMailer.php";
-                    $mail->setFrom("noreply@WessBlog.com");
+                    $mail->setFrom('noreply@wessblog.com',"WessBlog");
                     $mail->addAddress($email);
-                    $mail->Subject="Password Reset";
+                    $mail->Subject="Reset Password";
                     $mail->Body = <<<END
-                        Click <a href="http://localhost/blog/public/?action=reset-password&token=$token">HERE</a> to reset you password
+                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="display: flex; padding: 15px; border: 1px solid rgba(204, 204, 204, 0.5411764706); border-radius: 5px; background-color: #eef5ff;">
+                            <tr>
+                                <td align="center" style="padding: 10px 20px;">
+                                    <h1 style="font-size: 25px; color: #091651; margin: 0; font-weight: 500;">Password Reset</h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 0 20px 0 20px;">
+                                    <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">Seems like you forgot your password for WessBlog. If this is true, click below to reset your password.</p>
+                                    <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">The reset button is expire for 30 minutes</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 20px;">
+                                    <a href="http://localhost/blog/public/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding: 0 20px 40px 20px;">
+                                    <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">If you did not forget your password you can safely ignore this email.</p>
+                                </td>
+                            </tr>
+                        </table>
                     END;
                     try{
                         $mail->send();
+                        $done=true;
                     } catch(Exception $error){
-                        echo "error ".$mail->ErrorInfo;
+                        $done=false;
+                        // echo "error ".$mail->ErrorInfo;
                     }
+                    include '../app/views/Forgot-password.php';
                 }
-                echo "Message sent, please check your inbox";
             }
         } else {
             include '../app/views/Forgot-password.php';
@@ -130,12 +156,15 @@ class AuthController {
             $token=hash("sha256",$_GET["token"]);
             $user = $this->userModel->getTokenResetPassword($token);
             if(!$user){
-                die("Token not found, please try again");
-                // header("refresh:2;url=?action=reset-password");
+                echo "<h3>Token not found, please try again</h3>";
+                echo "<a href='?action=forgot-password'>Try again</a>";
+                header("refresh:4;url=?action=forgot-password");
             } else{
+                date_default_timezone_set('UTC');
                 if(strtotime($user["token_expires_at"])<=time()){
-                    echo "Token has expired, Please Try again";
-                    // header("refresh:2;url=?action=reset-password");
+                    echo "<h3>Token has expired, Please Try again</h3>";
+                    echo "<a href='?action=forgot-password'>Try again</a>";
+                    header("refresh:4;url=?action=forgot-password");
                     exit();
                 } else {
                     // header("location: ?action=reset-password&token={$token}");
@@ -143,30 +172,29 @@ class AuthController {
                 }
             }
         }
-        if($_GET["action"]=="reset-password"&&isset($_GET["token"])&&$_SERVER["REQUEST_METHOD"]=="POST"){
-            $token=hash("sha256",$_POST["token"]);
+        if($_GET["action"]=="reset-password"&&$_SERVER["REQUEST_METHOD"]=="POST"){
+            // $token=hash("sha256",$_POST["token"]);
             $id=$_POST["user_id"];
             $pwd1=$_POST["pwd1"];
             $pwd2=$_POST["pwd2"];
-            $error=[];
-            if ($password !== $confirmPassword) {
+            $errors=[];
+            if ($pwd1 !== $pwd2) {
                 array_push($errors,"Passwords do not match!");
             } else {
-                if(!preg_match('/(?=.*[A-Za-z])(?=.*\d)/', $password)){
-                    array_push($errors,$password);
+                if(!preg_match('/(?=.*[A-Za-z])(?=.*\d)/', $pwd1)){
+                    // array_push($errors,$pwd1);
                     array_push($errors,"Password must contain both letters and numbers.");
                 }
             }
             if(!empty($errors)){
-                // foreach($errors as $err){
-                //     echo $err."<br>";
-                // }
-                // include "../app/views/reset-password.php";
-                die("dsqfsdf");
-                header("location: ?action=reset-password&token={$token}");
+                include "../app/views/reset-password.php";
             } else {
-                $this->userModel->resetSaveNewPassword($pwd1,$id);
-                header("location:?action=reset-password&token={$token}");
+                $hash_password = password_hash($pwd1, PASSWORD_DEFAULT);
+                $changed = $this->userModel->resetSaveNewPassword($hash_password,$id);
+                if($changed){
+                    $done=true;
+                    include "../app/views/reset-password.php";
+                }
             }
         }
     }

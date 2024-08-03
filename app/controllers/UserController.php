@@ -42,6 +42,7 @@ class UserController {
         $user = $this->userModel->getUserByID($_SESSION['user_id']);
         // Handle new data
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $prevPhoto = $_POST['prev-photo'];
             $username = $_POST['username'];
             $prevUsername = $_POST['prev-username'];
             $bio = $_POST['bio'];
@@ -53,7 +54,7 @@ class UserController {
             $confirmPassword = $_POST['confirm-password'];
             $errors = [];
 
-            $userDetails = $this->userModel->getUserByEmail($prevEmail);
+            $userDetails = $this->userModel->getUserByEmail($prevEmail,$prevEmail);
             
             $changes = [
                 'photo' => false,
@@ -61,18 +62,35 @@ class UserController {
                 'bio' => false,
                 'email' => false,
                 'password' => false,
-                'photoLink' => ""
+                'photoLink' => "",
+                'photoID' => ""
             ];
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0){
-                $file = $_FILES['photo']['tmp_name'];
-                $up = uploadImage($file);
-                if(!empty($up)){
-                    $changes["photoLink"]=$up;
-                    $changes["photo"]=true;
+                $deleteFile = deleteImage($prevPhoto);
+                if ($deleteFile->error&&!empty($prevPhoto)) {
+                    // echo "Error deleting file: " . $deleteFile->error->message;
+                    array_push($errors,$deleteFile->error);
                 } else {
-                    array_push($errors,"There is problem in upload new Photo");
-                    echo "user photo changed"."<br>";
+                    $file = $_FILES['photo']['tmp_name'];
+                    $resultUpload = uploadImage($file);
+                    $img_url = $resultUpload->result->url;
+                    $img_id = $resultUpload->result->fileId;
+                    if(empty($img_url)){
+                        array_push($errors,"There is problem in Changed Photo");
+                    } else {
+                        $changes["photo"]=true;
+                        $changes["photoLink"]=$img_url;
+                        $changes["photoID"]=$img_id;
+                    }
                 }
+                
+                // $uploadInfo = uploadImage($file);
+                // if(!empty($up)){
+                    
+                // } else {
+                //     array_push($errors,"There is problem in Changed Photo");
+                //     echo "user photo changed"."<br>";
+                // }
                 // echo uploadImage($file)."<br>";
                 // echo $_FILES["photo"]["name"]."<br>";
                 // echo $file."<br>";
@@ -114,7 +132,7 @@ class UserController {
                 if($changes["photo"]||$changes["username"]||$changes["bio"]||$changes["email"]||$changes["password"]){
                     // array_push($errors,"Data is valid i will changed");
                     if(!empty($changes["photoLink"])){
-                        $this->userModel->changePhoto($changes["photoLink"],$userDetails["id"]);
+                        $this->userModel->changePhoto($changes["photoLink"],$changes["photoID"],$userDetails["id"]);
                         $_SESSION['user_photo'] = $this->userModel->getUserPhoto($userDetails["id"]);
                     }
                     if($changes["username"]){

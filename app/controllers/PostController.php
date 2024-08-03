@@ -83,16 +83,14 @@ class PostController{
       } else {
         header('location: ?action=');
       }
-    } else{
-      header('location: ?action=');
     }
-    
-    if($_SERVER["REQUEST_METHOD"]=="POST"){
+    if($_SERVER["REQUEST_METHOD"]=="POST"&&isset($_GET['action']) && $_GET['action'] === 'edit-post'){
       $postID=$_POST["postID"];
       $result = $this->postModel->getPostTopicsID($postID);
       $errors=[];
       $oldData = [
         'cover' => $_POST["prevCover"],
+        'coverID' => $_POST["prevCoverID"],
         'title' => $_POST["prevTitle"],
         'content' => $_POST["prevContent"],
         'topics' => explode(',', $result["topics"])
@@ -137,44 +135,31 @@ class PostController{
       if(!empty($newData["content"])&&strlen($newData["content"])<200&&$newData["content"]!=$oldData["content"]){
         array_push($errors,"The minimum characters in content is 200");
       }
-      if(empty($newData["topics"])){
-        array_push($errors,"Please choose at least one topic");
-      }
-
-      function getFileIdFromUrl($url) {
-        // Parse the URL to get the path
-        $parsedUrl = parse_url($url);
-        $path = $parsedUrl['path'];
-    
-        // Split the path by '/'
-        $pathParts = explode('/', $path);
-    
-        // The file ID is the last part of the path
-        $fileId = end($pathParts);
-    
-        return $fileId;
-      }
+      // if(empty($newData["topics"])){
+      //   array_push($errors,"Please choose at least one topic");
+      // }
 
       if(!empty($errors)){
-        include '../app/views/Edit-post.php';
+        header('location: ?action=edit-post&id='.$postID);
         exit();
       } else{
         if(!empty($newData["cover"])&&$oldData["cover"]!=$newData["cover"]){
-          $fileId = getFileIdFromUrl($oldData["cover"]);
-          $deleteFile = deleteImage($fileId); #php48B5_SfSBbSW3E
-          if ($deleteFile->error) {
-            echo "Error deleting file: " . $deleteFile->error->message;
+          $deleteFile = deleteImage($oldData["coverID"]);
+          if ($deleteFile->error&&!empty($oldData["coverID"])) {
+            // echo "Error deleting file: " . $deleteFile->error->message;
+            array_push($errors,"There is problem in Post Photo");
             include '../app/views/Edit-post.php';
             exit();
           } else {
-              echo "File deleted successfully.";
-              $url = uploadImage($newData["cover"]);
-              if(empty($url)){
+              $resultUpload = uploadImage($newData["cover"]);
+              $img_url = $resultUpload->result->url;
+              $img_id = $resultUpload->result->fileId;
+              if(empty($img_url)){
                 array_push($errors,"There is problem in upload Post Photo");
                 include '../app/views/Edit-post.php';
                 exit();
               } else {
-                $this->postModel->changePostCover($postID,$url);
+                $this->postModel->changePostCover($postID,$img_url,$img_id);
               }
           }
         }
@@ -184,7 +169,7 @@ class PostController{
         if($oldData["content"]!=$newData["content"]){
           $this->postModel->changePostContent($postID,$newData["content"]);
         }
-        if($oldData["topics"]!=$newData["topics"]){
+        if($oldData["topics"]!=$newData["topics"]&&!empty($newData["topics"])){
           // Delete Past Topics
           foreach ($oldData["topics"] as $topic) {
             $this->postModel->deletePostTopic($postID, $topic);
