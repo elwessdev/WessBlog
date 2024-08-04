@@ -20,4 +20,7 @@ This project is a comprehensive blog platform that offers various features for u
 ## Post Page
 - **Clap Feature:** Engage with posts by clapping for them.
 
+## Architecture
+This project uses the **MVC (Model-View-Controller)** architecture for structured and organized code management.
+
 Explore, interact, and share your thoughts with the community!
