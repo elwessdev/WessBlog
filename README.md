@@ -1,4 +1,4 @@
-# Blog Post Project
+# WessBlog Project
 
 This project is a comprehensive blog platform that offers various features for user interaction and content management.
 
