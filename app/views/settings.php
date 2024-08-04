@@ -69,6 +69,6 @@
     <!-- Footer -->
     <?php include("footer.php") ?>
     <!-- Js -->
-    <script src="js/settings.js"></script>
+    <script src="public/js/settings.js"></script>
 </body>
 </html>

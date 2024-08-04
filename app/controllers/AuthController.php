@@ -31,7 +31,7 @@ class AuthController {
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['user_photo'] = $user['photo'];
-                    header('Location: ?action=profile');
+                    header('Location: ./?action=home');
                 } else {
                     array_push($errors,"Invalid username or password");
                     include 'app/views/auth/login.php';

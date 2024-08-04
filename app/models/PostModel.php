@@ -21,10 +21,10 @@ class Post {
         return $stmt->get_result();
     }
     // Add new post
-    public function addPost($userId,$title,$img,$content){
-        $q="INSERT INTO posts (author_id,title,img,content,likes,published_at) VALUES (?,?,?,?,0,NOW())";
+    public function addPost($userId,$title,$img,$content,$img_id){
+        $q="INSERT INTO posts (author_id,title,img,content,likes,published_at,img_id) VALUES (?,?,?,?,0,NOW(),?)";
         $stmt = $this->db->prepare($q);
-        $stmt->bind_param("ssss",$userId,$title,$img,$content);
+        $stmt->bind_param("sssss",$userId,$title,$img,$content,$img_id);
         if ($stmt->execute()) {
             return $this->db->insert_id;
         } else {

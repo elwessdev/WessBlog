@@ -876,7 +876,7 @@ footer .backTop:hover {
 }
 .profile .infos .profile_sec img {
   width: 90px;
-  height: auto;
+  height: 90px;
   border-radius: 50%;
   margin: 0 auto;
   margin-bottom: 10px;
@@ -1039,6 +1039,49 @@ footer .backTop:hover {
   z-index: 5;
   cursor: pointer;
   height: 100%;
+}
+.new-post form .img .drop-zone {
+  max-width: 200px;
+  height: 200px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  cursor: pointer;
+  color: #cccccc;
+  border: 4px dashed #009578;
+  border-radius: 10px;
+}
+.new-post form .img .drop-zone .drop-zone--over {
+  border-style: solid;
+}
+.new-post form .img .drop-zone .drop-zone__input {
+  display: none;
+}
+.new-post form .img .drop-zone .drop-zone__thumb {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #cccccc;
+  background-size: cover;
+  position: relative;
+}
+.new-post form .img .drop-zone .drop-zone__thumb::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 5px 0;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.75);
+  font-size: 14px;
+  text-align: center;
 }
 .new-post form .details {
   display: flex;

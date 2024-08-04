@@ -44,31 +44,32 @@ class PostController{
         $cover = uploadImage($file);
         $validTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $validContent = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
-        if(empty($cover)){
+        if($cover->error){
           array_push($errors,"There is problem in upload Post Photo");
           include 'app/views/add-post.php';
           exit();
-        }
-        try {
-          // Start transaction
-          $this->postModel->beginTransaction();
-          // Add post
-          $postId = $this->postModel->addPost($id, $validTitle, $cover, $validContent);
-          // Add topics
-          $topics = $_POST['topics'];
-          foreach ($topics as $topic) {
-              $this->postModel->addPostTopic($postId, $topic);
+        } else {
+          try {
+            // Start transaction
+            $this->postModel->beginTransaction();
+            // Add post
+            $postId = $this->postModel->addPost($id, $validTitle, $cover->result->url, $validContent,$cover->result->fileId);
+            // Add topics
+            $topics = $_POST['topics'];
+            foreach ($topics as $topic) {
+                $this->postModel->addPostTopic($postId, $topic);
+            }
+            // Commit transaction
+            $this->postModel->commit();
+            header('location: ?action=my-profile');
+          } catch (Exception $e) {
+              // Rollback transaction in case of error
+              $this->postModel->rollback();
+              // array_push($errors, "There was a problem adding your post: " . $e->getMessage());
+              array_push($errors, "There was a problem adding your post, Please try again");
+              include 'app/views/add-post.php';
+              exit();
           }
-          // Commit transaction
-          $this->postModel->commit();
-          header('location: ?action=my-profile');
-        } catch (Exception $e) {
-            // Rollback transaction in case of error
-            $this->postModel->rollback();
-            // array_push($errors, "There was a problem adding your post: " . $e->getMessage());
-            array_push($errors, "There was a problem adding your post, Please try again");
-            include 'app/views/add-post.php';
-            exit();
         }
       }
     } else {
@@ -177,7 +178,8 @@ class PostController{
             $this->postModel->addPostTopic($postID, $topic);
           }
         }
-        header('location: ?action=edit-post&id='.$postID);
+        header('location: ?action=post&id='.$postID);
+        // header('location: ?action=edit-post&id='.$postID);
       }
     }
   }

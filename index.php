@@ -35,6 +35,7 @@ $id = $_GET['id'] ?? null;
 
 switch ($action) {
     case '':
+    case 'home':
         $homeController->index();
         break;
     // Auth

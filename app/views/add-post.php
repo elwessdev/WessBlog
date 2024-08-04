@@ -35,6 +35,10 @@
               <p>Upload Main Post Image</p>
               <img id="previewImg" alt="" />
             </div>
+            <!-- <div class="drop-zone">
+              <span class="drop-zone__prompt">Drop file here or click to upload</span>
+              <input type="file" name="myFile" class="drop-zone__input">
+            </div> -->
             <p class="error"></p>
           </div>
           <div class="details">
@@ -77,6 +81,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-<script src="js/post.js"></script>
+<script src="public/js/post.js"></script>
+<!-- <script src="public/js/drag-drop.js"></script> -->
 </body>
 </html>
