@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo ucfirst($name); ?> - WessBlog</title>
-    <!-- CSS -->
+    <?php include("components/favicon.php") ?>
+<!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./public/style/main.css">
 </head>
 <body class="post">
 <!-- Header -->
 <div class="container mx-auto px-6 py-4">
-    <?php include("header.php") ?>
+    <?php include("components/header.php") ?>
     <!-- Page content -->
     <div class="post_content">
         <h2><?php echo htmlspecialchars($post["postTitle"]) ?></h2>
@@ -73,7 +74,7 @@
     </div>
 </div>
 <!-- Footer -->
-<?php include("footer.php") ?>
+<?php include("components/footer.php") ?>
 <!-- JS -->
 <script>
     // Like Button

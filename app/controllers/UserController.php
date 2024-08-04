@@ -19,7 +19,7 @@ class UserController {
             if ($user) {
                 include 'app/views/user.php';
             } else {
-                header("location: ../public/");
+                header("location: ?action=home");
             }
         } else {
             http_response_code(400);

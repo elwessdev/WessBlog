@@ -106,7 +106,7 @@ class AuthController {
                 array_push($errors, "Email is not exist");
             }
             if(!empty($errors)){
-                include 'app/views/Forgot-password.php';
+                include 'app/views/auth/Forgot-password.php';
                 exit();
             } else {
                 // Prepare Token and expire date
@@ -152,11 +152,11 @@ class AuthController {
                         $done=false;
                         // echo "error ".$mail->ErrorInfo;
                     }
-                    include 'app/views/Forgot-password.php';
+                    include 'app/views/auth/Forgot-password.php';
                 }
             }
         } else {
-            include 'app/views/Forgot-password.php';
+            include 'app/views/auth/Forgot-password.php';
         }
     }
     // Handle Reset password
@@ -177,7 +177,7 @@ class AuthController {
                     exit();
                 } else {
                     // header("location: ?action=reset-password&token={$token}");
-                    include "app/views/reset-password.php";
+                    include "app/views/auth/Reset-password.php";
                 }
             }
         }
@@ -196,13 +196,13 @@ class AuthController {
                 }
             }
             if(!empty($errors)){
-                include "app/views/reset-password.php";
+                include "app/views/auth/Reset-password.php";
             } else {
                 $hash_password = password_hash($pwd1, PASSWORD_DEFAULT);
                 $changed = $this->userModel->resetSaveNewPassword($hash_password,$id);
                 if($changed){
                     $done=true;
-                    include "app/views/reset-password.php";
+                    include "app/views/auth/Reset-password.php";
                 }
             }
         }

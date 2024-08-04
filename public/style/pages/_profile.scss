@@ -320,3 +320,22 @@
     }
   }
 }
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+  border: 0;
+  border-radius: .25em;
+  background: initial;
+  background-color: #7066e0;
+  color: #fff;
+  font-size: 1em;
+  transition: all .2s !important;
+}
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel){
+  &:hover{
+    background-color: #cf1a1a !important;
+  }
+}
+div:where(.swal2-container) h2:where(.swal2-title) {
+  padding: 0 !important;
+  color: #091651 !important;
+}

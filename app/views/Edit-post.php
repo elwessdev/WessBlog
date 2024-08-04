@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Post - WessBlog</title>
-    <!-- CSS -->
+    <?php include("components/favicon.php") ?>
+<!-- CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet"> 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,7 +14,7 @@
 <body class="edit-post">
 <div class="container mx-auto px-6 py-4">
   <!-- Header -->
-  <?php include __DIR__ . "/header.php" ?>
+  <?php include __DIR__ . "/components/header.php" ?>
   <!-- Page content -->
   <div class="new-post">
       <h2 class="title">
@@ -82,7 +83,7 @@
     </div>
 </div>
 <!-- Footer -->
-<?php include("footer.php") ?>
+<?php include("components/footer.php") ?>
 <!-- Js -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->

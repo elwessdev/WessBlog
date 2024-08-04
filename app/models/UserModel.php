@@ -89,6 +89,7 @@ class User {
                 posts.published_at,
                 posts.likes,
                 posts.img,
+                posts.img_id,
                 users.id AS author_id,
                 users.username AS author_name,
                 users.photo AS author_img,

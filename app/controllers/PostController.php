@@ -221,7 +221,7 @@ class PostController{
       $posts = $this->postModel->getSearchPosts($keyword);
       include 'app/views/search.php';
     } else {
-      header("location: ../public/");
+      header("location: ?action=home");
     }
   }
   // For you page
@@ -232,7 +232,7 @@ class PostController{
       $posts = $this->postModel->followingPosts($_SESSION["user_id"]);
       include 'app/views/For-you.php';
     } else {
-      header("location: ../public/");
+      header("location: ?action=home");
     }
   }
 }

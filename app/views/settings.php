@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - WessBlog</title>
-    <!-- CSS -->
+    <?php include("components/favicon.php") ?>
+<!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./public/style/main.css">
 </head>
@@ -13,7 +14,7 @@
 <body>
     <div class="container mx-auto px-6 py-4">
         <!-- Header -->
-        <?php include __DIR__ . "/header.php" ?>
+        <?php include __DIR__ . "/components/header.php" ?>
         <!-- Page content -->
         <div class="settings">
             <form class="profile-form" action="?action=settings" method="POST" enctype="multipart/form-data">
@@ -67,7 +68,7 @@
         </div>
     </div>
     <!-- Footer -->
-    <?php include("footer.php") ?>
+    <?php include("components/footer.php") ?>
     <!-- Js -->
     <script src="public/js/settings.js"></script>
 </body>

@@ -96,6 +96,6 @@ switch ($action) {
     default:
         // http_response_code(404);
         // echo "Page not found";
-        header("location: ../public/");
+        header("location: ?action=home");
 }
 ?>

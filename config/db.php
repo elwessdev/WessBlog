@@ -3,18 +3,14 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__.'/../');
 $dotenv->load();
 // DataBase Connection credentials
-$hostname=$_ENV["DB_HOST"];
-$database=$_ENV["DB_DATABASE"];
-$user=$_ENV["DB_USERNAME"];
-$password=$_ENV["DB_PASSWORD"];
-// $hostname="php-myadmin.net";
-// $database="if0_37029225_devosama";
-// $user="if0_37029225";
-// $password="ZIbz3w39xW8sH7";
+$DB_SERVER=$_ENV["DB_SERVER"];
+$DB_NAME=$_ENV["DB_NAME"];
+$DB_USERNAME=$_ENV["DB_USERNAME"];
+$DB_PASSWORD=$_ENV["DB_PASSWORD"];
 // Check connection
 $db= "";
 try{
-  $db = mysqli_connect($hostname,$user,$password,$database);
+  $db = mysqli_connect($DB_SERVER,$DB_USERNAME,$DB_PASSWORD,$DB_NAME);
 } catch(mysqli_sql_exception){
   echo "DB could not connect";
 }

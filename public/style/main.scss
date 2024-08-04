@@ -4,7 +4,7 @@ body {
   background-color: #ffffff;
 }
 button,a,input,textarea,h1,h2{
-  transition: all .2s;
+  transition: all .2s !important;
 }
 button:hover{
   background: #2c49c9 !important;

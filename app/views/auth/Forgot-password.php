@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password | WessBlog</title>
+    <?php include __DIR__ . "/../components/favicon.php" ?>
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./public/style/main.css">
@@ -11,7 +12,7 @@
 <body>
 <div class="container mx-auto px-6 py-4">
     <!-- Header -->
-    <?php include __DIR__ . "/header.php" ?>
+    <?php include __DIR__ . "/../components/header.php" ?>
     <!-- Page Content -->
     <div class="auth">
         <h2>
