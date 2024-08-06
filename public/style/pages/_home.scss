@@ -105,7 +105,6 @@
       .posts {
         width: 100%;
         // min-height: calc(100vh - 82px);
-        overflow-y: auto;
         display: flex;
         flex-wrap: wrap;
         grid-gap: 20px;
@@ -180,11 +179,16 @@
               display: flex;
               grid-gap: 8px;
               margin-top: 10px;
+              width: fit-content;
+              flex-wrap: wrap;
+              grid-gap: 10px;
               a{
                 color: white;
                 padding: 3px 8px;
                 border-radius: 5px;
                 font-size: 11px;
+                margin: 0;
+                width: fit-content !important;
                 // text-transform: uppercase;
                 display: inline-block;
                 background: #5171ff;
@@ -243,6 +247,7 @@
       width: 340px;
       margin-top: 57px;
       height: fit-content;
+      margin-top: 25px;
       .list{
         li{
           padding: 13px 0;

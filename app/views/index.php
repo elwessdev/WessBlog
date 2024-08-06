@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - WessBlog</title>
     <?php include("components/favicon.php") ?>
-<!-- CSS -->
+    <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./public/style/main.css">
 </head>

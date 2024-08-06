@@ -42,6 +42,7 @@ input:focus,textarea:focus{
   width: 50%;
   margin: 0 auto;
 }
+
 // Header
 @import "pages/_header";
 // Footer
@@ -63,4 +64,6 @@ input:focus,textarea:focus{
 // Search
 @import "pages/_edit-post";
 // For you
-@import "pages/_for-you";
+// @import "pages/_for-you";
+// Responsive
+@import "pages/_responsive";

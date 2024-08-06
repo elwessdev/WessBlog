@@ -22,7 +22,7 @@ class AuthController {
                 array_push($errors,"Password is required");
             }
             if(!empty($errors)){
-                include 'app/views/auth/login.php';
+                include 'app/views/auth/Login.php';
                 exit();
             } else {
                 $user = $this->userModel->getUserByEmail($email);
@@ -34,7 +34,7 @@ class AuthController {
                     header('Location: ./?action=home');
                 } else {
                     array_push($errors,"Invalid username or password");
-                    include 'app/views/auth/login.php';
+                    include 'app/views/auth/Login.php';
                     exit();
                 }
             }
@@ -75,7 +75,7 @@ class AuthController {
             }
 
             if(!empty($errors)){
-                include 'app/views/auth/register.php';
+                include 'app/views/auth/Register.php';
                 exit();
             }else{
                 $uid = rand(1000, 999999);
@@ -86,7 +86,7 @@ class AuthController {
                     header('Location: ?action=login');
                 } else {
                     array_push($errors,"Registration failed, Please Try again");
-                    include 'app/views/auth/register.php';
+                    include 'app/views/auth/Register.php';
                     exit();
                 }
             }

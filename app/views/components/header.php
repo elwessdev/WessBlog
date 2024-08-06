@@ -5,28 +5,29 @@
         <img src="./public/assets/min.png" />
         <p>WessBlog</p>
       </a>
-      <ul>
-        <li class="active"><a href="?action=">Home</a></li>
-        <?php if(isset($_SESSION["user_id"])): ?>
-          <li class="active"><a href="?action=for-you">Following</a></li>
-        <?php endif; ?>
-        <li class="ds">
-            <form class="search_bar" action="?action=search" enctype="multipart/form-data" method="POST">
-              <input type="text" required placeholder="Search..." name="keywords" />
-              <button>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
-              </button>
-            </form>
-        </li>
-      </ul>
-      <div class="btns">
+      <div class="sec">
+        <ul>
+          <li class="active"><a href="?action=">Home</a></li>
+          <?php if(isset($_SESSION["user_id"])): ?>
+            <li class="active"><a href="?action=for-you">Following</a></li>
+          <?php endif; ?>
+          <li class="ds">
+              <form class="search_bar" action="?action=search" enctype="multipart/form-data" method="POST">
+                <input type="text" required placeholder="Search..." name="keywords" />
+                <button>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                </button>
+              </form>
+          </li>
+        </ul>
         <?php if(isset($_SESSION['user_id'])): ?>
-          <a class="lk" href="?action=add-post">
+          <div class="btns">
+            <a class="lk dr" href="?action=add-post">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>
               Add New Post
             </a>
             <div class="profile_down">
-                <img src="<?php echo $_SESSION['user_photo']; ?>" alt="Avatar" class="avatar" onclick="toggleMenu()">
+                <img src="<?php echo $_SESSION['user_photo']; ?>" alt="Avatar" class="avatar" onclick="toggleProfile()">
                 <div id="dropdown-menu" class="dropdown-menu">
                     <a href="?action=my-profile">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/></svg>
@@ -43,20 +44,34 @@
                     </a>
                 </div>
             </div>
-          <?php else: ?>
+          </div>
+        <?php else: ?>
+          <div class="btns">
             <a class="lk" href="?action=login">Sign in</a>
             <a class="lk" href="?action=register">Sign up</a>
-          <?php endif; ?>
+          </div>
+        <?php endif; ?>
+      </div>
+      <div class="menu" onclick="toggleMenu()">
+        <svg class="iconMenu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path class="pathIcon" d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>
       </div>
     </nav>
 </header>
 <script>
-  function toggleMenu() {
+  function toggleProfile() {
     const dropdownMenu = document.getElementById("dropdown-menu");
     if (dropdownMenu.style.display === "block") {
         dropdownMenu.style.display = "none";
     } else {
         dropdownMenu.style.display = "block";
+    }
+  }
+  function toggleMenu() {
+    const menu = document.querySelector(".sec");
+    if (menu.style.display === "flex") {
+      menu.style.display = "none";
+    } else {
+      menu.style.display = "flex";
     }
   }
   window.onclick = function(event) {
