@@ -141,23 +141,21 @@ class PostController{
         exit();
       } else{
         if(!empty($newData["cover"])&&$oldData["cover"]!=$newData["cover"]){
-          $deleteFile = deleteImage($oldData["coverID"]);
-          if ($deleteFile->error&&!empty($oldData["coverID"])) {
-            // echo "Error deleting file: " . $deleteFile->error->message;
-            array_push($errors,"There is problem in post cover, Try Again");
+          $resultUpload = uploadImage($newData["cover"]);
+          if($resultUpload->error){
+            array_push($errors,"There is problem in update post cover, Try Again");
             include 'app/views/Edit-post.php';
             exit();
           } else {
-              $resultUpload = uploadImage($newData["cover"]);
-              $img_url = $resultUpload->result->url;
-              $img_id = $resultUpload->result->fileId;
-              if(empty($img_url)){
-                array_push($errors,"There is problem in post cover, Try Again");
-                include 'app/views/Edit-post.php';
-                exit();
-              } else {
-                $this->postModel->changePostCover($postID,$img_url,$img_id);
-              }
+            $deleteFile = deleteImage($oldData["coverID"]);
+            if ($deleteFile->error&&!empty($oldData["coverID"])) {
+              // echo "Error deleting file: " . $deleteFile->error->message;
+              array_push($errors,"There is problem in update post cover, Try Again");
+              include 'app/views/Edit-post.php';
+              exit();
+            } else {
+              $this->postModel->changePostCover($postID,$resultUpload->result->url,$resultUpload->result->fileId);
+            }
           }
         }
         if($oldData["title"]!=$newData["title"]){

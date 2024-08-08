@@ -66,34 +66,21 @@ class UserController {
                 'photoID' => ""
             ];
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0){
-                $deleteFile = deleteImage($prevPhoto);
-                if ($deleteFile->error&&!empty($prevPhoto)) {
-                    // echo "Error deleting file: " . $deleteFile->error->message;
-                    array_push($errors,$deleteFile->error);
+                $file = $_FILES['photo']['tmp_name'];
+                $resultUpload = uploadImage($file);
+                if($resultUpload->error){
+                    array_push($errors,"There is problem in Changed Photo, please try again");
                 } else {
-                    $file = $_FILES['photo']['tmp_name'];
-                    $resultUpload = uploadImage($file);
-                    $img_url = $resultUpload->result->url;
-                    $img_id = $resultUpload->result->fileId;
-                    if(empty($img_url)){
-                        array_push($errors,"There is problem in Changed Photo");
+                    $deleteFile = deleteImage($prevPhoto);
+                    if ($deleteFile->error&&!empty($prevPhoto)) {
+                        // echo "Error deleting file: " . $deleteFile->error->message;
+                        array_push($errors,"There is problem in Changed Photo, please try again");
                     } else {
                         $changes["photo"]=true;
-                        $changes["photoLink"]=$img_url;
-                        $changes["photoID"]=$img_id;
+                        $changes["photoLink"]=$resultUpload->result->url;
+                        $changes["photoID"]=$resultUpload->result->fileId;
                     }
                 }
-                
-                // $uploadInfo = uploadImage($file);
-                // if(!empty($up)){
-                    
-                // } else {
-                //     array_push($errors,"There is problem in Changed Photo");
-                //     echo "user photo changed"."<br>";
-                // }
-                // echo uploadImage($file)."<br>";
-                // echo $_FILES["photo"]["name"]."<br>";
-                // echo $file."<br>";
             }
             if($username!=$prevUsername){
                 if(!preg_match('/^[a-zA-Z0-9]+$/', $username)){
