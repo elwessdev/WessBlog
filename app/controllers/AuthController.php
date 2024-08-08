@@ -135,7 +135,7 @@ class AuthController {
                             </tr>
                             <tr>
                                 <td align="center" style="padding: 20px;">
-                                    <a href="http://localhost/wessblog/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
+                                    <a href="http://wessblog.wuaze.com/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
                                 </td>
                             </tr>
                             <tr>
