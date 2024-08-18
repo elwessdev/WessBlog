@@ -56,6 +56,7 @@ class Post {
             users.username AS authorName,
             users.id AS authorId,
             users.photo AS authorPhoto,
+            COUNT(DISTINCT comments.id) as comments,
             GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
             FROM
                 posts
@@ -65,8 +66,11 @@ class Post {
                 post_tags ON posts.id = post_tags.post_id
             LEFT JOIN
                 tags ON post_tags.topic_id = tags.id
+            LEFT JOIN
+                comments ON posts.id = comments.post_id
             GROUP BY
-                posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img, users.username, users.id, users.photo
+                posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img,
+                users.username, users.id, users.photo
             ORDER BY
                 postDate DESC;
         ";
@@ -120,17 +124,24 @@ class Post {
             posts.likes AS postLikes,
             posts.img AS postCover,
             posts.img_id AS postCoverID,
+            --
             users.username AS authorName,
             users.id AS authorId,
             users.photo AS authorPhoto,
+            --
+            COUNT(DISTINCT comments.id) as comments,
+            --
             GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
-            FROM posts
+            FROM 
+                posts
             INNER JOIN users
                 ON posts.author_id = users.id
             LEFT JOIN post_tags
                 ON posts.id = post_tags.post_id
             LEFT JOIN tags
                 ON post_tags.topic_id = tags.id
+            LEFT JOIN
+                comments ON posts.id = comments.post_id
             WHERE posts.id = ?";
         $stmt=$this->db->prepare($q);
         $stmt->bind_param("i",$id);
@@ -156,6 +167,7 @@ class Post {
             users.username AS authorName,
             users.id AS authorId,
             users.photo AS authorPhoto,
+            COUNT(DISTINCT comments.id) as comments,
             GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
         FROM
             posts
@@ -165,6 +177,8 @@ class Post {
             post_tags ON posts.id = post_tags.post_id
         LEFT JOIN
             tags ON post_tags.topic_id = tags.id
+        LEFT JOIN
+            comments ON posts.id = comments.post_id
         WHERE 
             tags.name = ?
         GROUP BY
@@ -188,14 +202,24 @@ class Post {
                 users.username AS authorName,
                 users.id AS authorId,
                 users.photo AS authorPhoto,
+                COUNT(DISTINCT comments.id) as comments,
                 GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
-            FROM posts
-            INNER JOIN users ON posts.author_id = users.id
-            LEFT JOIN post_tags ON posts.id = post_tags.post_id
-            LEFT JOIN tags ON post_tags.topic_id = tags.id
-            WHERE posts.title LIKE ?
-            GROUP BY posts.id, users.username, users.id, users.photo
-            ORDER BY postLikes DESC
+            FROM 
+                posts
+            INNER JOIN 
+                users ON posts.author_id = users.id
+            LEFT JOIN
+                post_tags ON posts.id = post_tags.post_id
+            LEFT JOIN
+                tags ON post_tags.topic_id = tags.id
+            LEFT JOIN
+                comments ON posts.id = comments.post_id
+            WHERE 
+                posts.title LIKE ?
+            GROUP BY 
+                posts.id, users.username, users.id, users.photo
+            ORDER BY 
+                postLikes DESC
             ");
         $keyword="%{$keyword}%";
         $stmt->bind_param("s",$keyword);
@@ -254,6 +278,7 @@ class Post {
                 users.username AS authorName,
                 users.id AS authorId,
                 users.photo AS authorPhoto,
+                COUNT(DISTINCT comments.id) as comments,
                 GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
             FROM
                 posts
@@ -265,6 +290,8 @@ class Post {
                 tags ON post_tags.topic_id = tags.id
             INNER JOIN
                 following ON users.id = following.followed_id
+            LEFT JOIN
+                comments ON posts.id = comments.post_id
             WHERE
                 following.user_id = ?
             GROUP BY
@@ -283,6 +310,68 @@ class Post {
         $stmt->execute();
         $res = $stmt->get_result();
         return $res->num_rows > 0;
+    }
+    // Get Post Comments
+    public function getPostComments($id){
+        $stmt=$this->db->prepare("SELECT
+            comments.id as comment_id,
+            comments.user_id as comment_user_id,
+            comments.content as comment_content,
+            comments.likes as comment_likes,
+            comments.date as comment_date,
+            --
+            u1.username as comment_user_name,
+            u1.photo as comment_user_photo,
+            --
+            comment_reply.id as reply_id,
+            comment_reply.comment_id as reply_comment_id,
+            comment_reply.user_id as reply_user_id,
+            comment_reply.content as reply_content,
+            comment_reply.date as reply_date,
+            --
+            u2.username as reply_user_name,
+            u2.photo as reply_user_photo
+            FROM comments
+            LEFT JOIN users as u1
+                ON comments.user_id = u1.id
+            LEFT JOIN comment_reply
+                ON comments.id = comment_reply.comment_id
+            LEFT JOIN users as u2
+                ON comment_reply.user_id = u2.id
+            where comments.post_id = ?
+            ORDER BY comment_likes DESC
+        ");
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $comments = [];
+        while($row = $result->fetch_assoc()){
+            $comment_id = $row['comment_id'];
+            if (!isset($comments[$comment_id])) {
+                $comments[$comment_id] = [
+                    'comment_id' => $row['comment_id'],
+                    'user_id' => $row['comment_user_id'],
+                    'content' => $row['comment_content'],
+                    'likes' => $row['comment_likes'],
+                    'date' => $row['comment_date'],
+                    'user_name' => $row['comment_user_name'],
+                    'user_photo' => $row['comment_user_photo'],
+                    'replies' => []
+                ];
+            }
+            if($row["reply_id"]){
+                $comments[$comment_id]["replies"][] = [
+                    'reply_id' => $row['reply_id'],
+                    'comment_id' => $row['reply_comment_id'],
+                    'content' => $row['reply_content'],
+                    'date' => $row['reply_date'],
+                    'reply_user_id' => $row['reply_user_id'],
+                    'reply_user_name' => $row['reply_user_name'],
+                    'reply_user_photo' => $row['reply_user_photo']
+                ];
+            }
+        }
+        return $comments;
     }
 }
 ?>

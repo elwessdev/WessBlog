@@ -186,17 +186,17 @@ class PostController{
     if (isset($_GET['action']) && $_GET['action'] === 'post' && isset($_GET['id'])) {
       $result = $this->postModel->getPostDetails($_GET['id']);
       $post = $result->fetch_assoc();
-      $name=$post["postTitle"];
       if ($post) {
+        $comments = $this->postModel->getPostComments($_GET['id']);
+        // echo "<pre>";
+        //   print_r($comments);
+        // echo "</pre>";
+        $name=$post["postTitle"];
         include 'app/views/post.php';
       } else {
-        // http_response_code(404);
-        // echo "User not found";
         header("location: ?action=");
       }
     } else {
-      // http_response_code(400);
-      // echo "Invalid request";
       header("location: ?action=");
     }
   }

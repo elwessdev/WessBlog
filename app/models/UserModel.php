@@ -93,11 +93,13 @@ class User {
                 users.id AS author_id,
                 users.username AS author_name,
                 users.photo AS author_img,
+                COUNT(DISTINCT comments.id) as comments,
                 GROUP_CONCAT(tags.name ORDER BY tags.name SEPARATOR ', ') AS topics
             FROM posts
             INNER JOIN users ON posts.author_id = users.id
             LEFT JOIN post_tags ON posts.id = post_tags.post_id
             LEFT JOIN tags ON post_tags.topic_id = tags.id
+            LEFT JOIN comments ON posts.id = comments.post_id
             WHERE author_id = ?
             GROUP BY posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img, users.username, users.id, users.photo
             ORDER BY posts.published_at DESC

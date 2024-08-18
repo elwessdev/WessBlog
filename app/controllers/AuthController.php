@@ -210,7 +210,7 @@ class AuthController {
     // Handle user logout
     public function logout() {
         session_destroy();
-        header('Location: ?action=login');
+        header('Location: ?action=home');
     }
 }
 ?>
