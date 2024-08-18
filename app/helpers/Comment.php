@@ -11,7 +11,7 @@ $data = json_decode($commentData, true);
 if ($data['action']=="add") {
   $postID = $data['post_id'];
   $userID = $data['user_id'];
-  $commentContent = $data['commentContent'];
+  $commentContent = htmlspecialchars($data['commentContent'],ENT_QUOTES,'UTF-8');
   $stmt=$db->prepare("INSERT INTO comments (post_id,user_id,content,likes,date) VALUES (?,?,?,0,NOW())");
   $stmt->bind_param("iis",$postID,$userID,$commentContent);
   try {
@@ -30,7 +30,7 @@ if ($data['action']=="like") {
   return $stmt->execute();
 }
 if ($data['action']=="edit") {
-  $newComment = $data['new_comment'];
+  $newComment = htmlspecialchars($data['new_comment'],ENT_QUOTES,'UTF-8');
   $commentID = $data['comment_id'];
   $userID = $data['user_id'];
   $stmt=$db->prepare("UPDATE comments SET content = ? WHERE id = ? AND user_id = ?");
@@ -48,13 +48,13 @@ if ($data['action']=="delete") {
 if ($data['action']=="addReply") {
   $commentID = $data['comment_id'];
   $userID = $data['user_id'];
-  $replyContent = $data['reply_content'];
+  $replyContent = htmlspecialchars($data['reply_content'],ENT_QUOTES,'UTF-8');
   $stmt=$db->prepare("INSERT INTO comment_reply (comment_id,user_id,content,date) VALUES (?,?,?,NOW())");
   $stmt->bind_param("iis",$commentID,$userID,$replyContent);
   return $stmt->execute();
 }
 if ($data['action']=="editReply") {
-  $newReply = $data['new_reply'];
+  $newReply = htmlspecialchars($data['new_reply'],ENT_QUOTES,'UTF-8');
   $replyID = $data['reply_id'];
   $commentID = $data['comment_id'];
   $userID = $data['user_id'];
