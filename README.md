@@ -6,6 +6,19 @@ This project is a comprehensive blog platform that offers various features for u
 - **Authentication:** Secure login, signup, and password reset via email.
 - **Profile Management:** Personalize settings, add, remove, and edit posts.
 - **Social Interaction:** Follow other users and view the list of followed users on your profile.
+- **Comments and replies:** Comments in any post
+- **Comments:**
+  - Author: 
+    - Cannot create a comment on their own post.
+    - Can reply to any comment on their own post.
+  - User:
+    - Can comment on any post.
+    - Cannot reply to comments made by other users; they can only reply to their own comments.
+    - Cannot delete their main comment if it has at least one reply.
+  - Clapping:
+    - Users can clap for any comment.
+    - The comment with the most claps is highlighted as the "Top Comment.".
+  - This structure adds depth to user interaction, allowing engagement through comments and a voting system while maintaining boundaries for authors and users regarding comment management.
 
 ## Home Page
 - **Top Post:** The top post is prominently displayed in a large section.
