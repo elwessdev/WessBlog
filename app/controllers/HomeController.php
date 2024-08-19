@@ -8,7 +8,7 @@ class HomeController{
   public function index(){
     $posts = $this->postModel->getLatestPosts();
     $topPost = $this->postModel->getTopPost()->fetch_object();
-    $tradingPosts = $this->postModel->getTradingPosts();
+    $tradingPosts = $this->postModel->getTrendingPosts();
     $topics = $this->postModel->getTopicsWithNums();
     include 'app/views/index.php';
   }

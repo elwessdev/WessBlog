@@ -12,6 +12,7 @@ class PostController{
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       $title = $_POST['title'];
       $content = $_POST['content'];
+      $intro = $_POST['introduction'];
       $errors=[];
       // Validation
       if(!isset($_FILES['image'])||$_FILES['image']['error']!=0){
@@ -22,6 +23,13 @@ class PostController{
       } else {
         if(strlen($title)<20){
           array_push($errors,"Title at least 20 characters");
+        }
+      }
+      if(empty($intro)){
+        array_push($errors,"Post Introduction is require");
+      } else {
+        if(strlen($intro)<50){
+          array_push($errors,"Introduction at least 50 characters");
         }
       }
       if(empty($content)){
@@ -43,6 +51,7 @@ class PostController{
         $file = $_FILES['image']['tmp_name'];
         $cover = uploadImage($file);
         $validTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        $validIntro = htmlspecialchars($intro, ENT_QUOTES, 'UTF-8');
         $validContent = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
         if($cover->error){
           array_push($errors,"There is problem in upload Post Photo");
@@ -53,7 +62,7 @@ class PostController{
             // Start transaction
             $this->postModel->beginTransaction();
             // Add post
-            $postId = $this->postModel->addPost($id, $validTitle, $cover->result->url, $validContent,$cover->result->fileId);
+            $postId = $this->postModel->addPost($id,$validTitle,$validIntro,$cover->result->url,$validContent,$cover->result->fileId);
             // Add topics
             $topics = $_POST['topics'];
             foreach ($topics as $topic) {
@@ -72,6 +81,9 @@ class PostController{
           }
         }
       }
+      echo $content;
+      include 'app/views/add-post.php';
+      exit();
     } else {
       include 'app/views/add-post.php';
     }
@@ -97,6 +109,7 @@ class PostController{
       $oldData = [
         'cover' => $_POST["prevCover"],
         'coverID' => $_POST["prevCoverID"],
+        'intro' => $_POST["prevIntro"],
         'title' => $_POST["prevTitle"],
         'content' => $_POST["prevContent"],
         'topics' => explode(',', $result["topics"])
@@ -104,6 +117,7 @@ class PostController{
       $newData = [
         'cover' => $_FILES["image"]["tmp_name"],
         'title' => $_POST['title'],
+        'intro' => $_POST["intro"],
         'content' => $_POST['content'],
         'topics' => $_POST['topics'],
       ];
@@ -121,10 +135,17 @@ class PostController{
           array_push($errors,"Title at least 20 characters");
         }
       }
+      if(empty($newData["intro"])){
+        array_push($errors,"Post intro is require");
+      } else {
+        if(strlen($newData["intro"])<50&&$newData["intro"]!=$oldData["intro"]){
+          array_push($errors,"Title at least 50 characters");
+        }
+      }
       if(empty($newData["content"])){
         array_push($errors,"Post content is require");
       } else {
-        if(strlen($content)<200&&$newData["content"]!=$oldData["content"]){
+        if(strlen($newData["content"])<200&&$newData["content"]!=$oldData["content"]){
           array_push($errors,"Content at least 200 characters");
         }
       }
@@ -136,8 +157,8 @@ class PostController{
       // }
 
       if(!empty($errors)){
-        // include "app/views/Edit-post.php";
-        header("Location: ?action=edit-post&id={$postID}");
+        include "app/views/Edit-post.php";
+        // header("Location: ?action=edit-post&id={$postID}");
         exit();
       } else{
         if(!empty($newData["cover"])&&$oldData["cover"]!=$newData["cover"]){
@@ -162,6 +183,10 @@ class PostController{
           $validTitle = htmlspecialchars($newData["title"], ENT_QUOTES, 'UTF-8');
           $this->postModel->changePostTitle($postID,$validTitle);
         }
+        if($oldData["intro"]!=$newData["intro"]){
+          $validIntro = htmlspecialchars($newData["intro"], ENT_QUOTES, 'UTF-8');
+          $this->postModel->changePostIntro($postID,$validIntro);
+        }
         if($oldData["content"]!=$newData["content"]){
           $validContent = htmlspecialchars($newData["content"], ENT_QUOTES, 'UTF-8');
           $this->postModel->changePostContent($postID,$validContent);
@@ -176,8 +201,8 @@ class PostController{
             $this->postModel->addPostTopic($postID, $topic);
           }
         }
-        header('location: ?action=post&id='.$postID);
-        // header('location: ?action=edit-post&id='.$postID);
+        // header('location: ?action=post&id='.$postID);
+        header('location: ?action=edit-post&id='.$postID);
       }
     }
   }
@@ -205,7 +230,7 @@ class PostController{
     if(isset($_GET["action"])&&$_GET["action"]=="topic"&&isset($_GET["name"])){
       $topicName = $_GET["name"];
       $topics = $this->postModel->getTopicsWithNums();
-      $tradingPosts = $this->postModel->getTradingPosts();
+      $tradingPosts = $this->postModel->getTrendingPosts();
       $posts = $this->postModel->getTopicPosts($_GET["name"]);
       include 'app/views/topic.php';
     }
@@ -214,7 +239,7 @@ class PostController{
   public function searchPage(){
     if(isset($_POST["keywords"])&&!empty($_POST["keywords"])){
       $keyword=htmlspecialchars($_POST["keywords"],ENT_QUOTES,'UTF-8');
-      $tradingPosts = $this->postModel->getTradingPosts();
+      $tradingPosts = $this->postModel->getTrendingPosts();
       $topics = $this->postModel->getTopicsWithNums();
       $posts = $this->postModel->getSearchPosts($keyword);
       include 'app/views/search.php';
@@ -225,7 +250,7 @@ class PostController{
   // For you page
   public function ForYouPage(){
     if(isset($_GET['action'])&&$_GET['action']=='for-you'&&isset($_SESSION["user_id"])){
-      $tradingPosts = $this->postModel->getTradingPosts();
+      $tradingPosts = $this->postModel->getTrendingPosts();
       $topics = $this->postModel->getTopicsWithNums();
       $posts = $this->postModel->followingPosts($_SESSION["user_id"]);
       include 'app/views/For-you.php';

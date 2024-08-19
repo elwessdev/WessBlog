@@ -124,7 +124,8 @@
 			.sec{
 				width: 100%;
 				position: relative;
-				p{
+				height: fit-content;
+				.titleContent{
 					position: absolute;
 					right: 4px;
 					top: 4px;
@@ -133,6 +134,17 @@
 					font-size: 12px;
 					color: #091651;
 					margin-bottom: 5px;
+				}
+				.ql-toolbar{
+					background-color: #FFF;
+					button:hover{
+						background: transparent !important;
+						color: #5171ff !important;
+					}
+				}
+				#editor{
+					height: 500px;
+					background-color: #FFF;
 				}
 			}
 			label{

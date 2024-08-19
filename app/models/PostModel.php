@@ -21,10 +21,10 @@ class Post {
         return $stmt->get_result();
     }
     // Add new post
-    public function addPost($userId,$title,$img,$content,$img_id){
-        $q="INSERT INTO posts (author_id,title,img,content,likes,published_at,img_id) VALUES (?,?,?,?,0,NOW(),?)";
+    public function addPost($userId,$title,$intro,$img,$content,$img_id){
+        $q="INSERT INTO posts (author_id,title,img,intro,content,likes,published_at,img_id) VALUES (?,?,?,?,?,0,NOW(),?)";
         $stmt = $this->db->prepare($q);
-        $stmt->bind_param("sssss",$userId,$title,$img,$content,$img_id);
+        $stmt->bind_param("ssssss",$userId,$title,$img,$intro,$content,$img_id);
         if ($stmt->execute()) {
             return $this->db->insert_id;
         } else {
@@ -49,6 +49,7 @@ class Post {
         $q="SELECT 
             posts.id AS postId,
             posts.title AS postTitle,
+            posts.intro AS postIntro,
             posts.content AS postContent,
             posts.published_at AS postDate,
             posts.likes AS postLikes,
@@ -100,7 +101,7 @@ class Post {
         return $this->DBGetter($q);
     }
     // Trading Posts (6 posts only)
-    public function getTradingPosts(){
+    public function getTrendingPosts(){
         $q = "SELECT * FROM posts ORDER BY likes DESC LIMIT 6";
         return $this->DBGetter($q);
     }
@@ -120,6 +121,7 @@ class Post {
             posts.id AS postId,
             posts.title AS postTitle,
             posts.content AS postContent,
+            posts.intro AS postIntro,
             posts.published_at AS postDate,
             posts.likes AS postLikes,
             posts.img AS postCover,
@@ -160,6 +162,7 @@ class Post {
         $stmt=$this->db->prepare("SELECT 
             posts.id AS postId,
             posts.title AS postTitle,
+            posts.intro AS postIntro,
             posts.content AS postContent,
             posts.published_at AS postDate,
             posts.likes AS postLikes,
@@ -195,6 +198,7 @@ class Post {
         $stmt=$this->db->prepare("SELECT 
                 posts.id AS postId,
                 posts.title AS postTitle,
+                posts.intro AS postIntro,
                 posts.content AS postContent,
                 posts.published_at AS postDate,
                 posts.likes AS postLikes,
@@ -252,6 +256,12 @@ class Post {
         $stmt->bind_param("si",$title,$postID);
         $stmt->execute();
     }
+    public function changePostIntro($postID, $intro){
+        $q = "UPDATE posts SET intro = ? WHERE id = ?";
+        $stmt=$this->db->prepare($q);
+        $stmt->bind_param("si",$intro,$postID);
+        $stmt->execute();
+    }
     public function changePostContent($postID, $content){
         $q = "UPDATE posts SET content = ? WHERE id = ?";
         $stmt=$this->db->prepare($q);
@@ -271,6 +281,7 @@ class Post {
         $q="SELECT 
                 posts.id AS postId,
                 posts.title AS postTitle,
+                posts.intro AS postIntro,
                 posts.content AS postContent,
                 posts.published_at AS postDate,
                 posts.likes AS postLikes,

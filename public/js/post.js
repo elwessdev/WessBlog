@@ -37,14 +37,3 @@ document.querySelector(".img_up_fi").addEventListener("change", () => {
       // document.querySelector(".img .error").textContent="No file selected.";
     }
 })
-// Input Valid
-document.getElementById("inptTitle").addEventListener("keydown", (e) => {
-  if(e.target.value.length<=80){
-    document.querySelector(".titleNum span").textContent=e.target.value.length;
-  }
-})
-document.getElementById("inptContent").addEventListener("keydown", (e) => {
-  if(e.target.value.length<=1000){
-    document.querySelector(".titleContent span").textContent=e.target.value.length;
-  }
-})

@@ -45,7 +45,7 @@
                                 </a>
                                 <div class="post-content">
                                     <a href="?action=post&id=<?php echo $post['post_id'] ?>"><?php echo $post['title']; ?></a>
-                                    <p><?php echo $post["content"] ?></p>
+                                    <p><?php echo $post["intro"] ?></p>
                                     <div class="post-meta">
                                         <span><?php $date=new DateTime($post["published_at"]); echo $date->format('F j, Y') ?></span>
                                         <span>
@@ -197,7 +197,7 @@
         .catch(err=>console.log("error", err))
     }
     function deletePost(id,auth,img_id){
-        console.log(id,auth,img_id);
+        // console.log(id,auth,img_id);
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this post!",
@@ -218,16 +218,16 @@
                 .then(res=>res.text())
                 .then(data=>{
                     if(data){
-                        console.log("There is an error -> ", data);
+                        // console.log("There is an error -> ", data);
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Something went wrong! Try Agin",
+                            text: "Something went wrong! Try Agin 😯",
                         });
                     } else {
                         Swal.fire({
                             title: "Deleted!",
-                            text: "Your Post has been deleted.",
+                            text: "Your Post has been deleted 👌",
                             icon: "success"
                         });
                         setTimeout(()=>{
@@ -236,7 +236,14 @@
                     }
                     
                 })
-                .catch(err=>console.log("error", err))
+                .catch(err=>{
+                    // console.log("error", err);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong! Try Agin 😯",
+                    });
+                })
             }
         });
     }

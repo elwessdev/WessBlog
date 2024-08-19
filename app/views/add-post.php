@@ -8,6 +8,7 @@
 <!-- CSS -->
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /> -->
     <!-- <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">  -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./public/style/main.css">
 </head>
@@ -29,7 +30,14 @@
               <path d="M33 1c-3.3 0-3.3 4-6.598 4C23.1 5 23.1 1 19.8 1c-3.3 0-3.3 4-6.599 4-3.3 0-3.3-4-6.6-4S3.303 5 0 5" stroke="url(#gradient)" stroke-width="2" fill="none"></path>
           </svg>
       </h2>
-      <form action="?action=add-post" method="POST" enctype="multipart/form-data">
+      <form action="?action=add-post" method="POST" enctype="multipart/form-data" class="formAddPost">
+          <?php if (!empty($errors)): ?>
+            <ul class="errorsList" style="margin-top: 10px !important;">
+                <?php foreach ($errors as $error): ?>
+                    <li><?php echo htmlspecialchars($error); ?></li>
+                <?php endforeach; ?>
+            </ul>
+          <?php endif; ?>
           <div class="img">
             <div class="add-area">
               <input type="file" name="image" id="image" accept="image/*" class="img_up_fi" required />
@@ -45,14 +53,25 @@
           <div class="details">
             <div class="sec">
               <label for="title">Poste Title</label>
-              <p class="titleNum"><span>0</span> character - (Minimum 20)</p>
-              <input id="inptTitle" minlength="20" type="text" name="title" required>
+              <p class="titleContent"><span>0</span> character - (Minimum 20)</p>
+              <input minlength="20" type="text" name="title" required onkeydown="validInput(this,20)">
             </div>
             <div class="sec">
+              <label for="title">Small Introduction</label>
+              <p class="titleContent"><span>0</span> character - (Minimum 50)</p>
+              <input minlength="50" type="text" name="introduction" required onkeydown="validInput(this,50)">
+            </div>
+            <div class="sec" style="margin-bottom: 15px;">
+              <label for="content">Poste Content</label>
+              <p class="titleContent lengthQuill"><span>0</span> character - (Minimum 200)</p>
+              <div id="editor"></div>
+              <input type="hidden" name="content" id="content">
+            </div>
+            <!-- <div class="sec">
               <p class="titleContent"><span>0</span> character - (Minimum 200)</p>
               <label for="content">Poste Content</label>
               <textarea id="inptContent" minlength="200" name="content" required></textarea>
-            </div>
+            </div> -->
             <div class="sec">
               <label for="topics">Choose Topics</label>
               <div class="topics">
@@ -64,13 +83,6 @@
                 <?php endforeach; ?>
               </div>
             </div>
-            <?php if (!empty($errors)): ?>
-                <ul class="errorsList" style="margin-top: 10px !important;">
-                    <?php foreach ($errors as $error): ?>
-                        <li><?php echo htmlspecialchars($error); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
             <button type="submit" class="btn">Publish</button>
           </div>
       </form>
@@ -79,10 +91,33 @@
 <!-- Footer -->
 <?php include("components/footer.php") ?>
 <!-- Js -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-<script src="public/js/post.js"></script>
 <!-- <script src="public/js/drag-drop.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script src="public/js/post.js"></script>
+<script>
+  var quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            [{ 'header': [1, 2, false] }],
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+        ]
+    }
+  });
+  document.querySelector('.formAddPost').onsubmit = function(event) {
+    document.getElementById('content').value = quill.root.innerHTML;
+  }
+  // Input Valid
+  function validInput(e,max){
+    e.parentElement.children[1].children[0].textContent=e.parentElement.children[2].value.length;
+  }
+  quill.on('text-change', ()=>{
+    document.querySelector(".lengthQuill span").textContent = quill.getText().length;
+  });
+</script>
 </body>
 </html>

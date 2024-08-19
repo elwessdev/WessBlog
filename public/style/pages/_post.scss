@@ -7,8 +7,14 @@
       font-size: 30px;
       font-weight: 700;
       color: #091651;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       text-transform: capitalize;
+    }
+    h3{
+      color: #6B6B6B;
+      font-weight: 500;
+      font-size: 16px;
+      margin-bottom: 25px;
     }
     .tags {
       display: flex;
@@ -37,6 +43,47 @@
       margin-top: 20px;
       font-size: 16px;
       line-height: 1.8;
+      h1 {
+        font-size: 2em;
+        color: #222;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+        margin: 0;
+      }
+      h2 {
+        font-size: 1.5em;
+        color: #222;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+      }
+      a{
+        color: #5171ff;
+      }
+      strong {
+        font-weight: bold;
+      }
+      em {
+        font-style: italic;
+      }
+      u {
+        text-decoration: underline;
+      }
+      ol {
+        list-style-type: decimal;
+        margin-left: 1.5em;
+        list-style: auto;
+        li {
+          margin-bottom: 0.5em;
+        }
+      }
+      ul {
+        list-style-type: disc;
+        margin-left: 1.5em;
+        list-style: auto;
+        li {
+          margin-bottom: 0.5em;
+        }
+      }
     }
     .ld{
       display: flex;
@@ -173,11 +220,9 @@
       }
     }
     .edit{
-      position: absolute;
-      right: 0;
-      top: 60px;
       text-decoration: none;
       transition: all 0.2s;
+      width: fit-content;
       background-color: #5171ff;
       color: #FFF;
       border-radius: 5px;
@@ -187,6 +232,7 @@
       display: flex;
       height: fit-content;
       margin: 2px 0;
+      margin-bottom: 10px;
       &:hover{
         background-color: #1831a1;
       }

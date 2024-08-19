@@ -23,7 +23,7 @@
             </p>
           </div>
           <a href="?action=post&id=<?php echo $post['postId'] ?>"><?php echo $post['postTitle']; ?></a>
-          <p><?php echo $post['postContent']; ?></p>
+          <p><?php echo $post['postIntro']; ?></p>
           <div class="post-meta">
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">

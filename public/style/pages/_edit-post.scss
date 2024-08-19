@@ -22,4 +22,26 @@
       z-index: 30 !important;
     }
   }
+  h2{
+    a{
+      text-decoration: none;
+      background-color: #5171ff;
+      color: #FFF;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 15px;
+      display: flex;
+      height: fit-content;
+      width: fit-content;
+      margin: 0 auto;
+      margin-top: 10px;
+      border-radius: 30px;
+      svg{
+        width: 16px;
+        fill: #FFF;
+        margin-right: 5px;
+      }
+    }
+  }
 }
