@@ -211,5 +211,13 @@ class User {
             return false;
         }
     }
+    // Get user notifications
+    public function getNotifications($id){
+        $stmt=$this->db->prepare("SELECT content,isRead,date FROM notifications WHERE to_id = ?");
+        // $stmt->bind_param();
+        $stmt->execute([$id]);
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
 ?>

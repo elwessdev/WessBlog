@@ -4,6 +4,15 @@ class UserController {
     private $isAdmin=false;
     public function __construct($userModel) {
         $this->userModel = $userModel;
+        if(isset($_SESSION["user_id"])){
+            $notifications = $this->userModel->getNotifications($_SESSION['user_id']);
+            // foreach ($notifications as $row) {
+            //     echo "<pre>";
+            //     var_dump($row);
+            //     echo "</pre>";
+            // }
+            // include 'app/views/components/header.php';
+        }
     }
     // User Details
     public function user() {

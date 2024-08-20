@@ -2,7 +2,6 @@
 session_start();
 require 'vendor/autoload.php';
 require 'config/db.php';
-require 'vendor/autoload.php';
 require 'app/helpers/UploadImageHelper.php';
 require 'app/helpers/SessionHelper.php';
 // Models
@@ -13,6 +12,7 @@ require 'app/controllers/AuthController.php';
 require 'app/controllers/HomeController.php';
 require 'app/controllers/PostController.php';
 require 'app/controllers/UserController.php';
+
 
 $userModel = new User($db);
 $authController = new authController($userModel);
@@ -25,6 +25,7 @@ $PostController = new PostController($postModel);
 
 $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? null;
+
 
 // echo $id."<br>";
 // echo "action".$action."<br>";

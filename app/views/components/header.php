@@ -1,3 +1,17 @@
+<?php 
+
+// Models
+if(isset($_SESSION["user_id"])){
+  require 'config/db.php';
+  $stmt=$db->prepare("SELECT id,content,isRead,date FROM notifications WHERE to_id = ?");
+  $stmt->execute([$_SESSION["user_id"]]);
+  $notifications = $stmt->get_result();
+  $notifications->fetch_all();
+  // print_r($notifications);
+}
+
+?>
+
 <header>
     <nav>
       <!-- <div class="logo">Katen<span>.</span></div> -->
@@ -26,6 +40,23 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/></svg>
               Add New Post
             </a>
+            <div class="notifications">
+              <div class="icon">
+                <span class="new"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z"/></svg>
+              </div>
+              <ul class="content">
+                <?php if(isset($notifications->current_field)): ?>
+                  <?php foreach($notifications as $notif): ?>
+                    <li class="<?php echo $notif["isRead"] ?"" :"unread" ?>" data-id="<?php echo $notif['id']; ?>">
+                      <?php echo html_entity_decode($notif["content"]); ?>
+                    </li>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <li><p class="nothing">Nothing yet</p></li>
+                <?php endif; ?>
+              </ul>
+            </div>
             <div class="profile_down">
                 <img src="<?php echo $_SESSION['user_photo']; ?>" alt="Avatar" class="avatar" onclick="toggleProfile()">
                 <div id="dropdown-menu" class="dropdown-menu">
@@ -84,5 +115,64 @@
               }
           }
       }
+  }
+  // Notifications
+  let notificationsUnread = document.querySelectorAll(".notifications .unread");
+  let newNotif = document.querySelector(".notifications .new");
+  if(notificationsUnread.length > 0){
+    newNotif.classList.add("show");
+    newNotif.textContent = notificationsUnread.length;
+  }
+  let openNotifBtn = document.querySelector(".notifications .icon");
+  let contentNotifBtn = document.querySelector(".notifications .content");
+  openNotifBtn.onclick = (e) => {
+    if(contentNotifBtn.classList.contains("hide")){
+      closeNotification();
+    } else {
+      contentNotifBtn.classList.add("hide");
+      openNotifBtn.classList.add("active");
+    }
+  }
+  function closeNotification(){
+    if(contentNotifBtn.classList.contains("hide")){
+      contentNotifBtn.classList.remove("hide");
+      openNotifBtn.classList.remove("active");
+      if(notificationsUnread.length > 0){
+        notificationsUnread.forEach((elm) =>{
+          if(elm.classList.contains("unread")){
+            // console.log("read",elm.dataset.id);
+            // elm.classList.remove("unread");
+            readNotification(elm.dataset.id);
+          }
+        });
+        newNotif.classList.remove("show");
+        newNotif.textContent = notificationsUnread.length;
+      }
+    }
+  }
+  document.addEventListener('click', (event) => {
+      if (!contentNotifBtn.contains(event.target) && event.target !== openNotifBtn) {
+        closeNotification();
+      }
+  });
+  function readNotification(id){
+    fetch("app/helpers/Notifications.php",{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({action: "read", notif_id: id})
+    })
+    .then(res=>res.text())
+    .then(data=>{
+        if(!data){
+          console.log(id, "read done");
+        } else {
+          console.log(id, "read error");
+        }
+    })
+    .catch(err=>{
+        console.log("error", err)
+    });
   }
 </script>
