@@ -14,7 +14,7 @@ This project is a comprehensive blog platform that offers various features for u
 - **Explore Topics:** Discover various topics.
 - **Latest Posts:** Stay updated with the newest posts.
 
-## Topic Pages
+## Topic Page
 - View posts specific to a selected topic.
 
 ## Post Page
@@ -31,6 +31,10 @@ This project is a comprehensive blog platform that offers various features for u
     - Users can clap for any comment.
     - The comment with the most claps is highlighted as the "Top Comment.".
   - This structure adds depth to user interaction, allowing engagement through comments and a voting system while maintaining boundaries for authors and users regarding comment management.
+ 
+## Real-time notification system
+- Users receive notifications when someone follows them, replies to their comments, or comments on their posts.
+- Each notification is accompanied by a sound alert, ensuring that users stay engaged and informed about interactions on their content.
 
 ## Architecture
 This project uses the **MVC (Model-View-Controller)** architecture for structured and organized code management.
