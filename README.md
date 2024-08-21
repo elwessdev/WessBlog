@@ -7,17 +7,17 @@ This project is a comprehensive blog platform that offers various features for u
 - **Profile Management:** Personalize settings, add, remove, and edit posts.
 - **Social Interaction:** Follow other users and view the list of followed users on your profile.
 
-## Home Page
+## Home
 - **Top Post:** The top post is prominently displayed in a large section.
 - **Search Functionality:** Easily search for posts.
 - **Trending Posts:** Highlight posts with the most claps.
 - **Explore Topics:** Discover various topics.
 - **Latest Posts:** Stay updated with the newest posts.
 
-## Topic Page
+## Topics
 - View posts specific to a selected topic.
 
-## Post Page
+## Posts
 - **Clap Feature:** Engage with posts by clapping for them.
 - **Comments:**
   - Author: 
