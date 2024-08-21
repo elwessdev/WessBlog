@@ -188,9 +188,9 @@
         });
     }
     function addNotification(followedID,myID,followedProfile,followedName){
-        console.log(followedID,myID,followedName,followedProfile);
+        // console.log(followedID,myID,followedName,followedProfile);
         let NotifContent = `
-            <a href='?action=user&id=${myID}'><img src="${followedProfile}" /><p>${followedName} follow you</p></a>
+            <a href='?action=user&id=${myID}'><img src="${followedProfile}" /><p class="ss"><span>${followedName}</span> follow you</p></a>
         `;
         fetch("app/helpers/Notifications.php",{
             method: "POST",
@@ -202,13 +202,13 @@
         .then(res=>res.text())
         .then(data=>{
             if(!data){
-                console.log("Done notification");
+                // console.log("Done notification");
             } else {
-                console.log("There is an error");
+                // console.log("There is an error");
             }
         })
         .catch(err=>{
-            console.log("error", err)
+            // console.log("error", err);
         });
     }
     function unfollowBtn(){

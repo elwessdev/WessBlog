@@ -87,7 +87,7 @@
                         </div>
                         <textarea class="addContent" placeholder="Create your comment here..."></textarea>
                         <p class="error"></p>
-                        <button class="btn" onclick="addComment(<?php echo $post['postId']; ?>,<?php echo $_SESSION['user_id']; ?>)">Post</button>
+                        <button class="btn" onclick="addComment(<?php echo $post['postId']; ?>,<?php echo $_SESSION['user_id']; ?>,<?php echo $post['authorId']; ?>,'<?php echo $_SESSION['username']; ?>','<?php echo $_SESSION['user_photo']; ?>','<?php echo $post['postTitle']; ?>')">Post</button>
                     </div>
                 <?php endif; ?>
             <?php else: ?>
@@ -197,7 +197,7 @@
                                 <?php endforeach; ?>
                             <?php endif; ?>
                             <!-- Reply section -->
-                            <?php if(isset($_SESSION["user_id"])&&($post["authorId"]==$_SESSION["user_id"]||$comment["user_id"]==$_SESSION["user_id"])): ?>
+                            <?php if(isset($_SESSION["user_id"])&&($post["authorId"]==$_SESSION["user_id"]||(!empty($comment["replies"])&&$comment["user_id"]==$_SESSION["user_id"]))): ?>
                                 <div class="reply">
                                     <button class="tglBtn" onclick="openReply(this)">Reply</button>
                                     <div class="reply_section">
@@ -207,8 +207,14 @@
                                         onclick="addReply(
                                             this,
                                             <?php echo $_SESSION['user_id']; ?>,
-                                            <?php echo $comment['comment_id']; ?>
-                                        )"
+                                            <?php echo $comment['comment_id']; ?>,
+                                            <?php echo $post['authorId']; ?>,
+                                            <?php echo $comment['user_id']; ?>,
+                                            '<?php echo $_SESSION['username']; ?>',
+                                            '<?php echo $_SESSION['user_photo']; ?>',
+                                            <?php echo $post['postId']; ?>,
+                                            '<?php echo $post['postTitle']; ?>'
+                                            )"
                                         >Post</button>
                                     </div>
                                 </div>
@@ -301,7 +307,7 @@
             icon: icon,
         });
     }
-    function addComment(postID,userID){
+    function addComment(postID,userID,authorID,userName,userPhoto,postTitle){
         let content = document.querySelector(".addContent").value;
         let commentError = document.querySelector(".add_comment .error");
         if(content.length<10){
@@ -323,6 +329,7 @@
                 if(!data){
                     // console.log("Add comment","done");
                     Alert("Your comment has been added 👌","success");
+                    commentNotification(userID,authorID,postID,userName,userPhoto,postTitle);
                     setTimeout(()=>window.location.reload(),1000);
                 } else {
                     // console.log("Add comment",data);
@@ -421,7 +428,7 @@
         }
     }
     // Reply actions
-    function addReply(e,userID,commentID){
+    function addReply(e,userID,commentID,authorID,commentOwnerID,userName,userPhoto,postID,postTitle){
         // console.log(userID,commentID);
         let replyContent = e.parentElement.children[0].value;
         let replyError = e.parentElement.children[1];
@@ -441,6 +448,7 @@
                 if(!data){
                     // console.log("Add comment","done");
                     Alert("Your reply has been added 👌","success");
+                    replyNotification(userID,authorID,commentOwnerID,userName,userPhoto,postID,postTitle);
                     setTimeout(()=>window.location.reload(),1000);
                 } else {
                     // console.log("Add comment",data);
@@ -538,6 +546,63 @@
         } else {
             Alert("Be aware you take danger action 😎","error");
         }
+    }
+    // Notification
+    function commentNotification(userID,authorID,postID,userName,userPhoto,postTitle){
+        // console.log(userID,authorID,postID,userName,userPhoto,postTitle.substr(0,10));
+        let NotifContent = `
+            <a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p>${userName} added comment to post <span>${postTitle.substr(0,20)}...</span></p></a>
+        `;
+        fetch("app/helpers/Notifications.php",{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({action: "new", from_id: userID, to_id: authorID, content: NotifContent})
+        })
+        .then(res=>res.text())
+        .then(data=>{
+            if(!data){
+                // console.log("Done notification");
+            } else {
+                // console.log("There is an error");
+            }
+        })
+        .catch(err=>{
+            // console.log("error", err);
+        });
+    }
+    function replyNotification(userID,authorID,commentOwnerID,userName,userPhoto,postID,postTitle){
+        // console.log(userID,authorID,commentOwnerID,userName,userPhoto,postID);
+        var sendFrom=userID;
+        var sendTo=commentOwnerID;
+        var NotifContent = '';
+        if(userID==commentOwnerID){
+            NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p>${userName} reply to your comment in post <span>${postTitle.substr(0,20)}...</span></p></a>`;
+            sendFrom=commentOwnerID;
+            sendTo=authorID;
+        }
+        if(userID==authorID){
+            NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p>${userName}(Author) reply to your comment in post <span>${postTitle.substr(0,20)}...</span></p></a>`;
+        }
+        fetch("app/helpers/Notifications.php",{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({action: "new", from_id: sendFrom, to_id: sendTo, content: NotifContent})
+        })
+        .then(res=>res.text())
+        .then(data=>{
+            if(!data){
+                // console.log("Done notification");
+            } else {
+                // console.log("There is an error",data);
+            }
+        })
+        .catch(err=>{
+            // console.log("error", err);
+        });
     }
 </script>
 <body>

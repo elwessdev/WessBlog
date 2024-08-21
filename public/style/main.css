@@ -288,11 +288,13 @@ header nav .sec .btns .notifications .content {
   border-radius: 8px;
   overflow: hidden;
   z-index: 1;
-  width: 290px;
+  width: 370px;
   border: 1px solid rgba(9, 22, 81, 0.1490196078);
   margin: 0;
   display: none;
   padding: 0;
+  max-height: 432px;
+  overflow-y: auto;
 }
 header nav .sec .btns .notifications .content.hide {
   display: inline-block;
@@ -301,6 +303,8 @@ header nav .sec .btns .notifications .content li {
   width: 100%;
   display: flex;
   border-radius: 0;
+  flex-wrap: wrap;
+  position: relative;
 }
 header nav .sec .btns .notifications .content li:not(:last-of-type) {
   border-bottom: 1px solid #EEE;
@@ -330,6 +334,7 @@ header nav .sec .btns .notifications .content li a {
   padding: 10px 12px;
   border-radius: 0;
   padding-right: 20px;
+  padding-bottom: 20px;
 }
 header nav .sec .btns .notifications .content li a:hover {
   background: none;
@@ -341,15 +346,30 @@ header nav .sec .btns .notifications .content li a img {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  margin-right: 6px;
+  margin-right: 10px;
 }
 header nav .sec .btns .notifications .content li a p {
-  display: flex;
-  padding: 7px 0;
+  padding: 0;
   font-size: 14px;
   font-weight: 500;
-  color: #222;
+  color: #091651;
   transition: all 0.2s;
+}
+header nav .sec .btns .notifications .content li a p.ss {
+  display: flex;
+  align-items: center;
+}
+header nav .sec .btns .notifications .content li a p span {
+  font-weight: 700;
+  margin-right: 3px;
+}
+header nav .sec .btns .notifications .content li .date {
+  font-size: 10px;
+  font-weight: 500;
+  color: #8F9BAD;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
 }
 header nav .sec .btns .notifications .content li .nothing {
   width: 100%;
