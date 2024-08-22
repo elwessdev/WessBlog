@@ -293,7 +293,7 @@ header nav .sec .btns .notifications .content {
   margin: 0;
   display: none;
   padding: 0;
-  max-height: 432px;
+  max-height: 443px;
   overflow-y: auto;
 }
 header nav .sec .btns .notifications .content.hide {
@@ -354,6 +354,12 @@ header nav .sec .btns .notifications .content li a p {
   font-weight: 500;
   color: #091651;
   transition: all 0.2s;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 header nav .sec .btns .notifications .content li a p.ss {
   display: flex;
@@ -361,7 +367,7 @@ header nav .sec .btns .notifications .content li a p.ss {
 }
 header nav .sec .btns .notifications .content li a p span {
   font-weight: 700;
-  margin-right: 3px;
+  margin-right: 2px;
 }
 header nav .sec .btns .notifications .content li .date {
   font-size: 10px;
@@ -1655,6 +1661,21 @@ div:where(.swal2-container) h2:where(.swal2-title) {
 .post .post_content .txt .ql-code-block-container .ql-code-block:not(:last-of-type) {
   margin-bottom: 1px;
 }
+.post .post_content .txt p {
+  line-height: 1.9;
+  font-size: 16px;
+}
+@media (max-width: 767px) {
+  .post .post_content .txt h1 {
+    font-size: 20px;
+  }
+  .post .post_content .txt h2 {
+    font-size: 18px;
+  }
+  .post .post_content .txt p {
+    font-size: 15px;
+  }
+}
 .post .post_content .ld {
   display: flex;
   margin-top: 35px;
@@ -2147,6 +2168,9 @@ div:where(.swal2-container) h2:where(.swal2-title) {
 }
 
 @media (max-width: 1023px) {
+  header {
+    margin-bottom: 10px;
+  }
   header nav .menu {
     display: block !important;
   }
@@ -2187,6 +2211,7 @@ div:where(.swal2-container) h2:where(.swal2-title) {
     margin-bottom: 10px;
     grid-gap: 5px;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
   }
   header nav .sec .btns .lk {
@@ -2199,13 +2224,30 @@ div:where(.swal2-container) h2:where(.swal2-title) {
   }
   header nav .sec .btns .profile_down {
     order: 1;
-    margin: 0 auto;
   }
   header nav .sec .btns .profile_down .dropdown-menu {
     left: 50%;
     right: unset;
     transform: translateX(-50%);
     top: 48px;
+  }
+  header nav .sec .btns .notifications .content {
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    width: 90%;
+    position: fixed;
+    top: 140px;
+  }
+  header nav .sec .btns .notifications .content a {
+    justify-content: unset !important;
+  }
+  header nav .logo img {
+    width: 40px;
+  }
+  header nav .logo p {
+    font-size: 25px;
+    left: -21px;
   }
   .home main {
     flex-wrap: wrap;
@@ -2216,7 +2258,7 @@ div:where(.swal2-container) h2:where(.swal2-title) {
     margin: 0;
   }
   .home main .main-article {
-    height: 370px;
+    height: 260px;
   }
   .home main .main-article .article-content {
     bottom: 0;

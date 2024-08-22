@@ -11,7 +11,7 @@ $data = json_decode($postData, true);
 if($data["action"]=="new"){
   $from_id = $data["from_id"];
   $to_id = $data["to_id"];
-  $content = htmlspecialchars($data["content"]);
+  $content = $data["content"];
   $stmt = $db->prepare("INSERT INTO notifications (from_id,to_id,content,isRead,date) VALUES (?,?,?,FALSE,NOW())");
   $stmt->bind_param("iis",$from_id,$to_id,$content);
   $stmt->execute();

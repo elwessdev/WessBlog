@@ -552,9 +552,7 @@
     // Notification
     function commentNotification(userID,authorID,postID,userName,userPhoto,postTitle){
         // console.log(userID,authorID,postID,userName,userPhoto,postTitle.substr(0,10));
-        let NotifContent = `
-            <a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p>${userName} added comment to post <span>${postTitle.substr(0,20)}...</span></p></a>
-        `;
+        let NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p><span>${userName}</span> added comment to post <span>${postTitle}</span></p></a>`;
         fetch("app/helpers/Notifications.php",{
             method: "POST",
             headers: {
@@ -580,12 +578,12 @@
         var sendTo=commentOwnerID;
         var NotifContent = '';
         if(userID==commentOwnerID){
-            NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p>${userName} reply to your comment in post <span>${postTitle.substr(0,20)}...</span></p></a>`;
+            NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p><span>${userName}</span> reply to your comment in post <span>${postTitle}</span></p></a>`;
             sendFrom=commentOwnerID;
             sendTo=authorID;
         }
         if(userID==authorID){
-            NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p>${userName}(Author) reply to your comment in post <span>${postTitle.substr(0,20)}...</span></p></a>`;
+            NotifContent = `<a href='?action=post&id=${postID}'><img src="${userPhoto}" /><p><span>${userName}</span>(Author) reply to your comment in post <span>${postTitle}</span></p></a>`;
         }
         fetch("app/helpers/Notifications.php",{
             method: "POST",

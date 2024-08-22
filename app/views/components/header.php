@@ -49,7 +49,7 @@ if(isset($_SESSION["user_id"])){
                 <?php if($notifications->num_rows): ?>
                   <?php foreach($notifications as $notif): ?>
                     <li class="<?php echo $notif["isRead"] ?"" :"unread" ?>" data-id="<?php echo $notif['id']; ?>" onclick="readNotification(<?php echo $notif['id'] ?>)">
-                      <?php echo html_entity_decode($notif["content"]); ?>
+                      <?php echo $notif["content"]; ?>
                       <span class="date"><?php
                         $date = new DateTime($notif["date"]);
                         echo $date->format('F j, Y');
