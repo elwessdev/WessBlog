@@ -1636,6 +1636,25 @@ div:where(.swal2-container) h2:where(.swal2-title) {
 .post .post_content .txt ul li {
   margin-bottom: 0.5em;
 }
+.post .post_content .txt .ql-code-block-container {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 5px 0px;
+}
+.post .post_content .txt .ql-code-block-container .ql-ui {
+  display: none;
+}
+.post .post_content .txt .ql-code-block-container .ql-code-block {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 15px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.post .post_content .txt .ql-code-block-container .ql-code-block:not(:last-of-type) {
+  margin-bottom: 1px;
+}
 .post .post_content .ld {
   display: flex;
   margin-top: 35px;
@@ -2069,6 +2088,11 @@ div:where(.swal2-container) h2:where(.swal2-title) {
 }
 .post .swal2-popup .swal2-title {
   font-size: 24px;
+}
+
+.ql-ui {
+  color: #222;
+  outline: none;
 }
 
 .searchPage .explore_topics, .topicPage .explore_topics {

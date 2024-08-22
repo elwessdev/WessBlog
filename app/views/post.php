@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo ucfirst($name); ?> - WessBlog</title>
     <?php include("components/favicon.php") ?>
-<!-- CSS -->
+    <!-- CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./public/style/main.css">
 </head>
@@ -233,6 +234,7 @@
 <!-- Footer -->
 <?php include("components/footer.php") ?>
 <!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Like Post

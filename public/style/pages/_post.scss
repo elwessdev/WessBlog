@@ -84,6 +84,28 @@
           margin-bottom: 0.5em;
         }
       }
+      .ql-code-block-container{
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin: 5px 0px;
+        .ql-ui{
+          display: none;
+        }
+        .ql-code-block{
+          // background-color: rgb(81 113 255 / 11%);
+          // color: #5171ff;
+          // padding: 0 5px;
+          font-family: Consolas, "Courier New", monospace;
+          font-size: 15px;
+          border-radius: 3px;
+          font-weight: 500;
+          &:not(:last-of-type){
+            margin-bottom: 1px;
+          }
+        }
+      }
     }
     .ld{
       display: flex;
@@ -509,4 +531,8 @@
       font-size: 24px;
     }
   }
+}
+.ql-ui{
+  color: #222;
+  outline: none;
 }
