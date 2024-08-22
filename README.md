@@ -6,6 +6,7 @@ This project is a comprehensive blog platform that offers various features for u
 - **Authentication:** Secure login, signup, and password reset via email.
 - **Profile Management:** Personalize settings, add, remove, and edit posts.
 - **Social Interaction:** Follow other users and view the list of followed users on your profile.
+- **Post Management:** Add, remove, and edit posts with an editor with many features (heading 1, heading 2, text, italic, bold, lists, code blocks)
 
 ## Home
 - **Top Post:** The top post is prominently displayed in a large section.
