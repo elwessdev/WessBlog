@@ -1,0 +1,5 @@
+# Disable OPcache
+php_flag opcache.enable Off
+
+# Ensure PHP checks for file changes every time
+php_value opcache.revalidate_freq 0

@@ -1,6 +1,4 @@
 <?php 
-
-// Models
 if(isset($_SESSION["user_id"])){
   require 'config/db.php';
   $stmt=$db->prepare("SELECT id,content,isRead,date FROM notifications WHERE to_id = ? ORDER BY date DESC");
@@ -9,9 +7,7 @@ if(isset($_SESSION["user_id"])){
   $notifications->fetch_all();
   // print_r($notifications);
 }
-
 ?>
-
 <header>
     <nav>
       <!-- <div class="logo">Katen<span>.</span></div> -->
