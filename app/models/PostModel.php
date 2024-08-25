@@ -58,7 +58,7 @@ class Post {
             users.id AS authorId,
             users.photo AS authorPhoto,
             COUNT(DISTINCT comments.id) as comments,
-            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+            GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name) AS topics
             FROM
                 posts
             INNER JOIN
@@ -133,7 +133,7 @@ class Post {
             --
             COUNT(DISTINCT comments.id) as comments,
             --
-            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+            GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name) AS topics
             FROM 
                 posts
             INNER JOIN users
@@ -171,7 +171,7 @@ class Post {
             users.id AS authorId,
             users.photo AS authorPhoto,
             COUNT(DISTINCT comments.id) as comments,
-            GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+            GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name) AS topics
         FROM
             posts
         INNER JOIN
@@ -187,8 +187,7 @@ class Post {
         GROUP BY
             posts.id, posts.title, posts.content, posts.published_at, posts.likes, posts.img, users.username, users.id, users.photo
         ORDER BY
-            posts.published_at DESC;
-        ");
+            posts.published_at DESC;");
         $stmt->bind_param("s",$name);
         $stmt->execute();
         return $stmt->get_result();
@@ -207,7 +206,7 @@ class Post {
                 users.id AS authorId,
                 users.photo AS authorPhoto,
                 COUNT(DISTINCT comments.id) as comments,
-                GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+                GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name) AS topics
             FROM 
                 posts
             INNER JOIN 
@@ -290,7 +289,7 @@ class Post {
                 users.id AS authorId,
                 users.photo AS authorPhoto,
                 COUNT(DISTINCT comments.id) as comments,
-                GROUP_CONCAT(tags.name ORDER BY tags.name) AS topics
+                GROUP_CONCAT(DISTINCT tags.name ORDER BY tags.name) AS topics
             FROM
                 posts
             INNER JOIN

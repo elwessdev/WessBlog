@@ -211,6 +211,9 @@ class PostController{
     if (isset($_GET['action']) && $_GET['action'] === 'post' && isset($_GET['id'])) {
       $result = $this->postModel->getPostDetails($_GET['id']);
       $post = $result->fetch_assoc();
+      // echo "<pre>";
+      // echo var_dump($post);
+      // echo "</pre>";
       if ($post) {
         $comments = $this->postModel->getPostComments($_GET['id']);
         // echo "<pre>";
