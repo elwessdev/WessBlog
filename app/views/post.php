@@ -84,11 +84,11 @@
                     <div class="add_comment">
                         <div class="user">
                             <img src="<?php echo $_SESSION['user_photo']; ?>" />
-                            <p><?php echo $_SESSION['username']; ?></p>
+                            <p><?php echo $_SESSION['user_name']; ?></p>
                         </div>
                         <textarea class="addContent" placeholder="Create your comment here..."></textarea>
                         <p class="error"></p>
-                        <button class="btn" onclick="addComment(<?php echo $post['postId']; ?>,<?php echo $_SESSION['user_id']; ?>,<?php echo $post['authorId']; ?>,'<?php echo $_SESSION['username']; ?>','<?php echo $_SESSION['user_photo']; ?>','<?php echo $post['postTitle']; ?>')">Post</button>
+                        <button class="btn" onclick="addComment(<?php echo $post['postId']; ?>,<?php echo $_SESSION['user_id']; ?>,<?php echo $post['authorId']; ?>,'<?php echo $_SESSION['user_name']; ?>','<?php echo $_SESSION['user_photo']; ?>','<?php echo $post['postTitle']; ?>')">Post</button>
                     </div>
                 <?php endif; ?>
             <?php else: ?>
@@ -211,7 +211,7 @@
                                             <?php echo $comment['comment_id']; ?>,
                                             <?php echo $post['authorId']; ?>,
                                             <?php echo $comment['user_id']; ?>,
-                                            '<?php echo $_SESSION['username']; ?>',
+                                            '<?php echo $_SESSION['user_name']; ?>',
                                             '<?php echo $_SESSION['user_photo']; ?>',
                                             <?php echo $post['postId']; ?>,
                                             '<?php echo $post['postTitle']; ?>'

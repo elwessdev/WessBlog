@@ -830,6 +830,26 @@ footer .backTop:hover {
   margin: 3px 0;
   text-decoration: underline;
 }
+.auth form .remember_me {
+  width: 100%;
+  display: flex;
+  margin: 5px 0 10px 0;
+}
+.auth form .remember_me input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+}
+.auth form .remember_me label {
+  font-size: 13px;
+  margin: 0 0 0 6px;
+  margin-top: -4px;
+  width: -moz-fit-content;
+  width: fit-content;
+  position: relative;
+  cursor: pointer;
+  top: 2px;
+}
 .auth .error_msg {
   color: red;
   text-align: left;

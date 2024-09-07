@@ -23,6 +23,10 @@
             <label for="password">Password:</label>
             <input type="password" minlength="5" id="password" name="password" required>
             <br>
+            <div class="remember_me">
+                <input type="checkbox" name="remember" id="remember_me" />
+                <label for="remember_me">Remember me</label>
+            </div>
             <a class="for" href="?action=forgot-password">Forgot Password</a>
             <p>Did you not have account ?<a href="?action=register"> Sign up</a></p>
             <?php if (!empty($errors)): ?>

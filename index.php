@@ -1,5 +1,12 @@
 <?php
 session_start();
+// Checked remember me
+if (isset($_COOKIE['user_id'])) {
+    $_SESSION['user_id'] = $_COOKIE['user_id'];
+    $_SESSION['user_name'] = $_COOKIE['user_name'];
+    $_SESSION['user_photo'] = $_COOKIE['user_photo'];
+}
+
 require 'vendor/autoload.php';
 require 'config/db.php';
 require 'app/helpers/UploadImageHelper.php';

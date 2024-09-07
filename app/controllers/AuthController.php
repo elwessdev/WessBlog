@@ -13,9 +13,9 @@ class AuthController {
                 $data = htmlspecialchars($data);
                 return $data;
             }
+            $errors=[];
             $email = validate($_POST['email']);
             $password = validate($_POST['password']);
-            $errors=[];
             if (empty($email)) {
                 array_push($errors,"Username/Email is required");
             } else if (empty($password)) {
@@ -29,8 +29,20 @@ class AuthController {
                 if ($user && password_verify($password, $user['password'])) {
                     // Set session variables
                     $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['user_name'] = $user['username'];
                     $_SESSION['user_photo'] = $user['photo'];
+                    if(isset($_POST["remember"])&&$_POST["remember"]==true){
+                        $cookie_time = time()+(7*24*60*60); // For 7 days
+                        setcookie('user_id', $user['id'], $cookie_time, '/', '', true, true);
+                        setcookie('user_name', $user['username'], $cookie_time, '/', '', true, true);
+                        setcookie('user_photo', $user['photo'], $cookie_time, '/', '', true, true);
+                    } else {
+                        if (isset($_COOKIE['user_id'])) {
+                            setcookie('user_id', '', time() - 3600, '/');
+                            setcookie('user_name', '', time() - 3600, '/');
+                            setcookie('user_photo', '', time() - 3600, '/');
+                        }
+                    }
                     header('Location: ./?action=home');
                 } else {
                     array_push($errors,"Invalid username or password");
@@ -209,8 +221,14 @@ class AuthController {
     }
     // Handle user logout
     public function logout() {
+        session_unset();
         session_destroy();
-        header('Location: ?action=home');
+        if (isset($_COOKIE['user_id'])) {
+            setcookie('user_id', '', time() - 3600, '/');
+            setcookie('user_name', '', time() - 3600, '/');
+            setcookie('user_photo', '', time() - 3600, '/');
+        }
+        header('Location: ?action=login');
     }
 }
 ?>
