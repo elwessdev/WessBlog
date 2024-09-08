@@ -1,6 +1,9 @@
 <?php
+ini_set('session.cookie_secure', 1); // Only send cookies over HTTPS
+ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
+ini_set('session.cookie_samesite', 'Strict'); // Protect against CSRF attacks
 session_start();
-// Checked remember me
+// Remember me
 if (isset($_COOKIE['user_id'])) {
     $_SESSION['user_id'] = $_COOKIE['user_id'];
     $_SESSION['user_name'] = $_COOKIE['user_name'];

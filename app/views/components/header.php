@@ -5,7 +5,6 @@ if(isset($_SESSION["user_id"])){
   $stmt->execute([$_SESSION["user_id"]]);
   $notifications = $stmt->get_result();
   $notifications->fetch_all();
-  // print_r($notifications);
 }
 ?>
 <header>
