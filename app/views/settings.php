@@ -18,6 +18,7 @@
         <!-- Page content -->
         <div class="settings">
             <form class="profile-form" action="?action=settings" method="POST" enctype="multipart/form-data">
+                <input type="text" name="login-type" value="<?php echo $user["loginType"] ?>" hidden />
                 <input type="text" name="prev-photo" value="<?php echo $user["photo_id"] ?>" hidden />
                 <input type="text" name="prev-username" value="<?php echo $user["username"] ?>" hidden />
                 <input type="text" name="prev-bio" value="<?php echo $user["bio"] ?>" hidden />
@@ -48,21 +49,23 @@
                     <textarea id="last-name" name="bio"><?php echo $user["bio"] ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?php echo $user["email"] ?>">
+                    <label for="email">Email <?= $user["loginType"]=="google" ?"(Can't change Email when you login with Google)":"" ?></label>
+                    <input type="email" id="email" name="email" value="<?php echo $user["email"] ?>" <?= ($user["loginType"]=="google") ?"readonly":"" ?>>
                 </div>
-                <div class="form-group">
-                    <label for="new-password">Current Password</label>
-                    <input type="password" id="current-password" name="current-password" autocomplete="new-password">
-                </div>
-                <div class="form-group">
-                    <label for="new-password">New Password</label>
-                    <input type="password" id="new-password" name="new-password">
-                </div>
-                <div class="form-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm-password">
-                </div>
+                <?php if($user["loginType"]=="manual"): ?>
+                    <div class="form-group">
+                        <label for="new-password">Current Password</label>
+                        <input type="password" id="current-password" name="current-password" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" name="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password">
+                    </div>
+                <?php endif; ?>
                 <button type="submit" class="save-btn">Save</button>
             </div>
         </div>

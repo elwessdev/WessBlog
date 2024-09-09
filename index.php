@@ -1,15 +1,12 @@
 <?php
-ini_set('session.cookie_secure', 1); // Only send cookies over HTTPS
-ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
-ini_set('session.cookie_samesite', 'Strict'); // Protect against CSRF attacks
-session_start();
-// Remember me
-if (isset($_COOKIE['user_id'])) {
-    $_SESSION['user_id'] = $_COOKIE['user_id'];
-    $_SESSION['user_name'] = $_COOKIE['user_name'];
-    $_SESSION['user_photo'] = $_COOKIE['user_photo'];
-}
-
+session_start([
+    'cookie_secure' => true,
+    'cookie_httponly' => true,
+    'use_strict_mode' => true,
+    'use_cookies' => true,
+    'use_only_cookies' => true,
+    'cache_limiter' => 'nocache'
+]);
 require 'vendor/autoload.php';
 require 'config/db.php';
 require 'app/helpers/UploadImageHelper.php';
@@ -22,15 +19,35 @@ require 'app/controllers/AuthController.php';
 require 'app/controllers/HomeController.php';
 require 'app/controllers/PostController.php';
 require 'app/controllers/UserController.php';
-
+// Env File
+use Dotenv\Dotenv;
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 $userModel = new User($db);
 $authController = new authController($userModel);
 $userController = new UserController($userModel);
-
 $postModel = new Post($db);
 $homeController = new HomeController($postModel);
 $PostController = new PostController($postModel);
+
+// Remember me
+if (!isset($_SESSION["user_id"])&&(isset($_COOKIE['user_id'])&&isset($_COOKIE['user_name'])&&isset($_COOKIE['user_photo']))) {
+    function decrypt_cookie($value, $key) {
+        $cipher = 'AES-128-CTR'; // Cipher method
+        list($encrypted_data, $iv) = explode('::', base64_decode($value), 2);
+        return openssl_decrypt($encrypted_data, $cipher, $key, 0, $iv);
+    }
+    $decrypt = decrypt_cookie($_COOKIE['user_id'],$_ENV["ENCRYPTION_KEY"]);
+    $_SESSION['user_id'] = $decrypt;
+    $_SESSION['user_name'] = $_COOKIE['user_name'];
+    $_SESSION['user_photo'] = $_COOKIE['user_photo'];
+} 
+// else {
+//     setcookie('user_id', '', time() - 3600, '/');
+//     setcookie('user_name', '', time() - 3600, '/');
+//     setcookie('user_photo', '', time() - 3600, '/');
+// }
 
 
 $action = $_GET['action'] ?? '';
@@ -69,6 +86,9 @@ switch ($action) {
     case 'logout':
         $authController->logout();
         break;
+    // case 'google-callback':
+    //     $authController->loginWithGoogle();
+    //     break;
     // Post
     case 'post':
         $PostController->PostPage();

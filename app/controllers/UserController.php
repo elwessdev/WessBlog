@@ -80,10 +80,16 @@ class UserController {
                 if($resultUpload->error){
                     array_push($errors,"There is problem in Changed Photo, please try again");
                 } else {
-                    $deleteFile = deleteImage($prevPhoto);
-                    if ($deleteFile->error&&!empty($prevPhoto)) {
-                        // echo "Error deleting file: " . $deleteFile->error->message;
-                        array_push($errors,"There is problem in Changed Photo, please try again");
+                    if($prevPhoto){
+                        $deleteFile = deleteImage($prevPhoto);
+                        if ($deleteFile->error&&!empty($prevPhoto)) {
+                            // echo "Error deleting file: " . $deleteFile->error->message;
+                            array_push($errors,"There is problem in Changed Photo, please try again");
+                        } else {
+                            $changes["photo"]=true;
+                            $changes["photoLink"]=$resultUpload->result->url;
+                            $changes["photoID"]=$resultUpload->result->fileId;
+                        }
                     } else {
                         $changes["photo"]=true;
                         $changes["photoLink"]=$resultUpload->result->url;
@@ -107,30 +113,32 @@ class UserController {
                     $changes["bio"]=true;
                 }
             }
-            if(!empty($email)&&$email!=$prevEmail){
-                if(!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',$email)){
-                    array_push($errors,"Email is not valid");
-                } else if($this->userModel->checkEmailExist($email)){
-                    array_push($errors,"Email is exist");
-                } else {
-                    $changes["email"]=true;
-                }
-            }
-            if(!empty($currentPassword)){
-                if(password_verify($currentPassword, $userDetails['password'])){
-                    if(!empty($newPassword)&&!empty($confirmPassword)){
-                        if($newPassword==$confirmPassword){
-                            if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/',$newPassword)){
-                                array_push($errors, "Password is weak (Minimum 6 characters, At least one uppercase letter/lowercase letter/one digit/one special character)");
-                            } else {
-                                $changes["password"]=true;
-                            }
-                        } else {
-                            array_push($errors, "You'r password confirm is wrong");
-                        }
+            if($_POST['login-type']!="google"){
+                if(!empty($email)&&$email!=$prevEmail){
+                    if(!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',$email)){
+                        array_push($errors,"Email is not valid");
+                    } else if($this->userModel->checkEmailExist($email)){
+                        array_push($errors,"Email is exist");
+                    } else {
+                        $changes["email"]=true;
                     }
-                } else {
-                    array_push($errors,"You're password is wrong");
+                }
+                if(!empty($currentPassword)){
+                    if(password_verify($currentPassword, $userDetails['password'])){
+                        if(!empty($newPassword)&&!empty($confirmPassword)){
+                            if($newPassword==$confirmPassword){
+                                if(!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/',$newPassword)){
+                                    array_push($errors, "Password is weak (Minimum 6 characters, At least one uppercase letter/lowercase letter/one digit/one special character)");
+                                } else {
+                                    $changes["password"]=true;
+                                }
+                            } else {
+                                array_push($errors, "You'r password confirm is wrong");
+                            }
+                        }
+                    } else {
+                        array_push($errors,"You're password is wrong");
+                    }
                 }
             }
             if(!empty($errors)){

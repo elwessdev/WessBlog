@@ -19,6 +19,13 @@
             Sign up
         </h2>
         <form action="?action=register" method="POST">
+            <?php if (!empty($errors)): ?>
+                <ul class="errorsList" style="margin-top: 10px !important;">
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo htmlspecialchars($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
             <label for="username">Username:</label>
             <input type="text" minlength="5" id="username" name="username" required>
             <br>
@@ -32,17 +39,10 @@
             <input type="password" minlength="5" id="confirm_password" name="confirm_password" required>
             <br>
             <p>Do you have an account ? <a href="?action=login">Sign in</a></p>
-            <?php if (!empty($errors)): ?>
-                <ul class="errorsList" style="margin-top: 10px !important;">
-                    <?php foreach ($errors as $error): ?>
-                        <li><?php echo htmlspecialchars($error); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
             <button type="submit">Sign up</button>
-            <?php if (!empty($message)): ?>
-                <p style="color:green;"><?php echo htmlspecialchars($message); ?></p>
-            <?php endif; ?>
+            <?php #if (!empty($message)): ?>
+                <p style="color:green;"><?php #echo htmlspecialchars($message); ?></p>
+            <?php #endif; ?>
         </form>
     </div>
     <!-- Footer -->

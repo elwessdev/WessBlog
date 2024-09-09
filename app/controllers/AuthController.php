@@ -18,7 +18,8 @@ class AuthController {
             $password = validate($_POST['password']);
             if (empty($email)) {
                 array_push($errors,"Username/Email is required");
-            } else if (empty($password)) {
+            }
+            if (empty($password)) {
                 array_push($errors,"Password is required");
             }
             if(!empty($errors)){
@@ -27,13 +28,22 @@ class AuthController {
             } else {
                 $user = $this->userModel->getUserByEmail($email);
                 if ($user && password_verify($password, $user['password'])) {
-                    // Set session variables
+                    // Encryption Cookie
+                    function encrypt_cookie($value, $key) {
+                        $cipher = 'AES-128-CTR'; // Cipher method
+                        $iv_length = openssl_cipher_iv_length($cipher);
+                        $iv = openssl_random_pseudo_bytes($iv_length); // Generate a random initialization vector
+                        $encrypted = openssl_encrypt($value, $cipher, $key, 0, $iv);
+                        return base64_encode($encrypted . '::' . $iv); // Encode to base64 for storage
+                    }
+                    // Set Session
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_name'] = $user['username'];
                     $_SESSION['user_photo'] = $user['photo'];
                     if(isset($_POST["remember"])&&$_POST["remember"]==true){
+                        // Set Cookie
                         $cookie_time = time()+(7*24*60*60); // For 7 days
-                        setcookie('user_id', $user['id'], $cookie_time, '/', '', true, true);
+                        setcookie('user_id', encrypt_cookie($user['id'],$_ENV["ENCRYPTION_KEY"]), $cookie_time, '/', '', true, true);
                         setcookie('user_name', $user['username'], $cookie_time, '/', '', true, true);
                         setcookie('user_photo', $user['photo'], $cookie_time, '/', '', true, true);
                     } else {
@@ -53,6 +63,9 @@ class AuthController {
         } else {
             include 'app/views/auth/Login.php';
         }
+        // $key = openssl_random_pseudo_bytes(16);
+        // $key = bin2hex($key);
+        // echo $key;
     }
     // Handle user registration
     public function register() {
@@ -93,7 +106,7 @@ class AuthController {
                 $uid = rand(1000, 999999);
                 $profile_photo = "https://api.dicebear.com/9.x/thumbs/svg?seed=$username";
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                $result = $this->userModel->createUser($uid,$username,$email,$hashedPassword,$profile_photo);
+                $result = $this->userModel->createUser($uid,$username,$email,$hashedPassword,$profile_photo,"manual");
                 if ($result) {
                     header('Location: ?action=login');
                 } else {
@@ -111,60 +124,64 @@ class AuthController {
     public function forgotPassword(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST'&&$_GET["action"]=="forgot-password"){
             $email=$_POST["email"];
-            $emailExist = $this->userModel->checkEmailExist($email);
             $errors = [];
             $done=false;
+            $emailExist = $this->userModel->checkEmailExist($email);
             if(!$emailExist){
                 array_push($errors, "Email is not exist");
-            }
-            if(!empty($errors)){
                 include 'app/views/auth/Forgot-password.php';
                 exit();
             } else {
-                // Prepare Token and expire date
-                $token = bin2hex(random_bytes(16));
-                $token_hash=hash("sha256",$token);
-                date_default_timezone_set('UTC');
-                $expiry=date("Y-m-d H:i:s",time()+60*30);
-                $setToken = $this->userModel->TokenResetPassword($token_hash,$expiry,$email);
-                if($setToken){
-                    include "app/helpers/PHPMailer.php";
-                    $mail->setFrom('noreply@wessblog.com',"WessBlog");
-                    $mail->addAddress($email);
-                    $mail->Subject="Reset Password";
-                    $mail->Body = <<<END
-                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="display: flex; padding: 15px; border: 1px solid rgba(204, 204, 204, 0.5411764706); border-radius: 5px; background-color: #eef5ff;">
-                            <tr>
-                                <td align="center" style="padding: 10px 20px;">
-                                    <h1 style="font-size: 25px; color: #091651; margin: 0; font-weight: 500;">Password Reset</h1>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" style="padding: 0 20px 0 20px;">
-                                    <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">Seems like you forgot your password for WessBlog. If this is true, click below to reset your password.</p>
-                                    <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">The reset button is expire for 30 minutes</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" style="padding: 20px;">
-                                    <a href="http://wessblog.wuaze.com/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" style="padding: 0 20px 40px 20px;">
-                                    <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">If you did not forget your password you can safely ignore this email.</p>
-                                </td>
-                            </tr>
-                        </table>
-                    END;
-                    try{
-                        $mail->send();
-                        $done=true;
-                    } catch(Exception $error){
-                        $done=false;
-                        // echo "error ".$mail->ErrorInfo;
-                    }
+                if($this->userModel->userLoginType($email) == "google"){
+                    array_push($errors, "This mail logged by Google");
                     include 'app/views/auth/Forgot-password.php';
+                    exit();
+                } else {
+                    // Prepare Token and expire date
+                    $token = bin2hex(random_bytes(16));
+                    $token_hash=hash("sha256",$token);
+                    date_default_timezone_set('UTC');
+                    $expiry=date("Y-m-d H:i:s",time()+60*30);
+                    $setToken = $this->userModel->TokenResetPassword($token_hash,$expiry,$email);
+                    if($setToken){
+                        include "app/helpers/PHPMailer.php";
+                        $mail->setFrom('noreply@wessblog.com',"WessBlog");
+                        $mail->addAddress($email);
+                        $mail->Subject="Reset Password";
+                        $mail->Body = <<<END
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="display: flex; padding: 15px; border: 1px solid rgba(204, 204, 204, 0.5411764706); border-radius: 5px; background-color: #eef5ff;">
+                                <tr>
+                                    <td align="center" style="padding: 10px 20px;">
+                                        <h1 style="font-size: 25px; color: #091651; margin: 0; font-weight: 500;">Password Reset</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding: 0 20px 0 20px;">
+                                        <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">Seems like you forgot your password for WessBlog. If this is true, click below to reset your password.</p>
+                                        <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">The reset button is expire for 30 minutes</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding: 20px;">
+                                        <a href="http://wessblog.wuaze.com/?action=reset-password&token=$token" style="background-color: #5171ff; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-size: 16px;">Reset My Password</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="padding: 0 20px 40px 20px;">
+                                        <p style="font-size: 17px; color: #8F9BAD; margin: 0; text-align: left;">If you did not forget your password you can safely ignore this email.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        END;
+                        try{
+                            $mail->send();
+                            $done=true;
+                        } catch(Exception $error){
+                            $done=false;
+                            // echo "error ".$mail->ErrorInfo;
+                        }
+                        include 'app/views/auth/Forgot-password.php';
+                    }
                 }
             }
         } else {

@@ -5,10 +5,10 @@ class User {
         $this->db = $db;
     }
     // Create new user
-    public function createUser($id,$username,$email,$password,$profile_photo) {
-        $q = "INSERT INTO users (id, username, email, password, photo, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+    public function createUser($id,$username,$email,$password,$profile_photo,$loginType) {
+        $q = "INSERT INTO users (id, username, email, password, photo, loginType, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())";
         $stmt = $this->db->prepare($q);
-        $stmt->bind_param("issss", $id,$username,$email,$password,$profile_photo);
+        $stmt->bind_param("isssss", $id,$username,$email,$password,$profile_photo,$loginType);
         return $stmt->execute();
     }
     // Check user exist with mail or username
@@ -19,6 +19,23 @@ class User {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->num_rows > 0;
+    }
+    // Check Google account
+    // public function userExistByGoogle($googleID){
+    //     $q = "SELECT * FROM users WHERE id = ?";
+    //     $stmt=$this->db->prepare($q);
+    //     $stmt->bind_param("i", $googleID);
+    //     $stmt->execute();
+    //     $result = $stmt->get_result();
+    //     return $result->num_rows > 0;
+    // }
+    // Get user login type
+    public function userLoginType($email){
+        $stmt=$this->db->prepare("SELECT loginType FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $res = $stmt->get_result();
+        $type = $res->fetch_assoc();
+        return $type["loginType"];
     }
     // Check user exist with mail or username
     public function userNameExist($username){
@@ -51,6 +68,7 @@ class User {
             users.photo,
             users.photo_id,
             users.bio,
+            users.loginType,
             COUNT(following.user_id) AS followers
             FROM users
             LEFT JOIN following

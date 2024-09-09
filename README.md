@@ -3,7 +3,9 @@
 This project is a comprehensive blog platform that offers various features for user interaction and content management.
 
 ## User Features
-- **Authentication:** Secure login, signup, and password reset via email.
+- **Authentication:** Secure Login, Sign-up, and Password reset via email.
+- **Sign in with Google** Seamlessly log in or sign up using your Google account for enhanced convenience and security.
+- **Remember me:**  Stay logged in across sessions with a secure "Remember Me" option, ensuring easy access while maintaining data privacy.
 - **Profile Management:** Personalize settings, add, remove, and edit posts.
 - **Social Interaction:** Follow other users and view the list of followed users on your profile.
 - **Post Management:** Add, remove, and edit posts with an editor with many features (heading 1, heading 2, text, italic, bold, lists, code blocks)
