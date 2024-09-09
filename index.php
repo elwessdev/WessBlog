@@ -49,7 +49,6 @@ if (!isset($_SESSION["user_id"])&&(isset($_COOKIE['user_id'])&&isset($_COOKIE['u
 //     setcookie('user_photo', '', time() - 3600, '/');
 // }
 
-
 $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? null;
 
