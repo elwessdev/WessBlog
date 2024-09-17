@@ -60,6 +60,8 @@ $id = $_GET['id'] ?? null;
 // Route based on the path
 
 
+
+// With action
 switch ($action) {
     case '':
     case 'home':
@@ -128,4 +130,17 @@ switch ($action) {
         // echo "Page not found";
         header("location: ?action=home");
 }
+
+// $uri = trim($_SERVER['REQUEST_URI'], '/');
+// $uri = str_replace('wessblog/', '', $uri);
+// echo $uri."<br>";
+// switch($uri){
+//     case 'google-callback':
+//         $authController->login();
+//         break;
+//     default:
+//         echo "end";
+// }
+
+
 ?>

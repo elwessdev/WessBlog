@@ -8,8 +8,8 @@ $userModel = new User($db);
 
 // &&isset($_GET["action"])&&$_GET["action"]=="signin-with-google"
 
+$errors=[];
 if(!isset($_SESSION["user_id"])){
-  $errors=[];
   if(isset($_GET['code'])){
     $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
     $client->setAccessToken($token['access_token']);
@@ -67,7 +67,8 @@ if(!isset($_SESSION["user_id"])){
     exit();
   }
 } else {
-  header("location: ?action=login");
+  array_push($errors,"You are login already");
+  include 'app/views/auth/Login.php';
 }
 
 ?>
